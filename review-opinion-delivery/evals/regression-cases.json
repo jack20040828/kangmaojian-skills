@@ -1,0 +1,23 @@
+[
+  {"id":"reg-001","scenario":"two different opinions retain the same source-note number until reviewer confirmation","expected":"manual-confirmation","coverage":"duplicate-source-numbering"},
+  {"id":"reg-002","scenario":"latest approved DOCX and marked PDF use different drawing references","expected":"manual-confirmation","coverage":"drawing-reference-conflict"},
+  {"id":"reg-003","scenario":"two approved opinions intentionally reuse one PDF-provenanced evidence card","expected":"pass","coverage":"one-image-many-opinions"},
+  {"id":"reg-004","scenario":"one approved opinion uses a composite card derived from two PDF pages","expected":"pass","coverage":"many-sources-one-opinion"},
+  {"id":"reg-005","scenario":"reviewer supplies no regulation and manifest stores regulation_text as 无","expected":"pass","coverage":"empty-regulation"},
+  {"id":"reg-006","scenario":"manifest points to an absent evidence image","expected":"fail","coverage":"missing-image"},
+  {"id":"reg-007","scenario":"display item numbers are duplicated or out of order","expected":"fail","coverage":"order-change"},
+  {"id":"reg-008","scenario":"a preserved source file changes after the integrity snapshot","expected":"fail","coverage":"source-mutated"},
+  {"id":"reg-009","scenario":"rendered pages remain marked 待检查 in report_qa.csv","expected":"fail","coverage":"qa-pending"},
+  {"id":"reg-010","scenario":"known alias 设计深度文，必须修改（其它） is corrected and logged once","expected":"pass","coverage":"deterministic-type-correction"},
+  {"id":"reg-011","scenario":"known alias and unknown multi-meaning type coexist; alias is corrected and logged before delivery is blocked","expected":"fail","coverage":"ambiguous-type-block"},
+  {"id":"reg-012","scenario":"normalization sees separate mandatory and suggested canonical types","expected":"pass","coverage":"mandatory-suggested-preservation"},
+  {"id":"reg-013","scenario":"an approved 24-item draft is consolidated to an 18-item final and deleted items stay absent","expected":"pass","coverage":"old-deletion-no-return"},
+  {"id":"reg-014","scenario":"final regulation value is 无 while the older draft contains regulation text","expected":"pass","coverage":"no-regulation-no-backfill"},
+  {"id":"reg-015","scenario":"drawing opinion regulation and type fields share one Word paragraph","expected":"pass","coverage":"same-paragraph-fields"},
+  {"id":"reg-016","scenario":"Word section labels omit manual Chinese numbering because numbering is automatic","expected":"pass","coverage":"automatic-section-numbering"},
+  {"id":"reg-017","scenario":"one approved opinion contains multiple evidence images in order","expected":"pass","coverage":"multiple-images-one-opinion"},
+  {"id":"reg-018","scenario":"formal Word contains note IDs, note references, evidence-source text, PDF page traces, or red-box explanations","expected":"fail","coverage":"no-process-trace"},
+  {"id":"reg-019","scenario":"PDF provenance stays in the manifest while the delivered evidence image defaults to a compact panel without title or footer","expected":"pass","coverage":"compact-formal-evidence"},
+  {"id":"reg-020","scenario":"an approved 25-item draft becomes a 21-item final with two true deletions, two narrowed items, and two merge groups","expected":"pass","coverage":"25-to-21-authoritative-mapping"},
+  {"id":"reg-021","scenario":"automatic semantic mapping cannot confidently resolve all relations","expected":"manual-confirmation","coverage":"ambiguous-auto-mapping"}
+]

@@ -1,0 +1,6 @@
+interface:
+  display_name: "建筑审图"
+  short_description: "依据图纸事实和本地规范形成建筑专业审查意见"
+  default_prompt: "Use $building-review 仅对建筑专业施工图开展新技术审查：逐张清点并关闭图纸族覆盖状态，建立事实台账和审查矩阵，再检索本地规范、控制图形误判、筛选少而准的意见并逐页验证Word；不得凭记忆补规范或越专业。"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "BR-R01",
+    "query": "请审查这套建筑施工图，依据本地规范形成新的审查意见。",
+    "expected": "invoke_building_review",
+    "reason": "需要从建筑图纸形成新的技术结论。"
+  },
+  {
+    "id": "BR-R02",
+    "query": "审核总平面图的建筑防火和场地布置，给出有图纸证据的意见。",
+    "expected": "invoke_building_review",
+    "reason": "属于建筑总图技术审查。"
+  },
+  {
+    "id": "BR-R03",
+    "query": "逐张检查建筑单体施工图并生成单体审查意见。",
+    "expected": "invoke_building_review",
+    "reason": "属于建筑单体技术审查。"
+  },
+  {
+    "id": "BR-R04",
+    "query": "检查建筑平面中的防火分区和疏散表达是否存在问题。",
+    "expected": "invoke_building_review",
+    "reason": "属于建筑专业承担的消防协调内容。"
+  },
+  {
+    "id": "BR-R05",
+    "query": "对建筑图开展无障碍专项审查并引用本地规范。",
+    "expected": "invoke_building_review",
+    "reason": "属于建筑无障碍专项技术审查。"
+  },
+  {
+    "id": "BR-R06",
+    "query": "审查这个既有建筑装修改造项目的建筑施工图。",
+    "expected": "invoke_building_review",
+    "reason": "属于建筑改造装修专项审查。"
+  },
+  {
+    "id": "BR-R07",
+    "query": "核查厂房建筑施工图并形成少而准的正式问题。",
+    "expected": "invoke_building_review",
+    "reason": "属于工业建筑施工图审查。"
+  },
+  {
+    "id": "BR-R08",
+    "query": "复核新版建筑屋面图是否产生新的建筑专业审查问题。",
+    "expected": "invoke_building_review",
+    "reason": "明确要求根据新版图纸形成新的判断。"
+  },
+  {
+    "id": "BR-D01",
+    "query": "把审查员已经写好的十条意见整理成Word，不要新增意见。",
+    "expected": "route_review_opinion_delivery",
+    "reason": "结论已经形成，只需整理交付。"
+  },
+  {
+    "id": "BR-D02",
+    "query": "以最新版审查意见Word为底稿修正编号和排版。",
+    "expected": "route_review_opinion_delivery",
+    "reason": "属于已有意见的保真编辑。"
+  },
+  {
+    "id": "BR-D03",
+    "query": "给现有审查意见补齐标记PDF截图并合成正式报告。",
+    "expected": "route_review_opinion_delivery",
+    "reason": "属于已有意见的证据编排和交付。"
+  },
+  {
+    "id": "BR-D04",
+    "query": "将审查笔记中的重复意见合并并按审查者确认顺序编号。",
+    "expected": "route_review_opinion_delivery",
+    "reason": "不要求重新技术审查。"
+  },
+  {
+    "id": "BR-D05",
+    "query": "把已批准的意见表和截图制作成最终审图Word。",
+    "expected": "route_review_opinion_delivery",
+    "reason": "内容权威已经确定，只做交付。"
+  },
+  {
+    "id": "BR-W01",
+    "query": "帮我把这份会议纪要Word统一字体和页眉。",
+    "expected": "route_documents",
+    "reason": "普通Word排版，与技术审图无关。"
+  },
+  {
+    "id": "BR-W02",
+    "query": "把两份普通项目说明文档合并成一个DOCX。",
+    "expected": "route_documents",
+    "reason": "属于通用文档处理。"
+  },
+  {
+    "id": "BR-W03",
+    "query": "润色这份项目汇报材料并保留原格式。",
+    "expected": "route_documents",
+    "reason": "没有施工图技术审查任务。"
+  },
+  {
+    "id": "BR-O01",
+    "query": "计算结构梁配筋并审查结构施工图。",
+    "expected": "out_of_scope",
+    "reason": "属于结构专业技术审查。"
+  },
+  {
+    "id": "BR-O02",
+    "query": "审核给排水系统管径和消防水量计算。",
+    "expected": "out_of_scope",
+    "reason": "属于给排水专业技术审查。"
+  },
+  {
+    "id": "BR-O03",
+    "query": "检查配电系统、负荷计算和电气施工图。",
+    "expected": "out_of_scope",
+    "reason": "属于电气专业技术审查。"
+  },
+  {
+    "id": "BR-O04",
+    "query": "审查设计单位资质、注册章和报建许可是否有效。",
+    "expected": "out_of_scope",
+    "reason": "属于行政报审与资格事项。"
+  },
+  {
+    "id": "BR-M01",
+    "query": "先审查建筑施工图找出新问题，再把最终意见整理成Word。",
+    "expected": "split_request",
+    "reason": "先技术审查，后对确认意见执行整理交付。"
+  },
+  {
+    "id": "BR-M02",
+    "query": "同时审核建筑图和电气图，分别出意见。",
+    "expected": "split_request",
+    "reason": "建筑部分可执行，电气部分必须拆分出本技能范围。"
+  },
+  {
+    "id": "BR-M03",
+    "query": "整理现有五条意见，同时再从图纸中找遗漏问题。",
+    "expected": "split_request",
+    "reason": "已有意见整理和新技术审查必须分阶段。"
+  },
+  {
+    "id": "BR-M04",
+    "query": "审查建筑总图，并顺便给无关的合同Word重新排版。",
+    "expected": "split_request",
+    "reason": "建筑技术审查和普通文档处理属于不同工作流。"
+  }
+]

@@ -1,0 +1,6 @@
+interface:
+  display_name: "施工图审查意见整理交付"
+  short_description: "忠实整理最新版审查意见，纠正确定性错字并逐页验证Word"
+  default_prompt: "Use $review-opinion-delivery 以我最新确认的Word为最高权威，整理已有意见和证据，必须纠正并记录明显错字及已知意见类型异常；未知或多义异常阻止交付，不新增技术审查结论。"
+policy:
+  allow_implicit_invocation: true

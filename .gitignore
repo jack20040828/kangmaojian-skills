@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+Thumbs.db
+
+# Local review workspaces and generated knowledge indexes
+output/
+renders/
+qa-render/
+generated/
+*.local.json
+.env
+

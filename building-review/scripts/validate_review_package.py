@@ -1,0 +1,689 @@
+#!/usr/bin/env python3
+"""Validate building-review evidence, integrity, and ledgers before Word generation."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import re
+from pathlib import Path
+from struct import unpack
+
+REQUIRED_FILES = [
+    "drawing_inventory.csv",
+    "fact_ledger.csv",
+    "check_matrix.csv",
+    "issue_candidates.csv",
+    "validation_log.csv",
+]
+
+VALID_OPINION_TYPES = {
+    "消防安全强制性条文，必须修改（消防安全）",
+    "一般性条文，必须修改（消防安全）",
+    "政策规定，必须修改（消防安全）",
+    "设计深度，必须修改（消防安全）",
+    "其它强制性条文，必须修改（其它）",
+    "其它强制性条文，建议修改（其它）",
+    "一般性条文，必须修改（其它）",
+    "一般性条文，建议修改（其它）",
+    "政策规定，必须修改（其它）",
+    "政策规定，建议修改（其它）",
+    "设计深度，必须修改（其它）",
+    "设计深度，建议修改（其它）",
+}
+
+VALID_ISSUE_STATUSES = {"verified", "needs_review", "rejected", "delete"}
+VALID_APPLICABILITY = {"适用", "不适用", "需判断"}
+VALID_CONCLUSIONS = {"符合", "不符合", "需核验", "不适用"}
+VALID_SCREENSHOT_STRATEGIES = {"none", "single", "multiple", "shared"}
+SCREENSHOT_REQUIRED_STRATEGIES = {"single", "multiple", "shared"}
+SUPPORTED_SCHEMA_VERSIONS = {"1.1", "1.2"}
+VALID_REVIEW_FAMILIES = {
+    "设计说明",
+    "目录索引",
+    "平面图",
+    "屋面图",
+    "立面图",
+    "剖面图",
+    "楼梯大样",
+    "墙身大样",
+    "其他大样",
+    "门窗表",
+    "材料做法表",
+    "总图设计说明",
+    "总平面图",
+    "竖向设计图",
+    "交通消防图",
+    "其他总图",
+    "其他",
+}
+VALID_REVIEW_STATUSES = {"reviewed", "not_applicable", "needs_review"}
+VALID_CITATION_MODES = {"cited", "none"}
+GENERIC_CLOSURE_PATTERNS = (
+    "已提供",
+    "均已提供",
+    "可识别",
+    "覆盖完整",
+    "大样覆盖",
+    "图纸齐全",
+)
+OBJECTIVE_FACT_PATTERN = re.compile(
+    r"\d|[%％]|mm|cm|\bm\b|坡度|坡向|标高|净宽|净高|高度|宽度|距离|尺寸|数量|"
+    r"荷载|防火等级|耐火极限|开启方向|雨水口|地漏|滴水|反坎|上翻|盲道|扶手|栏杆|视线"
+)
+DESIGN_DEPTH_OPINION_TYPES = {
+    "设计深度，必须修改（消防安全）",
+    "设计深度，必须修改（其它）",
+    "设计深度，建议修改（其它）",
+}
+V11_ISSUE_FIELDS = {
+    "display_order",
+    "report_section",
+    "screenshot_strategy",
+    "screenshot_reason",
+    "screenshot_count",
+    "evidence_point",
+    "red_box_target",
+    "context_required",
+    "screenshot_quality",
+}
+LEGACY_NEW_ISSUE_FIELDS = V11_ISSUE_FIELDS - {"display_order", "report_section"}
+V11_GATE_FIELDS = {
+    "professional_filter_check",
+    "screenshot_strategy_check",
+    "red_box_precision_check",
+}
+V12_INVENTORY_FIELDS = {"review_family", "review_status", "review_check_ids", "review_notes"}
+V12_ISSUE_FIELDS = V11_ISSUE_FIELDS | {
+    "citation_mode",
+    "standard_display_name",
+    "citation_none_reason",
+}
+V12_GATE_FIELDS = V11_GATE_FIELDS | {
+    "graphical_interpretation_check",
+    "opinion_wording_check",
+}
+LEGACY_GATE_FIELDS = V11_GATE_FIELDS | {"layout_check"}
+VALID_SECTIONS = {
+    "single": {"设计说明", "平面图", "立面剖面图", "大样图"},
+    "site": {"总图设计说明", "总图设计图纸"},
+}
+IGNORED_NAMES = {".DS_Store", "Thumbs.db"}
+
+
+def rows(path: Path) -> list[dict[str, str]]:
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def fieldnames(path: Path) -> set[str]:
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        return set(csv.DictReader(handle).fieldnames or [])
+
+
+def present(value: str | None) -> bool:
+    return bool((value or "").strip())
+
+
+def split_values(value: str | None) -> list[str]:
+    return [item.strip() for item in (value or "").replace(";", ",").split(",") if item.strip()]
+
+
+def resolve_paths(root: Path, value: str | None) -> list[Path]:
+    resolved: list[Path] = []
+    for item in split_values(value):
+        path = Path(item)
+        resolved.append(path if path.is_absolute() else root / path)
+    return resolved
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def ignored(path: Path) -> bool:
+    return path.name in IGNORED_NAMES or path.name.startswith("~$")
+
+
+def image_size(path: Path) -> tuple[int, int] | None:
+    data = path.read_bytes()[:32]
+    if data.startswith(b"\x89PNG\r\n\x1a\n") and len(data) >= 24:
+        return unpack(">II", data[16:24])
+    if data.startswith(b"\xff\xd8"):
+        with path.open("rb") as handle:
+            handle.read(2)
+            while True:
+                marker_start = handle.read(1)
+                if not marker_start:
+                    return None
+                if marker_start != b"\xff":
+                    continue
+                marker = handle.read(1)
+                while marker == b"\xff":
+                    marker = handle.read(1)
+                if marker in {b"\xc0", b"\xc1", b"\xc2", b"\xc3"}:
+                    length = unpack(">H", handle.read(2))[0]
+                    segment = handle.read(length - 2)
+                    if len(segment) >= 5:
+                        height, width = unpack(">HH", segment[1:5])
+                        return width, height
+                    return None
+                if marker in {b"\xd8", b"\xd9"}:
+                    continue
+                length_bytes = handle.read(2)
+                if len(length_bytes) != 2:
+                    return None
+                length = unpack(">H", length_bytes)[0]
+                handle.seek(length - 2, 1)
+    return None
+
+
+def duplicate_ids(items: list[dict[str, str]], field: str) -> list[str]:
+    seen: set[str] = set()
+    duplicates: set[str] = set()
+    for item in items:
+        value = item.get(field, "").strip()
+        if not value:
+            continue
+        if value in seen:
+            duplicates.add(value)
+        seen.add(value)
+    return sorted(duplicates)
+
+
+def path_key(value: str) -> str:
+    return str(Path(value)).replace("/", "\\").casefold()
+
+
+def resolve_index_entry(source: str, entries: list[dict]) -> tuple[dict | None, str | None]:
+    source_key = path_key(source)
+    absolute = [item for item in entries if path_key(item.get("absolute_path", "")) == source_key]
+    if len(absolute) == 1:
+        return absolute[0], None
+    relative = [item for item in entries if path_key(item.get("relative_path", "")) == source_key]
+    if len(relative) == 1:
+        return relative[0], None
+    name = Path(source).name.casefold()
+    by_name = [item for item in entries if item.get("name", "").casefold() == name]
+    if len(by_name) == 1:
+        return by_name[0], None
+    if len(by_name) > 1:
+        return None, f"standard source is ambiguous: {source}"
+    return None, f"standard source not found in knowledge index: {source}"
+
+
+def load_manifest(root: Path) -> tuple[str, dict]:
+    path = root / "review_manifest.json"
+    if not path.exists():
+        return "", {}
+    try:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return "", {"_invalid": True}
+    version = str(manifest.get("schema_version", ""))
+    return version if version in SUPPORTED_SCHEMA_VERSIONS else "", manifest
+
+
+def validate_integrity(
+    root: Path,
+    manifest: dict,
+    verified: list[dict[str, str]],
+    schema_version: str,
+) -> list[str]:
+    errors: list[str] = []
+    expected_records = manifest.get("source_integrity")
+    if not isinstance(expected_records, list) or not expected_records:
+        errors.append("source_integrity is empty; run snapshot_review_integrity.py")
+        expected_records = []
+    expected = {item.get("path", ""): item for item in expected_records if item.get("path")}
+    source_dir = root / "source"
+    actual_paths = {
+        path.relative_to(root).as_posix(): path
+        for path in source_dir.rglob("*")
+        if path.is_file() and not ignored(path)
+    } if source_dir.exists() else {}
+    for relative in sorted(expected.keys() - actual_paths.keys()):
+        errors.append(f"registered source is missing: {relative}")
+    for relative in sorted(actual_paths.keys() - expected.keys()):
+        errors.append(f"unregistered source file: {relative}")
+    for relative in sorted(expected.keys() & actual_paths.keys()):
+        path = actual_paths[relative]
+        record = expected[relative]
+        if path.stat().st_size != record.get("size_bytes") or sha256_file(path) != record.get("sha256"):
+            errors.append(f"source file changed after snapshot: {relative}")
+
+    snapshot = manifest.get("knowledge_snapshot")
+    if not isinstance(snapshot, dict) or not snapshot.get("corpus_sha256"):
+        errors.append("knowledge_snapshot is missing; run snapshot_review_integrity.py")
+        return errors
+    index_path = Path(snapshot.get("index_path", ""))
+    if not index_path.exists():
+        errors.append(f"snapshotted knowledge index is missing: {index_path}")
+        return errors
+    try:
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+    except Exception:
+        errors.append(f"knowledge index is invalid JSON: {index_path}")
+        return errors
+    if index.get("corpus_sha256") != snapshot.get("corpus_sha256"):
+        errors.append("knowledge corpus changed after snapshot")
+    if sha256_file(index_path) != snapshot.get("index_sha256"):
+        if index.get("corpus_sha256") == snapshot.get("corpus_sha256"):
+            pass
+        else:
+            errors.append("knowledge index changed after snapshot")
+    index_entries = index.get("files", [])
+    entries = {item.get("relative_path", ""): item for item in index_entries}
+    used = snapshot.get("used_standards", [])
+    used_map = {item.get("relative_path", ""): item for item in used if item.get("relative_path")}
+    cited_verified = [
+        issue
+        for issue in verified
+        if schema_version != "1.2" or issue.get("citation_mode", "").strip().lower() == "cited"
+    ]
+    if cited_verified and not used_map:
+        errors.append("knowledge_snapshot has no standards for verified issues")
+    for issue in cited_verified:
+        issue_id = issue.get("issue_id", "").strip() or "[missing issue_id]"
+        entry, error = resolve_index_entry(issue.get("standard_source", "").strip(), index_entries)
+        if error:
+            errors.append(f"{issue_id}: {error}")
+            continue
+        assert entry is not None
+        if entry.get("relative_path", "") not in used_map:
+            errors.append(f"{issue_id}: standard_source is not present in knowledge_snapshot.used_standards")
+    for relative, record in used_map.items():
+        entry = entries.get(relative)
+        if not entry:
+            errors.append(f"used standard is absent from current index: {relative}")
+            continue
+        path = Path(entry.get("absolute_path", ""))
+        if not path.exists():
+            errors.append(f"used standard file is missing: {relative}")
+            continue
+        if path.stat().st_size != record.get("size_bytes") or sha256_file(path) != record.get("sha256"):
+            errors.append(f"used standard changed after snapshot: {relative}")
+    return errors
+
+
+def fact_matches_inventory(fact: dict[str, str], inventory: list[dict[str, str]]) -> bool:
+    source = fact.get("source_file", "").strip().casefold()
+    candidates = [row for row in inventory if row.get("source_file", "").strip().casefold() == source]
+    if not candidates:
+        return False
+    drawing_no = fact.get("drawing_no", "").strip().casefold()
+    if drawing_no and any(row.get("drawing_no", "").strip() for row in candidates):
+        candidates = [row for row in candidates if row.get("drawing_no", "").strip().casefold() == drawing_no]
+    page = fact.get("page", "").strip().casefold()
+    if page and candidates and any(row.get("page", "").strip() for row in candidates):
+        candidates = [row for row in candidates if row.get("page", "").strip().casefold() == page]
+    return bool(candidates)
+
+
+def fact_matches_drawing(fact: dict[str, str], drawing: dict[str, str]) -> bool:
+    drawing_no = drawing.get("drawing_no", "").strip().casefold()
+    if drawing_no and fact.get("drawing_no", "").strip().casefold() == drawing_no:
+        return True
+    drawing_name = drawing.get("drawing_name", "").strip().casefold()
+    if drawing_name and fact.get("drawing_name", "").strip().casefold() == drawing_name:
+        return True
+    source = drawing.get("source_file", "").strip().casefold()
+    page = drawing.get("page", "").strip().casefold()
+    return bool(
+        source
+        and page
+        and fact.get("source_file", "").strip().casefold() == source
+        and fact.get("page", "").strip().casefold() == page
+    )
+
+
+def check_references_drawing(check: dict[str, str], drawing: dict[str, str]) -> bool:
+    refs = check.get("drawing_refs", "").strip().casefold()
+    return any(
+        value and value.casefold() in refs
+        for value in (drawing.get("drawing_no", "").strip(), drawing.get("drawing_name", "").strip())
+    )
+
+
+def generic_presence_only(check: dict[str, str], facts_by_id: dict[str, dict[str, str]]) -> bool:
+    if check.get("conclusion", "").strip() != "符合":
+        return False
+    linked_facts = [facts_by_id.get(fact_id) for fact_id in split_values(check.get("fact_ids"))]
+    evidence = " ".join(
+        [
+            check.get("actual_fact", ""),
+            check.get("not_forming_reason", ""),
+            *(fact.get("raw_text_or_measure", "") for fact in linked_facts if fact),
+        ]
+    )
+    return any(pattern in evidence for pattern in GENERIC_CLOSURE_PATTERNS) and not OBJECTIVE_FACT_PATTERN.search(evidence)
+
+
+def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
+    root = root.resolve()
+    errors: list[str] = []
+    warnings: list[str] = []
+    if not root.exists():
+        return [f"Project workspace not found: {root}"], warnings
+    for filename in REQUIRED_FILES:
+        if not (root / filename).exists():
+            errors.append(f"Missing required ledger: {filename}")
+    if errors:
+        return errors, warnings
+
+    schema_version, manifest = load_manifest(root)
+    v11 = schema_version == "1.1"
+    v12 = schema_version == "1.2"
+    versioned = v11 or v12
+    if manifest.get("_invalid"):
+        errors.append("review_manifest.json is invalid JSON")
+    elif manifest and not schema_version:
+        errors.append(f"unsupported review_manifest schema_version: {manifest.get('schema_version', '')}")
+    inventory = rows(root / "drawing_inventory.csv")
+    facts = rows(root / "fact_ledger.csv")
+    checks = rows(root / "check_matrix.csv")
+    issues = rows(root / "issue_candidates.csv")
+    validation = rows(root / "validation_log.csv")
+    inventory_fields = fieldnames(root / "drawing_inventory.csv")
+    issue_fields = fieldnames(root / "issue_candidates.csv")
+    validation_fields = fieldnames(root / "validation_log.csv")
+    has_screenshot_fields = versioned or LEGACY_NEW_ISSUE_FIELDS.issubset(issue_fields)
+
+    if not inventory:
+        errors.append("drawing_inventory.csv has no drawing rows")
+    if not facts:
+        errors.append("fact_ledger.csv has no fact rows")
+    if not checks:
+        errors.append("check_matrix.csv has no check rows")
+
+    if versioned:
+        required_issue_fields = V12_ISSUE_FIELDS if v12 else V11_ISSUE_FIELDS
+        missing = required_issue_fields - issue_fields
+        if missing:
+            errors.append(f"v{schema_version} issue_candidates.csv missing fields: {', '.join(sorted(missing))}")
+        required_validation_fields = V12_GATE_FIELDS if v12 else V11_GATE_FIELDS
+        missing_validation = required_validation_fields - validation_fields
+        if missing_validation:
+            errors.append(
+                f"v{schema_version} validation_log.csv missing fields: {', '.join(sorted(missing_validation))}"
+            )
+        if v12:
+            missing_inventory = V12_INVENTORY_FIELDS - inventory_fields
+            if missing_inventory:
+                errors.append(f"v1.2 drawing_inventory.csv missing fields: {', '.join(sorted(missing_inventory))}")
+        for items, field in [(facts, "fact_id"), (checks, "check_id"), (issues, "issue_id"), (validation, "issue_id")]:
+            for duplicate in duplicate_ids(items, field):
+                errors.append(f"duplicate {field}: {duplicate}")
+        for fact in facts:
+            fact_id = fact.get("fact_id", "").strip() or "[missing fact_id]"
+            if not present(fact.get("fact_id")):
+                errors.append("fact_ledger.csv contains a row without fact_id")
+            elif not fact_matches_inventory(fact, inventory):
+                errors.append(f"{fact_id}: source_file/page/drawing_no not found in drawing_inventory.csv")
+    else:
+        missing_issue = LEGACY_NEW_ISSUE_FIELDS - issue_fields
+        if missing_issue:
+            warnings.append(f"issue_candidates.csv uses legacy fields; upgrade recommended. Missing: {', '.join(sorted(missing_issue))}")
+        missing_validation = LEGACY_GATE_FIELDS - validation_fields
+        if missing_validation:
+            warnings.append(f"validation_log.csv uses legacy fields; upgrade recommended. Missing: {', '.join(sorted(missing_validation))}")
+
+    fact_ids = {row.get("fact_id", "").strip() for row in facts if present(row.get("fact_id"))}
+    check_ids = {row.get("check_id", "").strip() for row in checks if present(row.get("check_id"))}
+    facts_by_id = {row.get("fact_id", "").strip(): row for row in facts if present(row.get("fact_id"))}
+    checks_by_id = {row.get("check_id", "").strip(): row for row in checks if present(row.get("check_id"))}
+    validation_ids = {row.get("issue_id", "").strip(): row for row in validation if present(row.get("issue_id"))}
+
+    if v12 and V12_INVENTORY_FIELDS.issubset(inventory_fields):
+        for row_number, drawing in enumerate(inventory, start=2):
+            label = drawing.get("drawing_no", "").strip() or drawing.get("drawing_name", "").strip() or f"row {row_number}"
+            family = drawing.get("review_family", "").strip()
+            status = drawing.get("review_status", "").strip()
+            if family not in VALID_REVIEW_FAMILIES:
+                errors.append(f"{label}: invalid review_family: {family}")
+            if status not in VALID_REVIEW_STATUSES:
+                errors.append(f"{label}: invalid review_status: {status}")
+                continue
+            linked_checks = split_values(drawing.get("review_check_ids"))
+            if status == "reviewed":
+                if not linked_checks:
+                    errors.append(f"{label}: reviewed drawing requires review_check_ids")
+                substantive_links = 0
+                for check_id in linked_checks:
+                    if check_id not in check_ids:
+                        errors.append(f"{label}: review_check_id not found in check_matrix.csv: {check_id}")
+                        continue
+                    check = checks_by_id[check_id]
+                    if not check_references_drawing(check, drawing):
+                        continue
+                    linked_facts = [facts_by_id.get(fact_id) for fact_id in split_values(check.get("fact_ids"))]
+                    if any(fact and fact_matches_drawing(fact, drawing) for fact in linked_facts):
+                        substantive_links += 1
+                if linked_checks and not substantive_links:
+                    errors.append(f"{label}: reviewed drawing has no substantive sheet-specific check")
+            elif status == "not_applicable" and not present(drawing.get("review_notes")):
+                errors.append(f"{label}: not_applicable drawing requires review_notes")
+            elif status == "needs_review":
+                errors.append(f"{label}: drawing review_status needs_review blocks report generation")
+
+    for check in checks:
+        check_id = check.get("check_id", "").strip() or "[missing check_id]"
+        if versioned and not present(check.get("check_id")):
+            errors.append("check_matrix.csv contains a row without check_id")
+        if not present(check.get("specialty")):
+            errors.append(f"{check_id}: missing specialty")
+        if not present(check.get("source_review_item")):
+            errors.append(f"{check_id}: missing source_review_item")
+        applicability = check.get("applicability", "").strip()
+        if applicability not in VALID_APPLICABILITY:
+            errors.append(f"{check_id}: invalid applicability: {applicability}")
+        conclusion = check.get("conclusion", "").strip()
+        if conclusion not in VALID_CONCLUSIONS:
+            errors.append(f"{check_id}: invalid conclusion: {conclusion}")
+        if applicability == "需判断" and conclusion != "需核验":
+            errors.append(f"{check_id}: applicability 需判断 requires conclusion 需核验")
+        if v12 and generic_presence_only(check, facts_by_id):
+            errors.append(f"{check_id}: generic drawing-presence statement cannot close a compliant check")
+        forms_issue = check.get("forms_issue", "").strip().lower()
+        if forms_issue not in {"yes", "no", "y", "n", "true", "false", "1", "0"}:
+            errors.append(f"{check_id}: forms_issue must be yes/no")
+        if forms_issue in {"no", "n", "false", "0"} and not present(check.get("not_forming_reason")):
+            errors.append(f"{check_id}: missing not_forming_reason for non-issue check")
+
+    verified = [row for row in issues if row.get("status", "").strip() == "verified"]
+    if not verified:
+        if not versioned:
+            errors.append("issue_candidates.csv has no verified issues")
+        else:
+            if any(row.get("forms_issue", "").strip().lower() in {"yes", "y", "true", "1"} for row in checks):
+                errors.append("zero-opinion review has check items that form issues")
+            if any(row.get("conclusion", "").strip() not in {"符合", "不适用"} for row in checks):
+                errors.append("zero-opinion review may contain only 符合 or 不适用 conclusions")
+
+    for issue in issues:
+        issue_id = issue.get("issue_id", "").strip() or "[missing issue_id]"
+        status = issue.get("status", "").strip()
+        if versioned and not present(issue.get("issue_id")):
+            errors.append("issue_candidates.csv contains a row without issue_id")
+        if status not in VALID_ISSUE_STATUSES:
+            errors.append(f"{issue_id}: invalid status: {status}")
+        if status in {"needs_review", "rejected"} and not present(issue.get("notes")):
+            errors.append(f"{issue_id}: {status} issue must explain exclusion in notes")
+
+    if versioned and verified:
+        orders: list[int] = []
+        report_type = manifest.get("report_type", "")
+        if report_type not in VALID_SECTIONS:
+            errors.append(f"invalid manifest report_type: {report_type}")
+        for issue in verified:
+            issue_id = issue.get("issue_id", "").strip() or "[missing issue_id]"
+            try:
+                order = int(issue.get("display_order", ""))
+                if order < 1:
+                    raise ValueError
+                orders.append(order)
+            except ValueError:
+                errors.append(f"{issue_id}: display_order must be a positive integer")
+            if report_type in VALID_SECTIONS and issue.get("report_section", "").strip() not in VALID_SECTIONS[report_type]:
+                errors.append(f"{issue_id}: invalid report_section for {report_type}: {issue.get('report_section', '')}")
+        if len(orders) != len(set(orders)):
+            errors.append("verified issues have duplicate display_order values")
+        if orders and sorted(orders) != list(range(1, len(orders) + 1)):
+            errors.append("verified issue display_order must be continuous from 1")
+
+    for issue in verified:
+        issue_id = issue.get("issue_id", "").strip() or "[missing issue_id]"
+        check_id = issue.get("check_id", "").strip()
+        if not check_id:
+            errors.append(f"{issue_id}: missing check_id")
+        elif check_id not in check_ids:
+            errors.append(f"{issue_id}: check_id not found in check_matrix.csv: {check_id}")
+        elif v12:
+            linked_check = checks_by_id[check_id]
+            if linked_check.get("applicability", "").strip() == "需判断" or linked_check.get("conclusion", "").strip() == "需核验":
+                errors.append(f"{issue_id}: unresolved check cannot support a verified issue")
+        linked_facts = split_values(issue.get("fact_ids"))
+        if not linked_facts:
+            errors.append(f"{issue_id}: missing fact_ids")
+        for fact_id in linked_facts:
+            if fact_id not in fact_ids:
+                errors.append(f"{issue_id}: fact_id not found in fact_ledger.csv: {fact_id}")
+        for field in ["drawing_refs", "problem"]:
+            if not present(issue.get(field)):
+                errors.append(f"{issue_id}: missing {field}")
+        if versioned and not present(issue.get("judgment")):
+            errors.append(f"{issue_id}: missing judgment")
+        if v11:
+            for field in ["standard_source", "standard_article", "standard_requirement"]:
+                if not present(issue.get(field)):
+                    errors.append(f"{issue_id}: missing {field}")
+        elif v12:
+            drawing_refs = issue.get("drawing_refs", "")
+            for fact_id in linked_facts:
+                fact = facts_by_id.get(fact_id)
+                if not fact:
+                    continue
+                for field in ["drawing_no", "drawing_name"]:
+                    value = fact.get(field, "").strip()
+                    if value and value not in drawing_refs:
+                        errors.append(f"{issue_id}: drawing_refs missing linked fact {field}: {value}")
+            citation_mode = issue.get("citation_mode", "").strip().lower()
+            if citation_mode not in VALID_CITATION_MODES:
+                errors.append(f"{issue_id}: invalid citation_mode: {citation_mode}")
+            elif citation_mode == "cited":
+                for field in ["standard_source", "standard_display_name", "standard_article", "standard_requirement"]:
+                    if not present(issue.get(field)):
+                        errors.append(f"{issue_id}: citation_mode cited requires {field}")
+                display_name = issue.get("standard_display_name", "").strip().casefold()
+                if ".pdf" in display_name:
+                    errors.append(f"{issue_id}: standard_display_name must not contain .pdf")
+                if "/" in display_name or "\\" in display_name:
+                    errors.append(f"{issue_id}: standard_display_name must not contain a file path")
+            elif citation_mode == "none":
+                if not present(issue.get("citation_none_reason")):
+                    errors.append(f"{issue_id}: citation_mode none requires citation_none_reason")
+                if issue.get("opinion_type", "").strip() not in DESIGN_DEPTH_OPINION_TYPES:
+                    errors.append(f"{issue_id}: citation_mode none is allowed only for design-depth opinion types")
+                for field in ["standard_source", "standard_display_name", "standard_article", "standard_requirement"]:
+                    if present(issue.get(field)):
+                        errors.append(f"{issue_id}: citation_mode none requires empty {field}")
+        else:
+            for field in ["standard_source", "standard_requirement"]:
+                if not present(issue.get(field)):
+                    errors.append(f"{issue_id}: missing {field}")
+
+        screenshot_paths = resolve_paths(root, issue.get("screenshot_path"))
+        strategy = issue.get("screenshot_strategy", "").strip().lower()
+        if has_screenshot_fields and strategy not in VALID_SCREENSHOT_STRATEGIES:
+            errors.append(f"{issue_id}: invalid screenshot_strategy: {strategy}")
+        if has_screenshot_fields and not present(issue.get("notes")):
+            errors.append(f"{issue_id}: verified issue must record professional filtering reason in notes")
+        if has_screenshot_fields and strategy == "none":
+            if not present(issue.get("screenshot_reason")):
+                errors.append(f"{issue_id}: screenshot_strategy none requires screenshot_reason")
+        elif has_screenshot_fields and strategy in SCREENSHOT_REQUIRED_STRATEGIES:
+            if not screenshot_paths:
+                errors.append(f"{issue_id}: screenshot_strategy {strategy} requires screenshot_path")
+            for field in ["screenshot_location", "evidence_point", "red_box_target", "context_required", "screenshot_quality"]:
+                if not present(issue.get(field)):
+                    errors.append(f"{issue_id}: screenshot_strategy {strategy} requires {field}")
+            if strategy == "single" and len(screenshot_paths) != 1:
+                errors.append(f"{issue_id}: screenshot_strategy single requires exactly one screenshot path")
+            if strategy == "multiple" and len(screenshot_paths) < 2:
+                errors.append(f"{issue_id}: screenshot_strategy multiple requires at least two screenshots")
+            if v12 and strategy == "multiple" and not present(issue.get("screenshot_reason")):
+                errors.append(f"{issue_id}: screenshot_strategy multiple requires screenshot_reason")
+            if strategy == "shared" and not present(issue.get("screenshot_reason")):
+                errors.append(f"{issue_id}: screenshot_strategy shared requires screenshot_reason")
+            declared = issue.get("screenshot_count", "").strip()
+            if declared:
+                try:
+                    if int(declared) != len(screenshot_paths):
+                        errors.append(f"{issue_id}: screenshot_count does not match screenshot_path count")
+                except ValueError:
+                    errors.append(f"{issue_id}: screenshot_count must be an integer")
+        elif issue.get("needs_screenshot", "").strip().lower() in {"yes", "y", "true", "1"}:
+            if not screenshot_paths:
+                errors.append(f"{issue_id}: screenshot required but screenshot_path is missing")
+            if not present(issue.get("screenshot_location")):
+                errors.append(f"{issue_id}: screenshot required but screenshot_location is missing")
+
+        for screenshot in screenshot_paths:
+            if not screenshot.exists():
+                errors.append(f"{issue_id}: screenshot_path does not exist: {screenshot}")
+                continue
+            if screenshot.stat().st_size == 0:
+                errors.append(f"{issue_id}: screenshot_path is empty: {screenshot}")
+                continue
+            size = image_size(screenshot)
+            if size is None:
+                warnings.append(f"{issue_id}: screenshot size could not be read: {screenshot}")
+            else:
+                width, height = size
+                if width < 80 or height < 80:
+                    errors.append(f"{issue_id}: screenshot is too small: {screenshot} ({width}x{height})")
+                if max(width / height, height / width) > 30:
+                    errors.append(f"{issue_id}: screenshot aspect ratio is abnormal: {screenshot} ({width}x{height})")
+        opinion_type = issue.get("opinion_type", "").strip()
+        if opinion_type not in VALID_OPINION_TYPES:
+            errors.append(f"{issue_id}: invalid opinion_type: {opinion_type}")
+        gate = validation_ids.get(issue_id)
+        if not gate:
+            errors.append(f"{issue_id}: missing validation_log row")
+        elif gate.get("result", "").strip() != "通过":
+            errors.append(f"{issue_id}: validation result is not 通过")
+        else:
+            required_gate_fields = V12_GATE_FIELDS if v12 else V11_GATE_FIELDS if v11 else LEGACY_GATE_FIELDS
+            if required_gate_fields.issubset(validation_fields):
+                for column in required_gate_fields:
+                    if gate.get(column, "").strip() != "通过":
+                        errors.append(f"{issue_id}: {column} is not 通过")
+
+    if versioned:
+        errors.extend(validate_integrity(root, manifest, verified, schema_version))
+    return errors, warnings
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("project_workspace", type=Path)
+    args = parser.parse_args()
+    errors, warnings = validate_workspace(args.project_workspace)
+    if errors:
+        for error in errors:
+            print(f"FAIL: {error}")
+        return 1
+    for warning in warnings:
+        print(f"WARN: {warning}")
+    print("PASS: review package is ready for Word report generation")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

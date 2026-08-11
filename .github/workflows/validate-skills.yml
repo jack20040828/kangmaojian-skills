@@ -1,0 +1,32 @@
+name: Validate Skills
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    env:
+      PYTHONUTF8: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: python -m pip install --disable-pip-version-check python-docx pypdf Pillow pypdfium2 PyYAML
+      - name: Validate public release boundary
+        run: python -X utf8 scripts/validate_public_package.py .
+      - name: Run building-review regressions
+        run: |
+          python -X utf8 building-review/evals/run_regression_checks.py
+          python -X utf8 building-review/evals/test_cad_automation_guard.py
+      - name: Run review-opinion-delivery regressions
+        run: |
+          python -X utf8 review-opinion-delivery/evals/run_regression_checks.py
+          python -X utf8 review-opinion-delivery/evals/run_v12_regression_checks.py

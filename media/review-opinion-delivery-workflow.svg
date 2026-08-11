@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1770" viewBox="0 0 2600 1770">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="7" stdDeviation="9" flood-color="#1f344b" flood-opacity="0.14"/>
+    </filter>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f344b" flood-opacity="0.11"/>
+    </filter>
+    <linearGradient id="titleGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#dcecff"/>
+      <stop offset="52%" stop-color="#eef5ff"/>
+      <stop offset="100%" stop-color="#e7e0f4"/>
+    </linearGradient>
+    <linearGradient id="footerGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f7fbff"/>
+      <stop offset="50%" stop-color="#f4f9f6"/>
+      <stop offset="100%" stop-color="#faf7fc"/>
+    </linearGradient>
+    <style>
+      .title { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 42px; font-weight: 700; fill: #172b42; }
+      .subtitle { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 21px; font-weight: 400; fill: #536b82; letter-spacing: 0.5px; }
+      .laneTitle { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 25px; font-weight: 700; fill: #1f2e3f; }
+      .cardTitle { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 27px; font-weight: 700; fill: #182c42; }
+      .body { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 21px; font-weight: 400; fill: #435b72; }
+      .bodySmall { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 18px; font-weight: 400; fill: #536b82; }
+      .mini { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 17px; font-weight: 600; fill: #314a62; }
+      .num { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 18px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: middle; }
+      .branch { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 18px; font-weight: 700; }
+      .footerText { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; font-size: 20px; font-weight: 600; fill: #334b63; }
+      .arrow { fill: none; stroke: #60758a; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .arrowNo { fill: none; stroke: #d9544f; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .arrowYes { fill: none; stroke: #3f9a68; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .border { stroke-width: 3; }
+    </style>
+  </defs>
+
+  <!-- 画布 -->
+  <rect x="0" y="0" width="2600" height="1770" fill="#f4f7fa"/>
+  <rect x="20" y="20" width="2560" height="1730" rx="14" fill="#ffffff" stroke="#8aa0b5" stroke-width="3"/>
+
+  <!-- 标题 -->
+  <rect x="30" y="30" width="2540" height="100" fill="url(#titleGradient)" stroke="#4d86b8" stroke-width="3"/>
+  <text x="1300" y="80" class="title" text-anchor="middle">建筑施工图审查意见整理 Skill 工作流程</text>
+  <text x="1300" y="113" class="subtitle" text-anchor="middle">审查人已确认的技术意见 → 忠实整理 → 证据补齐 → Word 成文 → 逐页质检 → 定稿交付</text>
+
+  <!-- 五栏泳道表头 -->
+  <rect x="30" y="130" width="470" height="80" fill="#f8dedd" stroke="#d9544f" stroke-width="3"/>
+  <rect x="520" y="130" width="480" height="80" fill="#fae7cf" stroke="#d88b1d" stroke-width="3"/>
+  <rect x="1020" y="130" width="480" height="80" fill="#dfeefb" stroke="#4b91c4" stroke-width="3"/>
+  <rect x="1520" y="130" width="500" height="80" fill="#dcefdc" stroke="#4d9a55" stroke-width="3"/>
+  <rect x="2040" y="130" width="530" height="80" fill="#e8dff0" stroke="#8762a6" stroke-width="3"/>
+
+  <text x="265" y="180" class="laneTitle" text-anchor="middle">一、接收与定界</text>
+  <text x="760" y="180" class="laneTitle" text-anchor="middle">二、清单与核对</text>
+  <text x="1260" y="180" class="laneTitle" text-anchor="middle">三、证据图制作</text>
+  <text x="1770" y="180" class="laneTitle" text-anchor="middle">四、成文与内容门禁</text>
+  <text x="2305" y="180" class="laneTitle" text-anchor="middle">五、逐页质检与交付</text>
+
+  <!-- 泳道底色与边界 -->
+  <rect x="30" y="210" width="470" height="1380" fill="#fffafa" stroke="#d9544f" stroke-width="3"/>
+  <rect x="520" y="210" width="480" height="1380" fill="#fffcf8" stroke="#d88b1d" stroke-width="3"/>
+  <rect x="1020" y="210" width="480" height="1380" fill="#f9fcff" stroke="#4b91c4" stroke-width="3"/>
+  <rect x="1520" y="210" width="500" height="1380" fill="#f9fcf9" stroke="#4d9a55" stroke-width="3"/>
+  <rect x="2040" y="210" width="530" height="1380" fill="#fcfafe" stroke="#8762a6" stroke-width="3"/>
+
+  <!-- 第一栏 -->
+  <g filter="url(#shadow)">
+    <rect x="80" y="280" width="370" height="170" rx="22" fill="#fff1f0" stroke="#d9544f" class="border"/>
+  </g>
+  <circle cx="108" cy="308" r="20" fill="#d9544f"/>
+  <text x="108" y="309" class="num">1</text>
+  <text x="265" y="330" class="cardTitle" text-anchor="middle">接收审查人材料</text>
+  <text x="265" y="374" class="body" text-anchor="middle">审查意见 · 标记图纸</text>
+  <text x="265" y="410" class="body" text-anchor="middle">截图 · 既有 Word · 明确更正</text>
+
+  <path d="M265 450 L265 546" class="arrow"/>
+  <polygon points="255,546 275,546 265,560" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="80" y="560" width="370" height="150" rx="22" fill="#fff1f0" stroke="#d9544f" class="border"/>
+  </g>
+  <circle cx="108" cy="588" r="20" fill="#d9544f"/>
+  <text x="108" y="589" class="num">2</text>
+  <text x="265" y="611" class="cardTitle" text-anchor="middle">创建交付工作区</text>
+  <text x="265" y="658" class="body" text-anchor="middle">原件分类归档，只读留存</text>
+
+  <path d="M265 710 L265 796" class="arrow"/>
+  <polygon points="255,796 275,796 265,810" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="65" y="810" width="400" height="210" rx="22" fill="#fff1f0" stroke="#d9544f" class="border"/>
+  </g>
+  <circle cx="93" cy="838" r="20" fill="#d9544f"/>
+  <text x="93" y="839" class="num">3</text>
+  <text x="265" y="860" class="cardTitle" text-anchor="middle">确定权威来源</text>
+  <text x="265" y="908" class="body" text-anchor="middle">最新确认稿与明确更正优先</text>
+  <text x="265" y="946" class="body" text-anchor="middle">其次为原始笔记和标记图纸</text>
+  <text x="265" y="982" class="bodySmall" text-anchor="middle">早期草稿仅作格式与历史参考</text>
+
+  <!-- 第一栏到第二栏：独立转接通道 -->
+  <path d="M265 1020 L265 1090 L510 1090 L510 360 L546 360" class="arrow"/>
+  <polygon points="546,350 546,370 560,360" fill="#60758a"/>
+
+  <!-- 第二栏 -->
+  <g filter="url(#shadow)">
+    <rect x="560" y="270" width="400" height="180" rx="22" fill="#fff5e8" stroke="#d88b1d" class="border"/>
+  </g>
+  <circle cx="588" cy="298" r="20" fill="#d88b1d"/>
+  <text x="588" y="299" class="num">4</text>
+  <text x="760" y="320" class="cardTitle" text-anchor="middle">建立交付意见清单</text>
+  <text x="760" y="366" class="body" text-anchor="middle">锁定条数 · 顺序 · 章节 · 图号</text>
+  <text x="760" y="405" class="body" text-anchor="middle">原话 · 规范依据 · 意见类型</text>
+
+  <path d="M760 450 L760 546" class="arrow"/>
+  <polygon points="750,546 770,546 760,560" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="560" y="560" width="400" height="210" rx="22" fill="#fff5e8" stroke="#d88b1d" class="border"/>
+  </g>
+  <circle cx="588" cy="588" r="20" fill="#d88b1d"/>
+  <text x="588" y="589" class="num">5</text>
+  <text x="760" y="611" class="cardTitle" text-anchor="middle">逐条忠实整理</text>
+  <text x="760" y="659" class="body" text-anchor="middle">不新增 · 不删减</text>
+  <text x="760" y="697" class="body" text-anchor="middle">不强化 · 不弱化</text>
+  <text x="760" y="735" class="body" text-anchor="middle">不合并 · 不拆分</text>
+
+  <path d="M760 770 L760 866" class="arrow"/>
+  <polygon points="750,866 770,866 760,880" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="560" y="880" width="400" height="180" rx="22" fill="#fff5e8" stroke="#d88b1d" class="border"/>
+  </g>
+  <circle cx="588" cy="908" r="20" fill="#d88b1d"/>
+  <text x="588" y="909" class="num">6</text>
+  <text x="760" y="930" class="cardTitle" text-anchor="middle">对照核验并记录</text>
+  <text x="760" y="976" class="body" text-anchor="middle">意见与标记位置一一对应</text>
+  <text x="760" y="1015" class="body" text-anchor="middle">规范未提供时明确填写“无”</text>
+
+  <path d="M760 1060 L760 1156" class="arrow"/>
+  <polygon points="750,1156 770,1156 760,1170" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="575" y="1170" width="370" height="150" rx="48" fill="#fff8ed" stroke="#d88b1d" stroke-width="4"/>
+  </g>
+  <text x="760" y="1225" class="cardTitle" text-anchor="middle">来源与内容一致？</text>
+  <text x="760" y="1270" class="bodySmall" text-anchor="middle">条数、顺序、位置、原话均对应</text>
+
+  <!-- 一致：第二栏到第三栏 -->
+  <text x="965" y="1218" class="branch" fill="#3f9a68">是</text>
+  <path d="M945 1245 L1010 1245 L1010 365 L1046 365" class="arrowYes"/>
+  <polygon points="1046,355 1046,375 1060,365" fill="#3f9a68"/>
+
+  <!-- 不一致：暂停并回到核验 -->
+  <text x="778" y="1360" class="branch" fill="#d9544f">否</text>
+  <path d="M760 1320 L760 1376" class="arrowNo"/>
+  <polygon points="750,1376 770,1376 760,1390" fill="#d9544f"/>
+  <g filter="url(#softShadow)">
+    <rect x="585" y="1390" width="350" height="120" rx="20" fill="#fff0ef" stroke="#d9544f" stroke-width="3"/>
+  </g>
+  <text x="760" y="1438" class="cardTitle" text-anchor="middle">请审查人确认</text>
+  <text x="760" y="1480" class="bodySmall" text-anchor="middle">暂停该条，不自行推断</text>
+  <path d="M585 1450 L540 1450 L540 970 L546 970" class="arrowNo"/>
+  <polygon points="546,960 546,980 560,970" fill="#d9544f"/>
+
+  <!-- 第三栏 -->
+  <g filter="url(#shadow)">
+    <rect x="1060" y="270" width="400" height="190" rx="22" fill="#edf7ff" stroke="#4b91c4" class="border"/>
+  </g>
+  <circle cx="1088" cy="298" r="20" fill="#4b91c4"/>
+  <text x="1088" y="299" class="num">7</text>
+  <text x="1260" y="320" class="cardTitle" text-anchor="middle">确定证据策略</text>
+  <rect x="1090" y="350" width="78" height="38" rx="12" fill="#dceefc" stroke="#83b6da" stroke-width="2"/>
+  <rect x="1178" y="350" width="78" height="38" rx="12" fill="#dceefc" stroke="#83b6da" stroke-width="2"/>
+  <rect x="1266" y="350" width="78" height="38" rx="12" fill="#dceefc" stroke="#83b6da" stroke-width="2"/>
+  <rect x="1354" y="350" width="78" height="38" rx="12" fill="#dceefc" stroke="#83b6da" stroke-width="2"/>
+  <text x="1129" y="376" class="mini" text-anchor="middle">不插图</text>
+  <text x="1217" y="376" class="mini" text-anchor="middle">单图</text>
+  <text x="1305" y="376" class="mini" text-anchor="middle">多图</text>
+  <text x="1393" y="376" class="mini" text-anchor="middle">共用</text>
+  <text x="1260" y="425" class="bodySmall" text-anchor="middle">按意见需要选择，避免无效堆图</text>
+
+  <path d="M1260 460 L1260 556" class="arrow"/>
+  <polygon points="1250,556 1270,556 1260,570" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="1045" y="570" width="430" height="340" rx="22" fill="#edf7ff" stroke="#4b91c4" class="border"/>
+  </g>
+  <circle cx="1073" cy="598" r="20" fill="#4b91c4"/>
+  <text x="1073" y="599" class="num">8</text>
+  <text x="1260" y="620" class="cardTitle" text-anchor="middle">制作可追溯证据图</text>
+  <rect x="1075" y="658" width="370" height="58" rx="14" fill="#ffffff" stroke="#83b6da" stroke-width="2"/>
+  <text x="1260" y="695" class="mini" text-anchor="middle">标记图纸 → 打印图纸 → 渲染页面</text>
+  <path d="M1260 716 L1260 746" class="arrow"/>
+  <polygon points="1251,746 1269,746 1260,759" fill="#60758a"/>
+  <rect x="1090" y="759" width="340" height="58" rx="14" fill="#ffffff" stroke="#83b6da" stroke-width="2"/>
+  <text x="1260" y="796" class="mini" text-anchor="middle">裁剪并标红 → 证据图片</text>
+  <text x="1260" y="850" class="bodySmall" text-anchor="middle">记录来源、页码、裁剪范围和红框位置</text>
+  <rect x="1095" y="866" width="330" height="30" rx="15" fill="#ffe9e7"/>
+  <text x="1260" y="888" class="mini" fill="#b34440" text-anchor="middle">禁止使用制图软件界面截图</text>
+
+  <path d="M1260 910 L1260 1006" class="arrow"/>
+  <polygon points="1250,1006 1270,1006 1260,1020" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="1070" y="1020" width="380" height="170" rx="48" fill="#edf7ff" stroke="#4b91c4" stroke-width="4"/>
+  </g>
+  <circle cx="1098" cy="1048" r="20" fill="#4b91c4"/>
+  <text x="1098" y="1049" class="num">9</text>
+  <text x="1260" y="1068" class="cardTitle" text-anchor="middle">内容包校验门禁</text>
+  <text x="1260" y="1111" class="bodySmall" text-anchor="middle">条数与顺序 · 字段 · 图号 · 证据来源</text>
+  <text x="1260" y="1153" class="body" font-weight="700" text-anchor="middle">全部通过？</text>
+
+  <!-- 内容包通过：第三栏到第四栏 -->
+  <text x="1460" y="1088" class="branch" fill="#3f9a68">是</text>
+  <path d="M1450 1105 L1510 1105 L1510 330 L1566 330" class="arrowYes"/>
+  <polygon points="1566,320 1566,340 1580,330" fill="#3f9a68"/>
+
+  <!-- 内容包未通过：修正后重检 -->
+  <text x="1278" y="1280" class="branch" fill="#d9544f">否</text>
+  <path d="M1260 1190 L1260 1346" class="arrowNo"/>
+  <polygon points="1250,1346 1270,1346 1260,1360" fill="#d9544f"/>
+  <g filter="url(#softShadow)">
+    <rect x="1085" y="1360" width="350" height="120" rx="20" fill="#fff0ef" stroke="#d9544f" stroke-width="3"/>
+  </g>
+  <text x="1260" y="1408" class="cardTitle" text-anchor="middle">修正清单或证据</text>
+  <text x="1260" y="1450" class="bodySmall" text-anchor="middle">完成后重新进入校验门禁</text>
+  <path d="M1085 1420 L1035 1420 L1035 1105 L1056 1105" class="arrowNo"/>
+  <polygon points="1056,1095 1056,1115 1070,1105" fill="#d9544f"/>
+
+  <!-- 第四栏 -->
+  <g filter="url(#shadow)">
+    <rect x="1580" y="270" width="380" height="170" rx="22" fill="#edf8ed" stroke="#4d9a55" class="border"/>
+  </g>
+  <circle cx="1608" cy="298" r="20" fill="#4d9a55"/>
+  <text x="1608" y="299" class="num">10</text>
+  <text x="1770" y="320" class="cardTitle" text-anchor="middle">按正式模板生成 Word</text>
+  <text x="1770" y="367" class="body" text-anchor="middle">每条意见独立成块</text>
+  <text x="1770" y="405" class="bodySmall" text-anchor="middle">图号 · 意见 · 证据图 · 依据 · 类型</text>
+
+  <path d="M1770 440 L1770 556" class="arrow"/>
+  <polygon points="1760,556 1780,556 1770,570" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="1560" y="570" width="420" height="270" rx="48" fill="#edf8ed" stroke="#4d9a55" stroke-width="4"/>
+  </g>
+  <circle cx="1588" cy="598" r="20" fill="#4d9a55"/>
+  <text x="1588" y="599" class="num">11</text>
+  <text x="1770" y="620" class="cardTitle" text-anchor="middle">Word 内容回查</text>
+  <text x="1770" y="670" class="body" text-anchor="middle">条数与顺序一致</text>
+  <text x="1770" y="709" class="body" text-anchor="middle">章节与字段完整</text>
+  <text x="1770" y="748" class="body" text-anchor="middle">每条仅出现一次</text>
+  <text x="1770" y="799" class="body" font-weight="700" text-anchor="middle">是否通过？</text>
+
+  <!-- Word 内容通过：第四栏到第五栏 -->
+  <text x="1990" y="678" class="branch" fill="#3f9a68">是</text>
+  <path d="M1980 705 L2030 705 L2030 425 L2086 425" class="arrowYes"/>
+  <polygon points="2086,415 2086,435 2100,425" fill="#3f9a68"/>
+
+  <!-- Word 内容未通过：修正后重新生成 -->
+  <text x="1788" y="965" class="branch" fill="#d9544f">否</text>
+  <path d="M1770 840 L1770 1016" class="arrowNo"/>
+  <polygon points="1760,1016 1780,1016 1770,1030" fill="#d9544f"/>
+  <g filter="url(#softShadow)">
+    <rect x="1600" y="1030" width="340" height="120" rx="20" fill="#fff0ef" stroke="#d9544f" stroke-width="3"/>
+  </g>
+  <text x="1770" y="1078" class="cardTitle" text-anchor="middle">修正文稿</text>
+  <text x="1770" y="1120" class="bodySmall" text-anchor="middle">重新生成 Word 并回查</text>
+  <path d="M1600 1090 L1540 1090 L1540 400 L1566 400" class="arrowNo"/>
+  <polygon points="1566,390 1566,410 1580,400" fill="#d9544f"/>
+
+  <!-- 第五栏 -->
+  <g filter="url(#shadow)">
+    <rect x="2100" y="270" width="410" height="330" rx="22" fill="#f5eff9" stroke="#8762a6" class="border"/>
+  </g>
+  <circle cx="2128" cy="298" r="20" fill="#8762a6"/>
+  <text x="2128" y="299" class="num">12</text>
+  <text x="2305" y="320" class="cardTitle" text-anchor="middle">导出并逐页视觉质检</text>
+  <text x="2305" y="362" class="bodySmall" text-anchor="middle">将 Word 导出为固定版文档</text>
+  <text x="2305" y="397" class="bodySmall" text-anchor="middle">渲染并检查每一页</text>
+  <rect x="2140" y="430" width="145" height="43" rx="13" fill="#ffffff" stroke="#b59bc9" stroke-width="2"/>
+  <rect x="2325" y="430" width="145" height="43" rx="13" fill="#ffffff" stroke="#b59bc9" stroke-width="2"/>
+  <rect x="2140" y="489" width="145" height="43" rx="13" fill="#ffffff" stroke="#b59bc9" stroke-width="2"/>
+  <rect x="2325" y="489" width="145" height="43" rx="13" fill="#ffffff" stroke="#b59bc9" stroke-width="2"/>
+  <rect x="2140" y="548" width="145" height="32" rx="13" fill="#ffffff" stroke="#b59bc9" stroke-width="2"/>
+  <rect x="2325" y="548" width="145" height="32" rx="13" fill="#ffffff" stroke="#b59bc9" stroke-width="2"/>
+  <text x="2212" y="458" class="mini" text-anchor="middle">无裁切</text>
+  <text x="2398" y="458" class="mini" text-anchor="middle">无重叠</text>
+  <text x="2212" y="517" class="mini" text-anchor="middle">无空白页</text>
+  <text x="2398" y="517" class="mini" text-anchor="middle">图片清晰</text>
+  <text x="2212" y="571" class="mini" text-anchor="middle">红框准确</text>
+  <text x="2398" y="571" class="mini" text-anchor="middle">页码连续</text>
+
+  <path d="M2305 600 L2305 726" class="arrow"/>
+  <polygon points="2295,726 2315,726 2305,740" fill="#60758a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="2115" y="740" width="380" height="170" rx="48" fill="#f5eff9" stroke="#8762a6" stroke-width="4"/>
+  </g>
+  <text x="2305" y="805" class="cardTitle" text-anchor="middle">每一页均通过？</text>
+  <text x="2305" y="852" class="bodySmall" text-anchor="middle">内容、版式、图片、页码全部合格</text>
+
+  <!-- 页面未通过：调整后回到逐页质检 -->
+  <text x="2323" y="1010" class="branch" fill="#d9544f">否</text>
+  <path d="M2305 910 L2305 1056" class="arrowNo"/>
+  <polygon points="2295,1056 2315,1056 2305,1070" fill="#d9544f"/>
+  <g filter="url(#softShadow)">
+    <rect x="2130" y="1070" width="350" height="120" rx="20" fill="#fff0ef" stroke="#d9544f" stroke-width="3"/>
+  </g>
+  <text x="2305" y="1118" class="cardTitle" text-anchor="middle">调整版式</text>
+  <text x="2305" y="1160" class="bodySmall" text-anchor="middle">重新导出并逐页质检</text>
+  <path d="M2130 1130 L2060 1130 L2060 520 L2086 520" class="arrowNo"/>
+  <polygon points="2086,510 2086,530 2100,520" fill="#d9544f"/>
+
+  <!-- 页面通过：沿右侧独立通道进入最终交付 -->
+  <text x="2510" y="800" class="branch" fill="#3f9a68">是</text>
+  <path d="M2495 825 L2535 825 L2535 1410 L2514 1410" class="arrowYes"/>
+  <polygon points="2514,1400 2514,1420 2500,1410" fill="#3f9a68"/>
+
+  <g filter="url(#shadow)">
+    <path d="M2110 1345 L2110 1310 L2260 1310 L2295 1345 L2500 1345 L2500 1510 L2110 1510 Z"
+          fill="#eee4f5" stroke="#8762a6" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+  <text x="2305" y="1403" class="cardTitle" text-anchor="middle">最终交付 Word</text>
+  <text x="2305" y="1446" class="body" text-anchor="middle">默认只交付定稿文档</text>
+  <text x="2305" y="1482" class="bodySmall" text-anchor="middle">清单、核对日志、质检记录留档</text>
+
+  <!-- 底部三条原则 -->
+  <rect x="30" y="1590" width="2540" height="140" fill="url(#footerGradient)" stroke="#8aa0b5" stroke-width="3"/>
+
+  <circle cx="90" cy="1660" r="25" fill="#d9544f"/>
+  <text x="90" y="1661" class="num">一</text>
+  <text x="130" y="1668" class="footerText">不重新作技术审查</text>
+
+  <circle cx="835" cy="1660" r="25" fill="#d88b1d"/>
+  <text x="835" y="1661" class="num">二</text>
+  <text x="875" y="1668" class="footerText">不改变审查人已确认的技术结论</text>
+
+  <circle cx="1710" cy="1660" r="25" fill="#4d9a55"/>
+  <text x="1710" y="1661" class="num">三</text>
+  <text x="1750" y="1668" class="footerText">内容校验与逐页质检全部通过后才交付</text>
+</svg>
