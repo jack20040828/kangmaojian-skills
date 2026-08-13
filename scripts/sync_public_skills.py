@@ -325,6 +325,7 @@ def scrub_xml(name: str, data: bytes) -> bytes:
             data,
         )
     if name.startswith("word/") and name.endswith(".xml"):
+        data = data.replace("永州零陵".encode("utf-8"), "某".encode("utf-8"))
         data = re.sub(
             rb"\s+(?:[A-Za-z_][\w.-]*:)?rsid[\w.-]*=(?:\x22[^\x22]*\x22|\x27[^\x27]*\x27)",
             b"",

@@ -25,6 +25,7 @@ EXPECTED_LINKS = (
     "media/building-review-workflow.svg",
     "media/review-opinion-delivery-workflow.svg",
 )
+FORBIDDEN_DOCX_TEXT = ("永州零陵", "永州零零")
 
 
 def fail(errors: list[str], message: str) -> None:
@@ -104,6 +105,12 @@ def validate_docx(path: Path, errors: list[str]) -> None:
                 if not name.startswith("word/") or not name.endswith(".xml"):
                     continue
                 xml_root = ElementTree.fromstring(archive.read(name))
+                story_text = "".join(
+                    (node.text or "") for node in xml_root.iter() if local_name(node.tag) == "t"
+                )
+                for needle in FORBIDDEN_DOCX_TEXT:
+                    if needle in story_text:
+                        fail(errors, f"{path}: forbidden project text remains in {name}: {needle}")
                 for node in xml_root.iter():
                     if any(local_name(key).startswith("rsid") for key in node.attrib):
                         fail(errors, f"{path}: revision session metadata remains in {name}")
