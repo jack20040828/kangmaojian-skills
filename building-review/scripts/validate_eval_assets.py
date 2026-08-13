@@ -51,6 +51,7 @@ def main() -> int:
     errors: list[str] = []
     routing_path = skill_dir / "evals" / "routing-cases.json"
     regression_path = skill_dir / "evals" / "regression-cases.json"
+    gold_path = skill_dir / "evals" / "gold-cases.json"
     try:
         routing = load_json(routing_path)
     except Exception as error:
@@ -81,13 +82,23 @@ def main() -> int:
         regression = load_json(regression_path)
         if not isinstance(regression, list) or not regression:
             errors.append("regression-cases.json must contain a non-empty list")
+        elif len(regression) != 50:
+            errors.append(f"regression-cases.json must contain 50 cases, found {len(regression)}")
     except Exception as error:
         errors.append(f"invalid regression-cases.json: {error}")
+    try:
+        gold = load_json(gold_path)
+        if not isinstance(gold, dict) or gold.get("schema_version") != "1.0":
+            errors.append("gold-cases.json must use schema_version 1.0")
+        elif not isinstance(gold.get("cases"), list) or not gold["cases"]:
+            errors.append("gold-cases.json must contain candidate cases")
+    except Exception as error:
+        errors.append(f"invalid gold-cases.json: {error}")
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
         return 1
-    print(f"PASS: {len(routing)} routing cases and regression metadata are structurally valid")
+    print(f"PASS: {len(routing)} routing cases, 50 regressions, and gold metadata are structurally valid")
     return 0
 
 

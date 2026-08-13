@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "skills": {
+    "building-review": {
+      "files": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "evals/gold-cases.json",
+        "evals/regression-cases.json",
+        "evals/routing-cases.json",
+        "evals/run_regression_checks.py",
+        "evals/test_cad_automation_guard.py",
+        "evals/test_cross_sheet_consistency.py",
+        "evals/test_review_calculations.py",
+        "evals/test_v14_workflow.py",
+        "generated/review-rules.json",
+        "references/checklist-rules.md",
+        "references/evidence-ledger.md",
+        "references/gotchas.md",
+        "references/knowledge-map.md",
+        "references/opinion-rules.md",
+        "references/project-profile.md",
+        "references/report-format.md",
+        "references/review-rule-schema.md",
+        "references/review-rules-core.json",
+        "references/scope-boundary.md",
+        "references/screenshot-protocol.md",
+        "references/single-building-coverage.md",
+        "references/single-building-retrospective.md",
+        "references/workflow.md",
+        "scripts/audit_review_completeness.py",
+        "scripts/build_knowledge_index.py",
+        "scripts/build_review_rules.py",
+        "scripts/check_cross_sheet_consistency.py",
+        "scripts/create_review_workspace.py",
+        "scripts/generate_project_checklist.py",
+        "scripts/generate_review_report.py",
+        "scripts/review_calculations.py",
+        "scripts/review_rules.py",
+        "scripts/route_specialties.py",
+        "scripts/run_cad_script_safely.py",
+        "scripts/run_gold_evals.py",
+        "scripts/search_knowledge.py",
+        "scripts/snapshot_review_integrity.py",
+        "scripts/validate_docx_content.py",
+        "scripts/validate_eval_assets.py",
+        "scripts/validate_report_qa.py",
+        "scripts/validate_review_package.py",
+        "建筑单体施工图审查意见_格式说明.md",
+        "建筑总图施工图审查意见_格式说明.md",
+        "范本_建筑单体施工图审查意见.docx",
+        "范本_建筑总图施工图审查意见.docx"
+      ],
+      "public_only": [
+        "references/runtime-requirements.md"
+      ],
+      "ignored_files": [
+        "assets/建筑施工图审查Skill工作流程图_A4清晰版.png",
+        "assets/建筑施工图审查Skill工作流程图_A4清晰版.svg",
+        "assets/建筑施工图审查Skill工作流程图_大白话简化版.png",
+        "assets/建筑施工图审查Skill工作流程图_大白话简化版.svg",
+        "assets/建筑施工图审查Skill工作流程图_大白话简化版_说明.md",
+        "assets/建筑施工图审查Skill工作流程图_简化版.png",
+        "assets/建筑施工图审查Skill工作流程图_简化版.svg",
+        "assets/建筑施工图审查Skill工作流程图_修订版.png",
+        "assets/建筑施工图审查Skill工作流程图_修订版.svg",
+        "assets/建筑施工图审查Skill工作流程图_最新版.png",
+        "assets/建筑施工图审查Skill工作流程图_最新版.svg",
+        "assets/建筑施工图审查意见整理Skill工作流程图_简化版.png",
+        "assets/建筑施工图审查意见整理Skill工作流程图_简化版.svg",
+        "generated/knowledge-index.json",
+        "generated/knowledge-index.md"
+      ]
+    },
+    "review-opinion-delivery": {
+      "files": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "evals/regression-cases.json",
+        "evals/routing-cases.json",
+        "evals/run_regression_checks.py",
+        "evals/run_v12_regression_checks.py",
+        "references/delivery-style.md",
+        "references/gotchas.md",
+        "references/opinion-types.json",
+        "references/qa-checklist.md",
+        "references/scope-boundary.md",
+        "references/screenshot-standard.md",
+        "references/workflow.md",
+        "scripts/compare_reviewer_docx.py",
+        "scripts/compose_evidence_cards.py",
+        "scripts/create_delivery_workspace.py",
+        "scripts/export_docx_to_pdf.ps1",
+        "scripts/generate_delivery_report.py",
+        "scripts/normalize_opinion_types.py",
+        "scripts/opinion_types.py",
+        "scripts/render_pdf_pages.py",
+        "scripts/snapshot_source_integrity.py",
+        "scripts/validate_delivery_package.py",
+        "scripts/validate_docx_content.py",
+        "scripts/validate_eval_assets.py",
+        "scripts/validate_report_qa.py"
+      ],
+      "public_only": [
+        "references/runtime-requirements.md"
+      ],
+      "ignored_files": []
+    }
+  },
+  "media": [
+    {
+      "source_skill": "building-review",
+      "source": "assets/建筑施工图审查Skill工作流程图_最新版详细版.png",
+      "destination": "media/building-review-workflow.png"
+    },
+    {
+      "source_skill": "building-review",
+      "source": "assets/建筑施工图审查Skill工作流程图_最新版详细版.svg",
+      "destination": "media/building-review-workflow.svg"
+    },
+    {
+      "source_skill": "building-review",
+      "source": "assets/建筑施工图审查意见整理Skill工作流程图.png",
+      "destination": "media/review-opinion-delivery-workflow.png"
+    },
+    {
+      "source_skill": "building-review",
+      "source": "assets/建筑施工图审查意见整理Skill工作流程图.svg",
+      "destination": "media/review-opinion-delivery-workflow.svg"
+    }
+  ],
+  "validation_commands": [
+    ["scripts/validate_public_package.py", "."],
+    ["building-review/scripts/validate_eval_assets.py"],
+    ["building-review/evals/run_regression_checks.py"],
+    ["building-review/evals/test_cad_automation_guard.py"],
+    ["review-opinion-delivery/scripts/validate_eval_assets.py"],
+    ["review-opinion-delivery/evals/run_regression_checks.py"],
+    ["review-opinion-delivery/evals/run_v12_regression_checks.py"]
+  ]
+}

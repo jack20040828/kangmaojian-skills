@@ -1,4 +1,4 @@
-# 知识库地图
+﻿# 知识库地图
 
 Raw knowledge base:
 
@@ -66,6 +66,14 @@ When citing, record:
 
 Cases cannot replace standards. If a case and a standard conflict, re-check the standard first.
 
+## v1.4 可执行规则
+
+- Read `review-rule-schema.md` before building or changing rules.
+- Edit `references/review-rules-core.json`, then run `scripts/build_review_rules.py`; do not edit `generated/review-rules.json` directly.
+- A normative rule is executable only when its basis resolves to a local B-source file with path, hash, article, and requirement.
+- The generated catalog also contains design-depth coverage shells. They force topic inspection but cannot support an external technical violation.
+- Snapshot the catalog for every new workspace. A catalog hash change invalidates the old checklist until routing and atomic expansion are repeated.
+
 ## v1.1 检索与版本规则
 
 - 知识索引为每个文件记录大小和SHA-256，并用 `corpus_sha256` 标识整套知识库快照。
@@ -73,6 +81,6 @@ Cases cannot replace standards. If a case and a standard conflict, re-check the 
 - 只有在已限定专项时使用 `search_knowledge.py --deep --specialty <专项>`，避免无差别扫描整个知识库。
 - PDF返回 `scan_or_unreadable` 或深度检索提示“需视觉/OCR核验”时，必须打开原文件或执行OCR，不得把无文本当成无规定。
 - A类资料用于展开检查项，B类资料用于正式引用，C类资料辅助解释，D类资料只能提供发现方向和截图经验。
-- `route_specialties.py` 输出候选专项及触发理由，不证明专项必然适用。
+- `route_specialties.py --json` 输出候选专项、触发理由和最低 `required_topics`，不证明专项必然适用；确认适用后必须把对应主题逐项写入v1.3检查矩阵。
 - `verified`意见引用的规范必须能唯一解析到索引文件，并进入工作区 `knowledge_snapshot.used_standards`。
 - 知识库整体哈希或已引用规范哈希发生变化时，原验证失效；不得沿用旧的“通过”状态。

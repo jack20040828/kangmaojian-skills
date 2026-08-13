@@ -8,8 +8,15 @@ import csv
 import hashlib
 import json
 import re
+from datetime import datetime
 from pathlib import Path
 from struct import unpack
+
+from review_rules import applicable_rules, load_catalog, load_profile
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+SKILL_DIR = SCRIPT_DIR.parent
+DEFAULT_RULE_CATALOG = SKILL_DIR / "generated" / "review-rules.json"
 
 REQUIRED_FILES = [
     "drawing_inventory.csv",
@@ -39,7 +46,7 @@ VALID_APPLICABILITY = {"适用", "不适用", "需判断"}
 VALID_CONCLUSIONS = {"符合", "不符合", "需核验", "不适用"}
 VALID_SCREENSHOT_STRATEGIES = {"none", "single", "multiple", "shared"}
 SCREENSHOT_REQUIRED_STRATEGIES = {"single", "multiple", "shared"}
-SUPPORTED_SCHEMA_VERSIONS = {"1.1", "1.2"}
+SUPPORTED_SCHEMA_VERSIONS = {"1.1", "1.2", "1.3", "1.4"}
 VALID_REVIEW_FAMILIES = {
     "设计说明",
     "目录索引",
@@ -61,6 +68,17 @@ VALID_REVIEW_FAMILIES = {
 }
 VALID_REVIEW_STATUSES = {"reviewed", "not_applicable", "needs_review"}
 VALID_CITATION_MODES = {"cited", "none"}
+VALID_EVIDENCE_CLASSES = {
+    "identity_text",
+    "numeric",
+    "location",
+    "relationship",
+    "graphic",
+    "detail",
+    "performance",
+    "absence_chain",
+    "not_applicable",
+}
 GENERIC_CLOSURE_PATTERNS = (
     "已提供",
     "均已提供",
@@ -68,10 +86,10 @@ GENERIC_CLOSURE_PATTERNS = (
     "覆盖完整",
     "大样覆盖",
     "图纸齐全",
-)
-OBJECTIVE_FACT_PATTERN = re.compile(
-    r"\d|[%％]|mm|cm|\bm\b|坡度|坡向|标高|净宽|净高|高度|宽度|距离|尺寸|数量|"
-    r"荷载|防火等级|耐火极限|开启方向|雨水口|地漏|滴水|反坎|上翻|盲道|扶手|栏杆|视线"
+    "列有",
+    "可对应",
+    "表达完整",
+    "均已核对",
 )
 DESIGN_DEPTH_OPINION_TYPES = {
     "设计深度，必须修改（消防安全）",
@@ -96,6 +114,19 @@ V11_GATE_FIELDS = {
     "red_box_precision_check",
 }
 V12_INVENTORY_FIELDS = {"review_family", "review_status", "review_check_ids", "review_notes"}
+V13_CHECK_FIELDS = {"review_item_id", "coverage_topic", "evidence_class"}
+V14_CHECK_FIELDS = V13_CHECK_FIELDS | {
+    "rule_id",
+    "atomic_check_id",
+    "decision_state",
+    "discovery_track",
+    "applicability_basis",
+    "comparison_method",
+    "comparison_record",
+    "calculation_record",
+    "open_reason",
+    "reviewer_gate",
+}
 V12_ISSUE_FIELDS = V11_ISSUE_FIELDS | {
     "citation_mode",
     "standard_display_name",
@@ -105,10 +136,103 @@ V12_GATE_FIELDS = V11_GATE_FIELDS | {
     "graphical_interpretation_check",
     "opinion_wording_check",
 }
+V14_GATE_FIELDS = V12_GATE_FIELDS | {"evidence_chain_check", "independent_review_check"}
 LEGACY_GATE_FIELDS = V11_GATE_FIELDS | {"layout_check"}
 VALID_SECTIONS = {
     "single": {"设计说明", "平面图", "立面剖面图", "大样图"},
     "site": {"总图设计说明", "总图设计图纸"},
+}
+
+FAMILY_REQUIRED_TOPICS = {
+    "目录索引": {"document_traceability"},
+    "设计说明": {"project_identity_function", "project_scope_consistency", "code_basis_consistency"},
+    "平面图": {"function_layout", "fire_egress", "accessibility", "wet_room_hygiene", "safety_coordination"},
+    "屋面图": {"roof_drainage", "roof_fall_protection", "roof_access", "renewable_energy_safety"},
+    "立面图": {"height_elevation", "openings_rescue", "facade_safety_weather"},
+    "剖面图": {"height_clearance", "vertical_relationship", "roof_guard"},
+    "楼梯大样": {"stair_geometry", "stair_guard", "roof_exit"},
+    "墙身大样": {"detail_traceability", "window_sill_drainage", "parapet_flashing", "waterproofing_detail"},
+    "其他大样": {"detail_traceability", "wet_room_drainage", "accessibility_detail", "detail_implementability"},
+    "门窗表": {"door_window_identity", "fire_rescue_openings", "door_window_safety"},
+    "材料做法表": {"project_applicability", "material_performance", "cross_drawing_consistency"},
+    "总图设计说明": {"project_identity_function", "project_scope_consistency", "code_basis_consistency", "site_design_parameters"},
+    "总平面图": {"site_accessible_route", "parking_special_spaces", "site_fire_access", "site_function_space"},
+    "竖向设计图": {"site_vertical_drainage", "accessible_route_gradient", "site_elevation_relationship"},
+    "交通消防图": {"site_fire_access", "parking_special_spaces", "pedestrian_vehicle_relationship"},
+    "其他总图": {"site_function_space", "site_accessible_route"},
+    "其他": {"document_traceability"},
+}
+
+FUNCTION_TRIGGER_TOPICS = [
+    (("宿舍", "旅馆", "酒店"), {"single": {"dormitory_refuse", "dormitory_acoustics", "accessible_room", "accessible_room_detail"}, "site": {"site_assembly_space"}}),
+    (("食堂", "餐厅", "厨房", "备餐", "洗消"), {"single": {"food_wet_room_vertical"}}),
+    (("电梯",), {"single": {"accessible_elevator"}}),
+    (("光伏", "太阳能"), {"single": {"renewable_energy_safety"}}),
+    (("停车", "车位"), {"site": {"parking_special_spaces"}}),
+]
+
+TOPIC_EVIDENCE_CLASSES = {
+    "document_traceability": {"identity_text", "relationship", "absence_chain"},
+    "project_identity_function": {"identity_text", "relationship", "absence_chain"},
+    "project_scope_consistency": {"identity_text", "relationship", "absence_chain"},
+    "code_basis_consistency": {"identity_text", "relationship", "absence_chain"},
+    "function_layout": {"location", "relationship", "numeric", "absence_chain"},
+    "fire_egress": {"numeric", "location", "relationship", "graphic", "absence_chain"},
+    "accessibility": {"numeric", "location", "relationship", "detail", "absence_chain"},
+    "wet_room_hygiene": {"location", "relationship", "detail", "absence_chain"},
+    "safety_coordination": {"numeric", "location", "relationship", "graphic", "detail", "absence_chain"},
+    "roof_fall_protection": {"numeric", "location", "detail", "absence_chain"},
+    "roof_access": {"location", "relationship", "detail", "absence_chain"},
+    "height_elevation": {"numeric", "relationship", "absence_chain"},
+    "openings_rescue": {"numeric", "location", "relationship", "detail", "absence_chain"},
+    "facade_safety_weather": {"detail", "performance", "relationship", "absence_chain"},
+    "height_clearance": {"numeric", "relationship", "absence_chain"},
+    "vertical_relationship": {"numeric", "relationship", "absence_chain"},
+    "roof_guard": {"numeric", "detail", "relationship", "absence_chain"},
+    "stair_geometry": {"numeric", "detail", "relationship", "absence_chain"},
+    "stair_guard": {"numeric", "detail", "relationship", "absence_chain"},
+    "roof_exit": {"location", "relationship", "detail", "absence_chain"},
+    "detail_traceability": {"identity_text", "relationship", "detail", "absence_chain"},
+    "food_wet_room_vertical": {"relationship"},
+    "dormitory_refuse": {"location", "absence_chain"},
+    "dormitory_acoustics": {"relationship", "performance", "absence_chain"},
+    "accessible_room": {"location", "numeric", "absence_chain"},
+    "accessible_room_detail": {"detail", "absence_chain"},
+    "accessible_elevator": {"detail", "performance", "absence_chain"},
+    "site_assembly_space": {"location", "numeric", "absence_chain"},
+    "site_accessible_route": {"location", "relationship", "absence_chain"},
+    "parking_special_spaces": {"location", "numeric", "absence_chain"},
+    "roof_drainage": {"location", "relationship", "detail", "absence_chain"},
+    "renewable_energy_safety": {"location", "relationship", "detail", "absence_chain"},
+    "window_sill_drainage": {"detail", "relationship", "absence_chain"},
+    "parapet_flashing": {"detail", "relationship", "absence_chain"},
+    "waterproofing_detail": {"detail", "performance", "absence_chain"},
+    "wet_room_drainage": {"location", "detail", "absence_chain"},
+    "accessibility_detail": {"numeric", "detail", "relationship", "absence_chain"},
+    "detail_implementability": {"numeric", "detail", "performance", "relationship", "absence_chain"},
+    "door_window_identity": {"identity_text", "relationship", "absence_chain"},
+    "fire_rescue_openings": {"numeric", "location", "detail", "absence_chain"},
+    "door_window_safety": {"numeric", "detail", "performance", "relationship", "absence_chain"},
+    "project_applicability": {"identity_text", "relationship", "performance", "absence_chain"},
+    "material_performance": {"identity_text", "performance", "detail", "absence_chain"},
+    "cross_drawing_consistency": {"identity_text", "relationship", "absence_chain"},
+    "site_design_parameters": {"numeric", "identity_text", "relationship", "absence_chain"},
+    "site_fire_access": {"numeric", "location", "relationship", "graphic", "absence_chain"},
+    "site_function_space": {"numeric", "location", "relationship", "absence_chain"},
+    "site_vertical_drainage": {"numeric", "location", "relationship", "detail", "absence_chain"},
+    "accessible_route_gradient": {"numeric", "location", "relationship", "absence_chain"},
+    "site_elevation_relationship": {"numeric", "relationship", "absence_chain"},
+    "pedestrian_vehicle_relationship": {"location", "relationship", "graphic", "absence_chain"},
+}
+VALID_DECISION_STATES = {"unreviewed", "resolved", "needs_review"}
+VALID_DISCOVERY_TRACKS = {"technical_compliance", "design_depth", "optimization"}
+PROFILE_FACT_KEYS = {
+    "location_province", "location_city", "building_use", "industrial_building",
+    "overnight_stay", "gross_floor_area_m2", "building_height_m", "floors_above",
+    "floors_below", "fire_hazard_class", "fire_resistance_rating", "occupant_load",
+    "sprinkler", "basement", "elevator", "accessible_requirement", "roof_accessible",
+    "wet_rooms", "parking", "photovoltaic_or_solar", "food_service",
+    "dormitory_or_hotel", "school", "office", "children_activity",
 }
 IGNORED_NAMES = {".DS_Store", "Thumbs.db"}
 
@@ -234,6 +358,7 @@ def validate_integrity(
     root: Path,
     manifest: dict,
     verified: list[dict[str, str]],
+    checks: list[dict[str, str]],
     schema_version: str,
 ) -> list[str]:
     errors: list[str] = []
@@ -282,22 +407,37 @@ def validate_integrity(
     entries = {item.get("relative_path", ""): item for item in index_entries}
     used = snapshot.get("used_standards", [])
     used_map = {item.get("relative_path", ""): item for item in used if item.get("relative_path")}
-    cited_verified = [
-        issue
+    cited_records = [
+        (
+            issue.get("issue_id", "").strip() or "[missing issue_id]",
+            issue.get("standard_source", "").strip(),
+        )
         for issue in verified
-        if schema_version != "1.2" or issue.get("citation_mode", "").strip().lower() == "cited"
+        if schema_version not in {"1.2", "1.3", "1.4"}
+        or issue.get("citation_mode", "").strip().lower() == "cited"
     ]
-    if cited_verified and not used_map:
-        errors.append("knowledge_snapshot has no standards for verified issues")
-    for issue in cited_verified:
-        issue_id = issue.get("issue_id", "").strip() or "[missing issue_id]"
-        entry, error = resolve_index_entry(issue.get("standard_source", "").strip(), index_entries)
+    if schema_version == "1.4":
+        cited_records.extend(
+            (
+                check.get("check_id", "").strip() or "[missing check_id]",
+                check.get("standard_source", "").strip(),
+            )
+            for check in checks
+            if check.get("decision_state", "").strip() == "resolved"
+            and check.get("discovery_track", "").strip() in {"technical_compliance", "optimization"}
+            and check.get("conclusion", "").strip() in {"符合", "不符合"}
+        )
+    cited_records = [(label, source) for label, source in cited_records if source]
+    if cited_records and not used_map:
+        errors.append("knowledge_snapshot has no standards for verified issues or resolved technical checks")
+    for label, source in cited_records:
+        entry, error = resolve_index_entry(source, index_entries)
         if error:
-            errors.append(f"{issue_id}: {error}")
+            errors.append(f"{label}: {error}")
             continue
         assert entry is not None
         if entry.get("relative_path", "") not in used_map:
-            errors.append(f"{issue_id}: standard_source is not present in knowledge_snapshot.used_standards")
+            errors.append(f"{label}: standard_source is not present in knowledge_snapshot.used_standards")
     for relative, record in used_map.items():
         entry = entries.get(relative)
         if not entry:
@@ -362,10 +502,167 @@ def generic_presence_only(check: dict[str, str], facts_by_id: dict[str, dict[str
             *(fact.get("raw_text_or_measure", "") for fact in linked_facts if fact),
         ]
     )
-    return any(pattern in evidence for pattern in GENERIC_CLOSURE_PATTERNS) and not OBJECTIVE_FACT_PATTERN.search(evidence)
+    if not any(pattern in evidence for pattern in GENERIC_CLOSURE_PATTERNS):
+        return False
+    substantive = re.search(r"\d", evidence) or any(
+        marker in evidence
+        for marker in ("净宽", "净高", "坡度", "数量", "位置", "标高", "图号", "房间", "防火分区", "相邻", "上层", "下层")
+    )
+    return not substantive
 
 
-def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
+def valid_iso_datetime(value: str | None) -> bool:
+    try:
+        datetime.fromisoformat((value or "").strip())
+        return True
+    except ValueError:
+        return False
+
+
+def load_v14_profile(root: Path) -> tuple[dict, list[str]]:
+    path = root / "project_profile.json"
+    if not path.exists():
+        return {}, ["v1.4 requires project_profile.json"]
+    try:
+        profile = load_profile(path)
+    except Exception as error:
+        return {}, [f"project_profile.json is invalid: {error}"]
+    return profile, []
+
+
+def validate_v14_profile(profile: dict, manifest: dict, fact_ids: set[str]) -> list[str]:
+    errors: list[str] = []
+    if profile.get("schema_version") != "1.0":
+        errors.append("project_profile.json requires schema_version 1.0")
+    if profile.get("report_type") != manifest.get("report_type"):
+        errors.append("project_profile report_type conflicts with review_manifest")
+    if profile.get("confirmed") is not True:
+        errors.append("project_profile is not reviewer-confirmed")
+    if not str(profile.get("confirmed_by", "")).strip():
+        errors.append("project_profile confirmed_by is required")
+    if not valid_iso_datetime(str(profile.get("confirmed_at", ""))):
+        errors.append("project_profile confirmed_at must be an ISO date/time")
+    facts = profile.get("facts", {})
+    if not isinstance(facts, dict):
+        return errors + ["project_profile facts must be an object"]
+    missing = sorted(PROFILE_FACT_KEYS - set(facts))
+    if missing:
+        errors.append(f"project_profile is missing facts: {', '.join(missing)}")
+    for key in sorted(PROFILE_FACT_KEYS & set(facts)):
+        record = facts.get(key, {})
+        if not isinstance(record, dict):
+            errors.append(f"project_profile {key} must be an object")
+            continue
+        status = str(record.get("status", "")).strip()
+        if status not in {"confirmed", "not_applicable", "unknown"}:
+            errors.append(f"project_profile {key} has invalid status: {status}")
+            continue
+        if status == "unknown":
+            errors.append(f"project_profile {key} remains unknown")
+        elif status == "confirmed":
+            if record.get("value", "") == "":
+                errors.append(f"project_profile {key} confirmed value is blank")
+            ids = record.get("fact_ids", [])
+            if not isinstance(ids, list) or not ids:
+                errors.append(f"project_profile {key} confirmed fact_ids are required")
+            else:
+                for fact_id in ids:
+                    if str(fact_id) not in fact_ids:
+                        errors.append(f"project_profile {key} fact_id not found: {fact_id}")
+        elif not str(record.get("notes", "")).strip():
+            errors.append(f"project_profile {key} not_applicable requires notes")
+    route = profile.get("route_confirmation", {})
+    if not isinstance(route, dict) or route.get("confirmed") is not True:
+        errors.append("specialty route has not been reviewer-confirmed")
+    else:
+        if not str(route.get("confirmed_by", "")).strip():
+            errors.append("route_confirmation confirmed_by is required")
+        if not valid_iso_datetime(str(route.get("confirmed_at", ""))):
+            errors.append("route_confirmation confirmed_at must be an ISO date/time")
+    tracks = profile.get("discovery_tracks", {})
+    for track in sorted(VALID_DISCOVERY_TRACKS):
+        record = tracks.get(track, {}) if isinstance(tracks, dict) else {}
+        if record.get("status") != "completed":
+            errors.append(f"discovery track is not completed: {track}")
+        if not str(record.get("notes", "")).strip():
+            errors.append(f"discovery track requires notes: {track}")
+    return errors
+
+
+def load_v14_catalog(root: Path, manifest: dict) -> tuple[dict, list[str], str]:
+    errors: list[str] = []
+    snapshot = manifest.get("rule_catalog_snapshot", {})
+    if not isinstance(snapshot, dict):
+        return {}, ["rule_catalog_snapshot is missing"], ""
+    path_value = str(snapshot.get("path", "")).strip()
+    catalog_path = Path(path_value) if path_value else DEFAULT_RULE_CATALOG
+    if not catalog_path.is_absolute():
+        catalog_path = root / catalog_path
+    if not catalog_path.exists():
+        return {}, [f"rule catalog is missing: {catalog_path}"], ""
+    current_hash = sha256_file(catalog_path)
+    if current_hash != str(snapshot.get("sha256", "")).strip():
+        errors.append("rule catalog changed after workspace creation; re-route and regenerate the checklist")
+    try:
+        catalog = load_catalog(catalog_path)
+    except Exception as error:
+        return {}, errors + [f"rule catalog is invalid: {error}"], current_hash
+    if catalog.get("schema_version") != "1.0" or not catalog.get("rules"):
+        errors.append("rule catalog requires schema_version 1.0 and non-empty rules")
+    return catalog, errors, current_hash
+
+
+def workspace_input_hashes(root: Path) -> dict[str, str]:
+    names = ["review_manifest.json", "project_profile.json", *REQUIRED_FILES]
+    return {name: sha256_file(root / name) for name in names if (root / name).exists()}
+
+
+def validate_completion_audit(root: Path, catalog_hash: str) -> list[str]:
+    path = root / "completion_audit.json"
+    if not path.exists():
+        return ["v1.4 requires completion_audit.json; run audit_review_completeness.py after the final snapshot"]
+    try:
+        audit = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as error:
+        return [f"completion_audit.json is invalid: {error}"]
+    errors: list[str] = []
+    if audit.get("schema_version") != "1.0" or audit.get("workspace_schema_version") != "1.4":
+        errors.append("completion audit schema is invalid")
+    if audit.get("status") != "pass" or audit.get("errors"):
+        errors.append("completion audit has not passed")
+    if audit.get("input_hashes") != workspace_input_hashes(root):
+        errors.append("completion audit is stale because review inputs changed")
+    if audit.get("rule_catalog_sha256") != catalog_hash:
+        errors.append("completion audit is stale because the rule catalog changed")
+    return errors
+
+
+def valid_coverage_topics() -> set[str]:
+    topics = {topic for values in FAMILY_REQUIRED_TOPICS.values() for topic in values}
+    for _terms, report_topics in FUNCTION_TRIGGER_TOPICS:
+        for values in report_topics.values():
+            topics.update(values)
+    return topics
+
+
+def function_required_topics(fact_text: str, report_type: str) -> set[str]:
+    required: set[str] = set()
+    for terms, report_topics in FUNCTION_TRIGGER_TOPICS:
+        if any(term in fact_text for term in terms):
+            required.update(report_topics.get(report_type, set()))
+    return required
+
+
+def check_closes_topic(check: dict[str, str]) -> bool:
+    if check.get("decision_state", "").strip() and check.get("decision_state", "").strip() != "resolved":
+        return False
+    return (
+        check.get("applicability", "").strip() in {"适用", "不适用"}
+        and check.get("conclusion", "").strip() in {"符合", "不符合", "不适用"}
+    )
+
+
+def validate_workspace(root: Path, require_completion_audit: bool = True) -> tuple[list[str], list[str]]:
     root = root.resolve()
     errors: list[str] = []
     warnings: list[str] = []
@@ -380,7 +677,10 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
     schema_version, manifest = load_manifest(root)
     v11 = schema_version == "1.1"
     v12 = schema_version == "1.2"
-    versioned = v11 or v12
+    v13 = schema_version == "1.3"
+    v14 = schema_version == "1.4"
+    modern = v12 or v13 or v14
+    versioned = v11 or modern
     if manifest.get("_invalid"):
         errors.append("review_manifest.json is invalid JSON")
     elif manifest and not schema_version:
@@ -392,6 +692,7 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
     validation = rows(root / "validation_log.csv")
     inventory_fields = fieldnames(root / "drawing_inventory.csv")
     issue_fields = fieldnames(root / "issue_candidates.csv")
+    check_fields = fieldnames(root / "check_matrix.csv")
     validation_fields = fieldnames(root / "validation_log.csv")
     has_screenshot_fields = versioned or LEGACY_NEW_ISSUE_FIELDS.issubset(issue_fields)
 
@@ -403,20 +704,31 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
         errors.append("check_matrix.csv has no check rows")
 
     if versioned:
-        required_issue_fields = V12_ISSUE_FIELDS if v12 else V11_ISSUE_FIELDS
+        required_issue_fields = V12_ISSUE_FIELDS if modern else V11_ISSUE_FIELDS
         missing = required_issue_fields - issue_fields
         if missing:
             errors.append(f"v{schema_version} issue_candidates.csv missing fields: {', '.join(sorted(missing))}")
-        required_validation_fields = V12_GATE_FIELDS if v12 else V11_GATE_FIELDS
+        required_validation_fields = V14_GATE_FIELDS if v14 else V12_GATE_FIELDS if modern else V11_GATE_FIELDS
         missing_validation = required_validation_fields - validation_fields
         if missing_validation:
             errors.append(
                 f"v{schema_version} validation_log.csv missing fields: {', '.join(sorted(missing_validation))}"
             )
-        if v12:
+        if modern:
             missing_inventory = V12_INVENTORY_FIELDS - inventory_fields
             if missing_inventory:
-                errors.append(f"v1.2 drawing_inventory.csv missing fields: {', '.join(sorted(missing_inventory))}")
+                errors.append(
+                    f"v{schema_version} drawing_inventory.csv missing fields: "
+                    f"{', '.join(sorted(missing_inventory))}"
+                )
+        if v13 or v14:
+            required_check_fields = V14_CHECK_FIELDS if v14 else V13_CHECK_FIELDS
+            missing_checks = required_check_fields - check_fields
+            if missing_checks:
+                errors.append(
+                    f"v{schema_version} check_matrix.csv missing fields: "
+                    f"{', '.join(sorted(missing_checks))}"
+                )
         for items, field in [(facts, "fact_id"), (checks, "check_id"), (issues, "issue_id"), (validation, "issue_id")]:
             for duplicate in duplicate_ids(items, field):
                 errors.append(f"duplicate {field}: {duplicate}")
@@ -439,8 +751,26 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
     facts_by_id = {row.get("fact_id", "").strip(): row for row in facts if present(row.get("fact_id"))}
     checks_by_id = {row.get("check_id", "").strip(): row for row in checks if present(row.get("check_id"))}
     validation_ids = {row.get("issue_id", "").strip(): row for row in validation if present(row.get("issue_id"))}
+    profile: dict = {}
+    catalog: dict = {}
+    rules_by_id: dict[str, dict] = {}
+    catalog_hash = ""
+    if v14:
+        for duplicate in duplicate_ids(checks, "atomic_check_id"):
+            errors.append(f"duplicate atomic_check_id: {duplicate}")
+        profile, profile_errors = load_v14_profile(root)
+        errors.extend(profile_errors)
+        if profile:
+            errors.extend(validate_v14_profile(profile, manifest, fact_ids))
+        catalog, catalog_errors, catalog_hash = load_v14_catalog(root, manifest)
+        errors.extend(catalog_errors)
+        rules_by_id = {
+            str(rule.get("rule_id", "")).strip(): rule
+            for rule in catalog.get("rules", [])
+            if str(rule.get("rule_id", "")).strip()
+        }
 
-    if v12 and V12_INVENTORY_FIELDS.issubset(inventory_fields):
+    if modern and V12_INVENTORY_FIELDS.issubset(inventory_fields):
         for row_number, drawing in enumerate(inventory, start=2):
             label = drawing.get("drawing_no", "").strip() or drawing.get("drawing_name", "").strip() or f"row {row_number}"
             family = drawing.get("review_family", "").strip()
@@ -455,6 +785,7 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
                 if not linked_checks:
                     errors.append(f"{label}: reviewed drawing requires review_check_ids")
                 substantive_links = 0
+                closed_topics: set[str] = set()
                 for check_id in linked_checks:
                     if check_id not in check_ids:
                         errors.append(f"{label}: review_check_id not found in check_matrix.csv: {check_id}")
@@ -465,8 +796,42 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
                     linked_facts = [facts_by_id.get(fact_id) for fact_id in split_values(check.get("fact_ids"))]
                     if any(fact and fact_matches_drawing(fact, drawing) for fact in linked_facts):
                         substantive_links += 1
+                        if check_closes_topic(check):
+                            closed_topics.add(check.get("coverage_topic", "").strip())
                 if linked_checks and not substantive_links:
                     errors.append(f"{label}: reviewed drawing has no substantive sheet-specific check")
+                if v13 or v14:
+                    required_topics = FAMILY_REQUIRED_TOPICS.get(family, set())
+                    missing_topics = sorted(required_topics - closed_topics)
+                    if missing_topics:
+                        errors.append(
+                            f"{label}: required coverage topics are not closed: "
+                            f"{', '.join(missing_topics)}"
+                        )
+                if v14 and profile and catalog:
+                    expected = applicable_rules(catalog, profile, family, manifest.get("report_type", ""))
+                    expected_ids = {rule["rule_id"] for rule, _state in expected}
+                    linked_rule_ids = {
+                        checks_by_id[check_id].get("rule_id", "").strip()
+                        for check_id in linked_checks
+                        if check_id in checks_by_id
+                    }
+                    missing_rules = sorted(expected_ids - linked_rule_ids)
+                    if missing_rules:
+                        errors.append(
+                            f"{label}: triggered atomic rules are missing: {', '.join(missing_rules)}"
+                        )
+                    unresolved_rules = sorted(
+                        checks_by_id[check_id].get("rule_id", "").strip()
+                        for check_id in linked_checks
+                        if check_id in checks_by_id
+                        and checks_by_id[check_id].get("rule_id", "").strip() in expected_ids
+                        and checks_by_id[check_id].get("decision_state", "").strip() != "resolved"
+                    )
+                    if unresolved_rules:
+                        errors.append(
+                            f"{label}: triggered atomic rules are unresolved: {', '.join(unresolved_rules)}"
+                        )
             elif status == "not_applicable" and not present(drawing.get("review_notes")):
                 errors.append(f"{label}: not_applicable drawing requires review_notes")
             elif status == "needs_review":
@@ -488,13 +853,130 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
             errors.append(f"{check_id}: invalid conclusion: {conclusion}")
         if applicability == "需判断" and conclusion != "需核验":
             errors.append(f"{check_id}: applicability 需判断 requires conclusion 需核验")
-        if v12 and generic_presence_only(check, facts_by_id):
+        if modern and generic_presence_only(check, facts_by_id):
             errors.append(f"{check_id}: generic drawing-presence statement cannot close a compliant check")
+        if v13 or v14:
+            review_item_id = check.get("review_item_id", "").strip()
+            coverage_topic = check.get("coverage_topic", "").strip()
+            evidence_class = check.get("evidence_class", "").strip()
+            if not review_item_id:
+                errors.append(f"{check_id}: missing review_item_id")
+            if coverage_topic not in valid_coverage_topics():
+                errors.append(f"{check_id}: invalid coverage_topic: {coverage_topic}")
+            if evidence_class not in VALID_EVIDENCE_CLASSES:
+                errors.append(f"{check_id}: invalid evidence_class: {evidence_class}")
+            if applicability == "不适用" or conclusion == "不适用":
+                if applicability != "不适用" or conclusion != "不适用":
+                    errors.append(f"{check_id}: 不适用 requires both applicability and conclusion to be 不适用")
+                if evidence_class != "not_applicable":
+                    errors.append(f"{check_id}: 不适用 requires evidence_class not_applicable")
+            elif evidence_class == "not_applicable":
+                errors.append(f"{check_id}: evidence_class not_applicable requires a 不适用 check")
+            allowed_classes = TOPIC_EVIDENCE_CLASSES.get(coverage_topic)
+            if allowed_classes and evidence_class not in allowed_classes and evidence_class != "not_applicable":
+                errors.append(
+                    f"{check_id}: evidence_class {evidence_class} does not fit "
+                    f"coverage_topic {coverage_topic}"
+                )
+        if v13 and conclusion in {"符合", "不符合"}:
+            for field in ["standard_source", "standard_article", "standard_requirement"]:
+                if not present(check.get(field)):
+                    errors.append(f"{check_id}: v1.3 technical closure requires {field}; upgrade to v1.4 for design-depth-only rules")
+        if v14:
+            rule_id = check.get("rule_id", "").strip()
+            atomic_check_id = check.get("atomic_check_id", "").strip()
+            decision_state = check.get("decision_state", "").strip()
+            discovery_track = check.get("discovery_track", "").strip()
+            rule = rules_by_id.get(rule_id)
+            if not rule_id:
+                errors.append(f"{check_id}: missing rule_id")
+            elif not rule:
+                errors.append(f"{check_id}: rule_id not found in snapshotted catalog: {rule_id}")
+            if not atomic_check_id:
+                errors.append(f"{check_id}: missing atomic_check_id")
+            if decision_state not in VALID_DECISION_STATES:
+                errors.append(f"{check_id}: invalid decision_state: {decision_state}")
+            if discovery_track not in VALID_DISCOVERY_TRACKS:
+                errors.append(f"{check_id}: invalid discovery_track: {discovery_track}")
+            if not present(check.get("applicability_basis")):
+                errors.append(f"{check_id}: missing applicability_basis")
+            if decision_state == "unreviewed":
+                if conclusion != "需核验":
+                    errors.append(f"{check_id}: unreviewed check requires conclusion 需核验")
+                errors.append(f"{check_id}: unreviewed atomic check blocks report generation")
+            elif decision_state == "needs_review":
+                if conclusion != "需核验" or not present(check.get("open_reason")):
+                    errors.append(f"{check_id}: needs_review requires conclusion 需核验 and open_reason")
+                errors.append(f"{check_id}: unresolved atomic check blocks report generation")
+            elif decision_state == "resolved":
+                if conclusion == "需核验":
+                    errors.append(f"{check_id}: resolved check cannot use conclusion 需核验")
+                for field in ["actual_fact", "fact_ids", "drawing_refs", "comparison_method", "comparison_record"]:
+                    if not present(check.get(field)):
+                        errors.append(f"{check_id}: resolved check requires {field}")
+                if check.get("reviewer_gate", "").strip() != "已复核":
+                    errors.append(f"{check_id}: resolved check requires reviewer_gate 已复核")
+                for fact_id in split_values(check.get("fact_ids")):
+                    if fact_id not in fact_ids:
+                        errors.append(f"{check_id}: fact_id not found in fact_ledger.csv: {fact_id}")
+                if generic_presence_only(check, facts_by_id):
+                    errors.append(f"{check_id}: presence-only wording cannot resolve an atomic check")
+                if applicability == "不适用" and not present(check.get("applicability_basis")):
+                    errors.append(f"{check_id}: 不适用 requires a project-fact applicability basis")
+                if rule:
+                    authority_mode = rule.get("authority_mode")
+                    expected_track = "technical_compliance" if authority_mode == "normative" else "design_depth"
+                    if discovery_track != expected_track and discovery_track != "optimization":
+                        errors.append(
+                            f"{check_id}: discovery_track {discovery_track} conflicts with rule authority {authority_mode}"
+                        )
+                    if authority_mode == "normative" and conclusion in {"符合", "不符合"}:
+                        basis = rule.get("basis", {})
+                        expected = {
+                            "standard_source": basis.get("relative_path", ""),
+                            "standard_article": basis.get("article", ""),
+                            "standard_requirement": basis.get("requirement", ""),
+                        }
+                        for field, value in expected.items():
+                            if check.get(field, "").strip() != str(value).strip():
+                                errors.append(f"{check_id}: {field} does not match executable rule {rule_id}")
+                        if basis.get("source_role") != "B_核心规范":
+                            errors.append(f"{check_id}: normative conclusion is not backed by B_核心规范")
+                    if authority_mode == "design_depth" and any(
+                        present(check.get(field))
+                        for field in ["standard_source", "standard_article", "standard_requirement"]
+                    ):
+                        errors.append(f"{check_id}: design-depth rule must not carry a technical citation")
+                    if rule.get("calculation_required") is True and conclusion in {"符合", "不符合"}:
+                        if not present(check.get("calculation_record")):
+                            errors.append(f"{check_id}: executable rule requires calculation_record")
         forms_issue = check.get("forms_issue", "").strip().lower()
         if forms_issue not in {"yes", "no", "y", "n", "true", "false", "1", "0"}:
             errors.append(f"{check_id}: forms_issue must be yes/no")
         if forms_issue in {"no", "n", "false", "0"} and not present(check.get("not_forming_reason")):
             errors.append(f"{check_id}: missing not_forming_reason for non-issue check")
+        if v14 and forms_issue in {"yes", "y", "true", "1"} and conclusion != "不符合":
+            errors.append(f"{check_id}: only an 不符合 check may form a formal issue")
+
+    if v13:
+        report_type = manifest.get("report_type", "")
+        fact_text = " ".join(
+            " ".join(value or "" for value in fact.values())
+            for fact in facts
+        )
+        required_function_topics = function_required_topics(fact_text, report_type)
+        closed_function_topics = {
+            check.get("coverage_topic", "").strip()
+            for check in checks
+            if check_closes_topic(check)
+            and any(fact_id in fact_ids for fact_id in split_values(check.get("fact_ids")))
+        }
+        missing_function_topics = sorted(required_function_topics - closed_function_topics)
+        if missing_function_topics:
+            errors.append(
+                "function-triggered coverage topics are not closed: "
+                f"{', '.join(missing_function_topics)}"
+            )
 
     verified = [row for row in issues if row.get("status", "").strip() == "verified"]
     if not verified:
@@ -536,6 +1018,12 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
             errors.append("verified issues have duplicate display_order values")
         if orders and sorted(orders) != list(range(1, len(orders) + 1)):
             errors.append("verified issue display_order must be continuous from 1")
+        primary_check_ids = [issue.get("check_id", "").strip() for issue in verified]
+        duplicate_primary_checks = sorted(
+            {check_id for check_id in primary_check_ids if check_id and primary_check_ids.count(check_id) > 1}
+        )
+        for check_id in duplicate_primary_checks:
+            errors.append(f"verified issues share primary check_id: {check_id}")
 
     for issue in verified:
         issue_id = issue.get("issue_id", "").strip() or "[missing issue_id]"
@@ -544,10 +1032,17 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
             errors.append(f"{issue_id}: missing check_id")
         elif check_id not in check_ids:
             errors.append(f"{issue_id}: check_id not found in check_matrix.csv: {check_id}")
-        elif v12:
+        elif modern:
             linked_check = checks_by_id[check_id]
             if linked_check.get("applicability", "").strip() == "需判断" or linked_check.get("conclusion", "").strip() == "需核验":
                 errors.append(f"{issue_id}: unresolved check cannot support a verified issue")
+            if v14:
+                if linked_check.get("decision_state", "").strip() != "resolved":
+                    errors.append(f"{issue_id}: verified issue requires a resolved atomic check")
+                if linked_check.get("forms_issue", "").strip().lower() not in {"yes", "y", "true", "1"}:
+                    errors.append(f"{issue_id}: linked atomic check does not form an issue")
+                if linked_check.get("issue_id", "").strip() != issue_id:
+                    errors.append(f"{issue_id}: linked atomic check issue_id does not match")
         linked_facts = split_values(issue.get("fact_ids"))
         if not linked_facts:
             errors.append(f"{issue_id}: missing fact_ids")
@@ -563,7 +1058,7 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
             for field in ["standard_source", "standard_article", "standard_requirement"]:
                 if not present(issue.get(field)):
                     errors.append(f"{issue_id}: missing {field}")
-        elif v12:
+        elif modern:
             drawing_refs = issue.get("drawing_refs", "")
             for fact_id in linked_facts:
                 fact = facts_by_id.get(fact_id)
@@ -617,7 +1112,7 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
                 errors.append(f"{issue_id}: screenshot_strategy single requires exactly one screenshot path")
             if strategy == "multiple" and len(screenshot_paths) < 2:
                 errors.append(f"{issue_id}: screenshot_strategy multiple requires at least two screenshots")
-            if v12 and strategy == "multiple" and not present(issue.get("screenshot_reason")):
+            if modern and strategy == "multiple" and not present(issue.get("screenshot_reason")):
                 errors.append(f"{issue_id}: screenshot_strategy multiple requires screenshot_reason")
             if strategy == "shared" and not present(issue.get("screenshot_reason")):
                 errors.append(f"{issue_id}: screenshot_strategy shared requires screenshot_reason")
@@ -659,14 +1154,25 @@ def validate_workspace(root: Path) -> tuple[list[str], list[str]]:
         elif gate.get("result", "").strip() != "通过":
             errors.append(f"{issue_id}: validation result is not 通过")
         else:
-            required_gate_fields = V12_GATE_FIELDS if v12 else V11_GATE_FIELDS if v11 else LEGACY_GATE_FIELDS
+            required_gate_fields = V14_GATE_FIELDS if v14 else V12_GATE_FIELDS if modern else V11_GATE_FIELDS if v11 else LEGACY_GATE_FIELDS
             if required_gate_fields.issubset(validation_fields):
                 for column in required_gate_fields:
                     if gate.get(column, "").strip() != "通过":
                         errors.append(f"{issue_id}: {column} is not 通过")
+            if v14:
+                if gate.get("gate_origin", "").strip() != "manual":
+                    errors.append(f"{issue_id}: gate_origin must be manual")
+                if gate.get("reviewer_confirmation", "").strip() != "已确认":
+                    errors.append(f"{issue_id}: reviewer_confirmation must be 已确认")
+                if not present(gate.get("reviewer_name")):
+                    errors.append(f"{issue_id}: reviewer_name is required")
+                if not valid_iso_datetime(gate.get("reviewed_at")):
+                    errors.append(f"{issue_id}: reviewed_at must be an ISO date/time")
 
     if versioned:
-        errors.extend(validate_integrity(root, manifest, verified, schema_version))
+        errors.extend(validate_integrity(root, manifest, verified, checks, schema_version))
+    if v14 and require_completion_audit:
+        errors.extend(validate_completion_audit(root, catalog_hash))
     return errors, warnings
 
 

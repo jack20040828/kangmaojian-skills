@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run anonymous end-to-end regression gates for building-review v1.1 and v1.2."""
+"""Run anonymous end-to-end regression gates for building-review v1.1-v1.3."""
 
 from __future__ import annotations
 
@@ -91,6 +91,9 @@ def check(check_id: str, issue_id: str, forms_issue: str = "yes", conclusion: st
     return {
         "check_id": check_id,
         "specialty": "匿名专项",
+        "review_item_id": "ANON-A-001",
+        "coverage_topic": "function_layout",
+        "evidence_class": "relationship",
         "source_review_item": "匿名审查要点",
         "applicability": "适用",
         "required_fact": "匿名要求事实",
@@ -151,8 +154,8 @@ def none_issue(issue_id: str, check_id: str, order: str) -> dict[str, str]:
 
 def main() -> int:
     metadata = json.loads((SKILL_DIR / "evals" / "regression-cases.json").read_text(encoding="utf-8"))
-    if len(metadata) != 28:
-        raise AssertionError("regression metadata must contain 28 cases")
+    if len(metadata) != 50:
+        raise AssertionError("regression metadata must contain 50 cases")
     python = sys.executable
     keep_dir = os.environ.get("BUILDING_REVIEW_KEEP_TEMP", "")
     if keep_dir:
@@ -509,6 +512,208 @@ def main() -> int:
         if "一、设计说明：" in default_text or ".pdf" in default_text.casefold():
             raise AssertionError("v1.2 default report leaked a legacy heading or PDF filename")
 
+        # v1.3: a reviewed sheet closes only after every required coverage topic is resolved.
+        set_schema_version(workspace, "1.3")
+
+        def v13_check(
+            check_id: str,
+            topic: str,
+            evidence_class: str,
+            actual_fact: str,
+            *,
+            conclusion: str = "符合",
+            applicability: str = "适用",
+            forms_issue: str = "no",
+            issue_id: str = "",
+        ) -> dict[str, str]:
+            value = check(check_id, issue_id, forms_issue=forms_issue, conclusion=conclusion)
+            value.update(
+                review_item_id=f"ANON-{topic}",
+                coverage_topic=topic,
+                evidence_class=evidence_class,
+                applicability=applicability,
+                source_review_item=f"匿名审查要点：{topic}",
+                actual_fact=actual_fact,
+                fact_ids="F001",
+                drawing_refs="A-01 一层平面图",
+                not_forming_reason="" if forms_issue == "yes" else "已按主题核对并形成结论。",
+            )
+            return value
+
+        v13_fact = dict(base_fact, raw_text_or_measure="匿名普通建筑平面事实。")
+        v13_checks = [
+            v13_check("C301", "function_layout", "relationship", "房间功能与相邻关系已逐项核对。"),
+            v13_check("C302", "fire_egress", "numeric", "安全出口数量和疏散宽度已定量核对。"),
+            v13_check("C303", "accessibility", "location", "无障碍通行位置与服务范围已核对。"),
+            v13_check(
+                "C304",
+                "wet_room_hygiene",
+                "not_applicable",
+                "本图无有水房间，本主题不适用。",
+                conclusion="不适用",
+                applicability="不适用",
+            ),
+            v13_check("C305", "safety_coordination", "relationship", "平面安全边界及协调关系已核对。"),
+        ]
+        v13_inventory = dict(base_inventory, review_check_ids=";".join(item["check_id"] for item in v13_checks))
+        write_rows(workspace / "drawing_inventory.csv", [v13_inventory])
+        write_rows(workspace / "fact_ledger.csv", [v13_fact])
+        write_rows(workspace / "check_matrix.csv", v13_checks)
+        write_rows(workspace / "issue_candidates.csv", [])
+        write_rows(workspace / "validation_log.csv", [])
+        run(snapshot, 0)
+        run(validate, 0)
+
+        missing_topic_checks = [item for item in v13_checks if item["coverage_topic"] != "safety_coordination"]
+        missing_topic_inventory = dict(
+            v13_inventory,
+            review_check_ids=";".join(item["check_id"] for item in missing_topic_checks),
+        )
+        write_rows(workspace / "drawing_inventory.csv", [missing_topic_inventory])
+        write_rows(workspace / "check_matrix.csv", missing_topic_checks)
+        run(validate, 1, "required coverage topics are not closed: safety_coordination")
+
+        wall_inventory = dict(
+            base_inventory,
+            drawing_no="A-09",
+            drawing_name="墙身大样图",
+            content_type="大样图",
+            review_family="墙身大样",
+        )
+        wall_fact = dict(
+            base_fact,
+            drawing_no="A-09",
+            drawing_name="墙身大样图",
+            raw_text_or_measure="节点标注300mm、500mm和600mm尺寸。",
+        )
+        wall_checks = [
+            v13_check("C311", "detail_traceability", "relationship", "节点索引关系已核对。"),
+            v13_check("C312", "window_sill_drainage", "numeric", "节点标注300mm控制尺寸。"),
+            v13_check("C313", "parapet_flashing", "detail", "女儿墙泛水构造已核对。"),
+            v13_check("C314", "waterproofing_detail", "detail", "防水收头构造已核对。"),
+        ]
+        for item in wall_checks:
+            item["drawing_refs"] = "A-09 墙身大样图"
+        wall_inventory["review_check_ids"] = ";".join(item["check_id"] for item in wall_checks)
+        write_rows(workspace / "drawing_inventory.csv", [wall_inventory])
+        write_rows(workspace / "fact_ledger.csv", [wall_fact])
+        write_rows(workspace / "check_matrix.csv", wall_checks)
+        run(validate, 1, "evidence_class numeric does not fit coverage_topic window_sill_drainage")
+
+        dormitory_fact = dict(base_fact, raw_text_or_measure="本层为学生宿舍，设置电梯。")
+        write_rows(workspace / "drawing_inventory.csv", [v13_inventory])
+        write_rows(workspace / "fact_ledger.csv", [dormitory_fact])
+        write_rows(workspace / "check_matrix.csv", v13_checks)
+        run(validate, 1, "function-triggered coverage topics are not closed")
+
+        dormitory_checks = v13_checks + [
+            v13_check("C321", "dormitory_refuse", "location", "垃圾收集间位置和卫生措施已核对。"),
+            v13_check("C322", "dormitory_acoustics", "performance", "宿舍与公共空间隔声减振措施已核对。"),
+            v13_check("C323", "accessible_room", "numeric", "无障碍宿舍数量和位置已核对。"),
+            v13_check("C324", "accessible_room_detail", "detail", "无障碍宿舍及卫生间详图已核对。"),
+            v13_check("C325", "accessible_elevator", "performance", "无障碍电梯设施和提示要求已核对。"),
+        ]
+        dormitory_inventory = dict(
+            v13_inventory,
+            review_check_ids=";".join(item["check_id"] for item in dormitory_checks),
+        )
+        write_rows(workspace / "drawing_inventory.csv", [dormitory_inventory])
+        write_rows(workspace / "check_matrix.csv", dormitory_checks)
+        run(snapshot, 0)
+        run(validate, 0)
+
+        food_fact = dict(base_fact, raw_text_or_measure="本层设置食堂、餐厅和厨房。")
+        food_check = v13_check(
+            "C331",
+            "food_wet_room_vertical",
+            "numeric",
+            "厨房开间标注6000mm。",
+        )
+        food_checks = v13_checks + [food_check]
+        food_inventory = dict(
+            v13_inventory,
+            review_check_ids=";".join(item["check_id"] for item in food_checks),
+        )
+        write_rows(workspace / "drawing_inventory.csv", [food_inventory])
+        write_rows(workspace / "fact_ledger.csv", [food_fact])
+        write_rows(workspace / "check_matrix.csv", food_checks)
+        run(validate, 1, "evidence_class numeric does not fit coverage_topic food_wet_room_vertical")
+
+        design_inventory = dict(
+            base_inventory,
+            drawing_no="A-00",
+            drawing_name="建筑设计说明",
+            content_type="设计说明",
+            review_family="设计说明",
+        )
+        design_fact = dict(
+            base_fact,
+            drawing_no="A-00",
+            drawing_name="建筑设计说明",
+            raw_text_or_measure="设计说明列出项目范围和设计依据。",
+        )
+        design_checks = [
+            v13_check("C341", "project_scope_consistency", "relationship", "项目范围和楼层功能已核对。"),
+            v13_check("C342", "code_basis_consistency", "identity_text", "设计依据名称及版本已核对。"),
+        ]
+        for item in design_checks:
+            item["drawing_refs"] = "A-00 建筑设计说明"
+        design_inventory["review_check_ids"] = ";".join(item["check_id"] for item in design_checks)
+        write_rows(workspace / "drawing_inventory.csv", [design_inventory])
+        write_rows(workspace / "fact_ledger.csv", [design_fact])
+        write_rows(workspace / "check_matrix.csv", design_checks)
+        run(validate, 1, "required coverage topics are not closed: project_identity_function")
+
+        issue_checks = list(v13_checks)
+        issue_checks[0] = v13_check(
+            "C301",
+            "function_layout",
+            "relationship",
+            "匿名功能关系与要求不一致。",
+            conclusion="不符合",
+            forms_issue="yes",
+            issue_id="I301",
+        )
+        issue_inventory = dict(
+            v13_inventory,
+            review_check_ids=";".join(item["check_id"] for item in issue_checks),
+        )
+        first_v13_issue = issue("I301", "C301", "1", standard)
+        duplicate_root_issue = issue("I302", "C301", "2", standard)
+        write_rows(workspace / "drawing_inventory.csv", [issue_inventory])
+        write_rows(workspace / "fact_ledger.csv", [v13_fact])
+        write_rows(workspace / "check_matrix.csv", issue_checks)
+        write_rows(workspace / "issue_candidates.csv", [first_v13_issue, duplicate_root_issue])
+        write_rows(workspace / "validation_log.csv", [gate("I301"), gate("I302")])
+        run(snapshot, 0)
+        run(validate, 1, "verified issues share primary check_id: C301")
+
+        mixed_primary_issue = dict(first_v13_issue, check_id="C301;C302")
+        write_rows(workspace / "issue_candidates.csv", [mixed_primary_issue])
+        write_rows(workspace / "validation_log.csv", [gate("I301")])
+        run(snapshot, 0)
+        run(validate, 1, "check_id not found in check_matrix.csv: C301;C302")
+
+        write_rows(workspace / "issue_candidates.csv", [first_v13_issue])
+        write_rows(workspace / "validation_log.csv", [gate("I301")])
+        run(snapshot, 0)
+        run(validate, 0)
+        v13_generate = run([
+            python,
+            str(SCRIPTS / "generate_review_report.py"),
+            str(workspace),
+            "--project-name",
+            "匿名项目",
+        ], 0)
+        v13_report = Path(v13_generate.stdout.strip().splitlines()[-1])
+        run([python, str(SCRIPTS / "validate_docx_content.py"), str(workspace), str(v13_report)], 0)
+        v13_text = "\n".join(paragraph.text for paragraph in Document(v13_report).paragraphs)
+        if "建筑单体施工图内审意见" not in v13_text or "《匿名规范》第1条" not in v13_text:
+            raise AssertionError("v1.3 report did not preserve the confirmed internal-review format")
+
+    run([python, str(SKILL_DIR / "evals" / "test_v14_workflow.py")], 0, "12 v1.4 workflow")
+    run([python, str(SKILL_DIR / "evals" / "test_review_calculations.py")], 0, "5 deterministic calculation")
+    run([python, str(SKILL_DIR / "evals" / "test_cross_sheet_consistency.py")], 0, "4 cross-sheet consistency")
     print(f"PASS: {len(metadata)} anonymous regression scenarios completed")
     return 0
 

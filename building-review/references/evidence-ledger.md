@@ -10,16 +10,16 @@ Columns:
 
 Use one row per identifiable drawing sheet or page.
 
-v1.2 rules:
+v1.2-v1.4 rules:
 - `review_family`: `设计说明`, `目录索引`, `平面图`, `屋面图`, `立面图`, `剖面图`, `楼梯大样`, `墙身大样`, `其他大样`, `门窗表`, `材料做法表`, `总图设计说明`, `总平面图`, `竖向设计图`, `交通消防图`, `其他总图`, or `其他`.
-- `review_status`: `reviewed`, `not_applicable`, or `needs_review`.
+- `review_status`: `reviewed`, `not_applicable`, or `needs_review`. New v1.4 rows remain `needs_review` until all triggered atomic rules for the sheet are resolved.
 - `reviewed` requires one or more existing `review_check_ids`.
 - `not_applicable` requires a sheet-specific `review_notes` reason.
 - `needs_review`, a blank status, or an invalid family blocks Word generation.
 
 ## `fact_ledger.csv`
 
-Columns:
+v1.1-v1.3 columns:
 
 `fact_id,source_file,page,drawing_no,drawing_name,location,fact_type,raw_text_or_measure,value,unit,confidence,needs_verification,notes`
 
@@ -33,7 +33,11 @@ Rules:
 
 Columns:
 
-`check_id,specialty,source_review_item,applicability,required_fact,actual_fact,fact_ids,drawing_refs,standard_source,standard_article,standard_requirement,conclusion,forms_issue,issue_id,not_forming_reason,notes`
+`check_id,specialty,review_item_id,coverage_topic,evidence_class,source_review_item,applicability,required_fact,actual_fact,fact_ids,drawing_refs,standard_source,standard_article,standard_requirement,conclusion,forms_issue,issue_id,not_forming_reason,notes`
+
+v1.4 columns:
+
+`check_id,specialty,review_item_id,rule_id,atomic_check_id,coverage_topic,evidence_class,decision_state,discovery_track,source_review_item,applicability,applicability_basis,required_fact,actual_fact,fact_ids,drawing_refs,standard_source,standard_article,standard_requirement,comparison_method,comparison_record,calculation_record,conclusion,forms_issue,issue_id,not_forming_reason,open_reason,reviewer_gate,notes`
 
 Rules:
 - Use stable ids such as `CHK-001`.
@@ -43,6 +47,23 @@ Rules:
 - Set `forms_issue=yes` only when the row forms or supports an issue in `issue_candidates.csv`.
 - If `forms_issue=no`, fill `not_forming_reason` with a short reason such as `符合`, `不适用`, `证据不足需复核`, or `建筑专业范围外`.
 - Link `verified` issues back to this ledger by `check_id`.
+
+v1.3 rules:
+- `review_item_id` identifies the source A_审查要点 item or a controlled design-depth item. Do not invent one broad ID for an entire sheet family.
+- `coverage_topic` uses the exact topic IDs in `single-building-coverage.md`. One row closes one primary topic.
+- `evidence_class` is one of `identity_text`, `numeric`, `location`, `relationship`, `graphic`, `detail`, `performance`, `absence_chain`, or `not_applicable`.
+- Evidence class must fit the topic. A dimension proves only the dimension it measures; it cannot prove window-sill drainage, parapet flashing, waterproof closure, vertical room relationships, or project identity.
+- For `不适用`, both applicability and conclusion must be `不适用`, use `evidence_class=not_applicable`, and link a sheet-specific fact explaining why.
+- A sheet is `reviewed` only after every required family topic is closed by `符合`, `不符合`, or `不适用`. `需判断` and `需核验` do not close a topic.
+
+v1.4 rules:
+
+- Generate initial rows with `generate_project_checklist.py`. The generator must not populate `符合`, `reviewed`, validation `通过`, or reviewer confirmation.
+- Use `decision_state=unreviewed|needs_review|resolved`. Only `resolved` can close a rule or topic.
+- A resolved check requires applicability facts, actual sheet facts, fact IDs, a comparison record, and `reviewer_gate=已复核`.
+- Technical `符合/不符合` must match an executable B-source rule. If the rule requires calculation, record inputs, method, and result.
+- `不适用` requires explicit project facts. Unknown is `需判断/需核验`, not `不适用`.
+- v1.4 `validation_log.csv` additionally requires `evidence_chain_check`, `independent_review_check`, `gate_origin`, `reviewer_confirmation`, `reviewer_name`, and `reviewed_at`. `gate_origin` must be `manual`; scripts may verify but not insert these values.
 
 ## Minimum Facts Before Review
 
@@ -63,7 +84,7 @@ For 单体:
 - waterproofing, energy, green-building, equipment-room, curtain wall, safety glass, guardrails
 - drawing consistency across notes, plans, elevations, sections, details, door/window schedules
 
-## v1.2 关联完整性
+## v1.2-v1.4 关联完整性
 
 - `fact_id`、`check_id`、`issue_id` 是稳定标识，建立引用后不得因排序而改号。
 - 每类ID必须非空且唯一；正式显示次序使用 `display_order`，不要复用ID承担排序。

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import os
 import re
@@ -15,7 +16,10 @@ from pathlib import Path
 DEFAULT_PROJECT_ROOT = Path(
     os.environ.get("BUILDING_REVIEW_PROJECT_ROOT", str(Path.cwd() / "building-review-projects"))
 ).expanduser()
-SCHEMA_VERSION = "1.2"
+SCHEMA_VERSION = "1.4"
+SCRIPT_DIR = Path(__file__).resolve().parent
+SKILL_DIR = SCRIPT_DIR.parent
+RULE_CATALOG = SKILL_DIR / "generated" / "review-rules.json"
 
 TEMPLATES = {
     "drawing_inventory.csv": [
@@ -52,8 +56,16 @@ TEMPLATES = {
     "check_matrix.csv": [
         "check_id",
         "specialty",
+        "review_item_id",
+        "rule_id",
+        "atomic_check_id",
+        "coverage_topic",
+        "evidence_class",
+        "decision_state",
+        "discovery_track",
         "source_review_item",
         "applicability",
+        "applicability_basis",
         "required_fact",
         "actual_fact",
         "fact_ids",
@@ -61,10 +73,15 @@ TEMPLATES = {
         "standard_source",
         "standard_article",
         "standard_requirement",
+        "comparison_method",
+        "comparison_record",
+        "calculation_record",
         "conclusion",
         "forms_issue",
         "issue_id",
         "not_forming_reason",
+        "open_reason",
+        "reviewer_gate",
         "notes",
     ],
     "issue_candidates.csv": [
@@ -113,10 +130,53 @@ TEMPLATES = {
         "opinion_wording_check",
         "layout_check",
         "opinion_type_check",
+        "evidence_chain_check",
+        "independent_review_check",
+        "gate_origin",
+        "reviewer_confirmation",
+        "reviewer_name",
+        "reviewed_at",
         "result",
         "notes",
     ],
 }
+
+PROFILE_FACT_KEYS = [
+    "location_province", "location_city", "building_use", "industrial_building",
+    "overnight_stay", "gross_floor_area_m2", "building_height_m", "floors_above",
+    "floors_below", "fire_hazard_class", "fire_resistance_rating", "occupant_load",
+    "sprinkler", "basement", "elevator", "accessible_requirement", "roof_accessible",
+    "wet_rooms", "parking", "photovoltaic_or_solar", "food_service",
+    "dormitory_or_hotel", "school", "office", "children_activity",
+]
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def initial_profile(report_type: str) -> dict:
+    return {
+        "schema_version": "1.0",
+        "confirmed": False,
+        "confirmed_by": "",
+        "confirmed_at": "",
+        "report_type": report_type,
+        "facts": {
+            key: {"status": "unknown", "value": "", "fact_ids": [], "notes": ""}
+            for key in PROFILE_FACT_KEYS
+        },
+        "route_confirmation": {"confirmed": False, "confirmed_by": "", "confirmed_at": "", "notes": ""},
+        "discovery_tracks": {
+            "technical_compliance": {"status": "not_started", "notes": ""},
+            "design_depth": {"status": "not_started", "notes": ""},
+            "optimization": {"status": "not_started", "notes": ""},
+        },
+    }
 
 
 def slugify(value: str) -> str:
@@ -154,6 +214,13 @@ def main() -> int:
         if not path.exists():
             write_csv(path, headers)
 
+    profile_path = folder / "project_profile.json"
+    if not profile_path.exists():
+        profile_path.write_text(
+            json.dumps(initial_profile(args.report_type), ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
     manifest_path = folder / "review_manifest.json"
     if not manifest_path.exists():
         manifest = {
@@ -163,6 +230,10 @@ def main() -> int:
             "report_type": args.report_type,
             "source_integrity": [],
             "knowledge_snapshot": {},
+            "rule_catalog_snapshot": {
+                "path": str(RULE_CATALOG.resolve()) if RULE_CATALOG.exists() else "",
+                "sha256": sha256_file(RULE_CATALOG) if RULE_CATALOG.exists() else "",
+            },
         }
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

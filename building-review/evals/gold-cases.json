@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "thresholds": {
+    "high_risk_safety_recall": 1.0,
+    "overall_issue_recall": 0.85,
+    "verified_issue_precision": 0.9,
+    "citation_accuracy": 1.0,
+    "max_mixed_root_count": 0,
+    "max_unsupported_verified_count": 0
+  },
+  "cases": [
+    {
+      "id": "GOLD-CANDIDATE-001",
+      "status": "pending_reviewer_confirmation",
+      "report_type": "single",
+      "source_paths": [],
+      "gold_opinion_candidates": [],
+      "approved_gold_path": "",
+      "approved_gold_sha256": "",
+      "expected_issues": []
+    },
+    {
+      "id": "GOLD-CANDIDATE-002",
+      "status": "pending_reviewer_confirmation",
+      "report_type": "single",
+      "source_paths": [],
+      "gold_opinion_candidates": [],
+      "approved_gold_path": "",
+      "approved_gold_sha256": "",
+      "expected_issues": []
+    },
+    {
+      "id": "GOLD-CANDIDATE-003",
+      "status": "pending_reviewer_confirmation",
+      "report_type": "single",
+      "source_paths": [],
+      "gold_opinion_candidates": [],
+      "approved_gold_path": "",
+      "approved_gold_sha256": "",
+      "expected_issues": []
+    },
+    {
+      "id": "GOLD-CANDIDATE-004",
+      "status": "pending_reviewer_confirmation",
+      "report_type": "single",
+      "source_paths": [],
+      "gold_opinion_candidates": [],
+      "approved_gold_path": "",
+      "approved_gold_sha256": "",
+      "expected_issues": []
+    },
+    {
+      "id": "GOLD-CANDIDATE-005",
+      "status": "pending_reviewer_confirmation",
+      "report_type": "single",
+      "source_paths": [],
+      "gold_opinion_candidates": [],
+      "approved_gold_path": "",
+      "approved_gold_sha256": "",
+      "expected_issues": []
+    }
+  ]
+}

@@ -9,6 +9,8 @@ output/
 renders/
 qa-render/
 generated/
+!building-review/generated/
+!building-review/generated/review-rules.json
 *.local.json
 .env
 

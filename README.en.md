@@ -69,7 +69,7 @@ Review these architectural drawings and produce verified opinions with evidence.
 
 [![Building review workflow](media/building-review-workflow.png)](media/building-review-workflow.svg)
 
-The public version passes 28 anonymous regression scenarios and 6 CAD safety-guard tests. No Chinese standards, local policies, or case library are bundled; users must supply lawfully obtained and current local sources.
+The public version passes 50 anonymous regression scenarios and 6 CAD safety-guard tests. No Chinese standards, local policies, or case library are bundled; users must supply lawfully obtained and current local sources.
 
 → [SKILL.md](building-review/SKILL.md) · [High-resolution workflow](media/building-review-workflow.svg) · [Runtime requirements](building-review/references/runtime-requirements.md)
 
@@ -121,6 +121,30 @@ See each skill's `runtime-requirements.md` for dependencies and environment vari
 - No real project names, drawings, client data, review reports, or evidence screenshots.
 - The two Word templates have their author, last-modifier, custom properties, and revision-session identifiers removed.
 - GitHub Actions reruns anonymous regressions and blocks machine-local paths, private indexes, and Word privacy metadata.
+
+## 🔄 Maintainer sync
+
+`sync-manifest.json` provides an exact per-file allowlist for synchronizing the two development-source Skills. Newly discovered source files are blocked until explicitly classified. Local knowledge indexes, project data, deliverables, caches, and unselected working assets are never copied to the public repository.
+
+Run a read-only preflight first:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/sync-public-skills.ps1 -SourceRoot "<development root containing both Skill directories>" -Check
+```
+
+Apply a validated snapshot to the local public repository:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/sync-public-skills.ps1 -SourceRoot "<development root>" -Apply
+```
+
+Apply, commit, push, and wait for GitHub Actions in one command:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/sync-public-skills.ps1 -SourceRoot "<development root>" -Apply -Publish -Message "Sync public Skills"
+```
+
+The synchronizer first builds a privacy-safe snapshot in a temporary directory, then runs syntax checks, public-boundary validation, and the complete anonymous regression suites for both Skills. It writes only after every gate passes and finally verifies that the development-source tree hashes are unchanged. `-Publish` is restricted to `main` and refuses unrelated working-tree changes.
 
 ## 🌟 About
 

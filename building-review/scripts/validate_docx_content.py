@@ -49,7 +49,7 @@ def validate_docx(root: Path, docx_path: Path) -> list[str]:
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         schema_version = str(manifest.get("schema_version", ""))
-    versioned = schema_version in {"1.1", "1.2"}
+    versioned = schema_version in {"1.1", "1.2", "1.3", "1.4"}
     if versioned:
         verified.sort(key=lambda row: int(row["display_order"]))
 
@@ -66,9 +66,9 @@ def validate_docx(root: Path, docx_path: Path) -> list[str]:
         cursor = -1
         for number, issue in enumerate(verified, start=1):
             issue_id = issue.get("issue_id", "") or f"item {number}"
-            if schema_version == "1.2" and issue.get("citation_mode", "").strip().lower() == "none":
+            if schema_version in {"1.2", "1.3", "1.4"} and issue.get("citation_mode", "").strip().lower() == "none":
                 citation_markers = ["【法规条文】：无。"]
-            elif schema_version == "1.2":
+            elif schema_version in {"1.2", "1.3", "1.4"}:
                 citation_markers = [
                     issue.get("standard_display_name", "").strip(),
                     issue.get("standard_article", "").strip(),
@@ -95,7 +95,7 @@ def validate_docx(root: Path, docx_path: Path) -> list[str]:
             else:
                 cursor = position
             if versioned:
-                heading_map = SECTION_HEADINGS_V12 if schema_version == "1.2" else SECTION_HEADINGS_V11
+                heading_map = SECTION_HEADINGS_V12 if schema_version in {"1.2", "1.3", "1.4"} else SECTION_HEADINGS_V11
                 heading = heading_map.get(issue.get("report_section", "").strip(), "")
                 if heading and text.find(heading) > position:
                     errors.append(f"{issue_id}: appears before its declared report section")

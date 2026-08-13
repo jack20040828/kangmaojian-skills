@@ -1,6 +1,6 @@
 # Word 报告格式
 
-v1.2 使用 `issue_candidates.csv` 中的 `report_section` 和 `display_order` 决定章节与顺序。v1.1工作区保持原章节样式；更早工作区继续使用历史关键词分类和CSV行顺序。
+v1.2 and v1.3 使用 `issue_candidates.csv` 中的 `report_section` 和 `display_order` 决定章节与顺序。v1.1工作区保持原章节样式；更早工作区继续使用历史关键词分类和CSV行顺序。
 
 Use the existing templates:
 
@@ -32,7 +32,7 @@ For 单体, use only these template-style sections:
 
 `display_order` 只控制正式显示顺序；`issue_id` 保持稳定，不随排序变化。
 
-v1.2单体默认：
+v1.2 and v1.3 单体默认：
 - 报告标题：`建筑单体施工图内审意见`
 - 文件名：`【建单内审】{项目名称}{YYYY-MM-DD}.docx`
 - 文内日期：`YYYY年M月D日`

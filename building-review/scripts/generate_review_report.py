@@ -140,12 +140,12 @@ def add_issue(
             paragraph = doc.add_paragraph()
             paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
             paragraph.add_run().add_picture(str(screenshot), width=fit_picture_width(screenshot))
-    if schema_version == "1.2" and issue.get("citation_mode", "").strip().lower() == "none":
+    if schema_version in {"1.2", "1.3", "1.4"} and issue.get("citation_mode", "").strip().lower() == "none":
         law = "【法规条文】：无"
     else:
         article = issue.get("standard_article", "").strip()
         requirement = issue.get("standard_requirement", "").strip()
-        if schema_version == "1.2":
+        if schema_version in {"1.2", "1.3", "1.4"}:
             source = issue.get("standard_display_name", "").strip()
         else:
             source_value = issue.get("standard_source", "").strip()
@@ -166,7 +166,7 @@ def load_manifest(root: Path) -> tuple[str, dict]:
         return "", {}
     manifest = json.loads(path.read_text(encoding="utf-8"))
     version = str(manifest.get("schema_version", ""))
-    return version if version in {"1.1", "1.2"} else "", manifest
+    return version if version in {"1.1", "1.2", "1.3", "1.4"} else "", manifest
 
 
 def build_report(args: argparse.Namespace) -> Path:
@@ -175,18 +175,18 @@ def build_report(args: argparse.Namespace) -> Path:
     if errors:
         raise RuntimeError("review package validation failed:\n- " + "\n- ".join(errors))
     schema_version, manifest = load_manifest(root)
-    versioned = schema_version in {"1.1", "1.2"}
+    versioned = schema_version in {"1.1", "1.2", "1.3", "1.4"}
     manifest_type = manifest.get("report_type") if versioned else None
     if args.report_type and manifest_type and args.report_type != manifest_type:
         raise RuntimeError(f"--report-type {args.report_type} conflicts with manifest report_type {manifest_type}")
     report_type = args.report_type or manifest_type or "single"
     template = SINGLE_TEMPLATE if report_type == "single" else SITE_TEMPLATE
     if report_type == "single":
-        sections = SINGLE_SECTIONS_V12 if schema_version == "1.2" else SINGLE_SECTIONS_V11
+        sections = SINGLE_SECTIONS_V12 if schema_version in {"1.2", "1.3", "1.4"} else SINGLE_SECTIONS_V11
     else:
         sections = SITE_SECTIONS
     classifier = classify_single if report_type == "single" else classify_site
-    if report_type == "single" and schema_version == "1.2":
+    if report_type == "single" and schema_version in {"1.2", "1.3", "1.4"}:
         default_name = f"【建单内审】{safe_filename_component(args.project_name)}{date.today().isoformat()}.docx"
     else:
         default_name = "建筑单体施工图审查意见.docx" if report_type == "single" else "建筑总图施工图审查意见.docx"
@@ -208,7 +208,7 @@ def build_report(args: argparse.Namespace) -> Path:
     clear_document_body(doc)
     set_default_fonts(doc)
     add_paragraph(doc, args.project_name, bold=True, size=16, align=WD_ALIGN_PARAGRAPH.CENTER)
-    default_title = "建筑单体施工图内审意见" if report_type == "single" and schema_version == "1.2" else (
+    default_title = "建筑单体施工图内审意见" if report_type == "single" and schema_version in {"1.2", "1.3", "1.4"} else (
         "建筑单体施工图审查意见" if report_type == "single" else "建筑总图施工图审查意见"
     )
     add_paragraph(doc, args.report_title or default_title, bold=True, size=18, align=WD_ALIGN_PARAGRAPH.CENTER)

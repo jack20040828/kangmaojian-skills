@@ -19,6 +19,7 @@ DEFAULT_INDEX = Path(
         str(Path.cwd() / "building-review-index" / "knowledge-index.json"),
     )
 ).expanduser()
+DEFAULT_RULE_CATALOG = SKILL_DIR / "generated" / "review-rules.json"
 IGNORED_NAMES = {".DS_Store", "Thumbs.db"}
 
 
@@ -79,6 +80,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project_workspace", type=Path)
     parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
+    parser.add_argument("--rule-catalog", type=Path, default=DEFAULT_RULE_CATALOG)
     args = parser.parse_args()
     root = args.project_workspace.resolve()
     manifest_path = root / "review_manifest.json"
@@ -97,8 +99,11 @@ def main() -> int:
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     schema_version = manifest.get("schema_version")
-    if schema_version not in {"1.1", "1.2"}:
-        print("FAIL: integrity snapshots require schema_version 1.1 or 1.2")
+    if schema_version not in {"1.1", "1.2", "1.3", "1.4"}:
+        print("FAIL: integrity snapshots require schema_version 1.1, 1.2, 1.3, or 1.4")
+        return 1
+    if schema_version == "1.4" and not args.rule_catalog.exists():
+        print(f"FAIL: rule catalog not found: {args.rule_catalog}")
         return 1
     index = json.loads(args.index.read_text(encoding="utf-8"))
     if index.get("schema_version") != "1.1" or not index.get("corpus_sha256"):
@@ -123,7 +128,7 @@ def main() -> int:
     for issue in csv_rows(issue_path):
         if issue.get("status", "").strip() != "verified":
             continue
-        if schema_version == "1.2" and issue.get("citation_mode", "").strip().lower() == "none":
+        if schema_version in {"1.2", "1.3", "1.4"} and issue.get("citation_mode", "").strip().lower() == "none":
             continue
         source = issue.get("standard_source", "").strip()
         if not source:
@@ -148,6 +153,37 @@ def main() -> int:
             "sha256": entry["sha256"],
         }
 
+    if schema_version == "1.4":
+        check_path = root / "check_matrix.csv"
+        if not check_path.exists():
+            errors.append("check_matrix.csv is missing")
+        else:
+            for check in csv_rows(check_path):
+                if check.get("decision_state", "").strip() != "resolved":
+                    continue
+                if check.get("discovery_track", "").strip() not in {"technical_compliance", "optimization"}:
+                    continue
+                if check.get("conclusion", "").strip() not in {"符合", "不符合"}:
+                    continue
+                source = check.get("standard_source", "").strip()
+                if not source:
+                    errors.append(f"{check.get('check_id', '[missing check_id]')}: missing standard_source")
+                    continue
+                entry, error = resolve_standard(source, index.get("files", []))
+                if error:
+                    errors.append(f"{check.get('check_id', '[missing check_id]')}: {error}")
+                    continue
+                assert entry is not None
+                path = Path(entry["absolute_path"])
+                if not path.exists() or sha256_file(path) != entry.get("sha256"):
+                    errors.append(f"standard changed since index build: {entry['relative_path']}")
+                    continue
+                used[entry["relative_path"]] = {
+                    "relative_path": entry["relative_path"],
+                    "size_bytes": entry["size_bytes"],
+                    "sha256": entry["sha256"],
+                }
+
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
@@ -163,6 +199,11 @@ def main() -> int:
         "specialty_count": index.get("specialty_count", 0),
         "used_standards": [used[key] for key in sorted(used)],
     }
+    if schema_version == "1.4":
+        manifest["rule_catalog_snapshot"] = {
+            "path": str(args.rule_catalog.resolve()),
+            "sha256": sha256_file(args.rule_catalog),
+        }
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"PASS: snapshotted {len(source_records)} source files and {len(used)} standards")
     return 0

@@ -22,6 +22,10 @@ jobs:
         run: python -m pip install --disable-pip-version-check python-docx pypdf Pillow pypdfium2 PyYAML
       - name: Validate public release boundary
         run: python -X utf8 scripts/validate_public_package.py .
+      - name: Validate synchronization tooling
+        run: |
+          python -X utf8 -c "import ast, pathlib; [ast.parse(pathlib.Path(path).read_text(encoding='utf-8')) for path in ('scripts/sync_public_skills.py', 'scripts/validate_public_package.py')]"
+          powershell -ExecutionPolicy Bypass -File scripts/sync-public-skills.ps1 -?
       - name: Run building-review regressions
         run: |
           python -X utf8 building-review/evals/run_regression_checks.py

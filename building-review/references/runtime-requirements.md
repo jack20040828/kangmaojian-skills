@@ -17,6 +17,12 @@
 
 Explicit CLI arguments take precedence where the script provides them.
 
+## Bundled Rule Catalog
+
+`generated/review-rules.json` is the public executable review-rule catalog used by the v1.4 workflow and anonymous regressions. It contains rule identifiers, applicability metadata, checks, and citations—not standards full text, project data, or a private search index.
+
+To rebuild that catalog, run `scripts/build_review_rules.py` against the repository's public rule source. Building a private standards search index is a separate operation and always requires the user's own local knowledge base.
+
 ## Optional CAD Automation
 
 CAD automation is Windows-specific and requires an installed AutoCAD/Core Console environment. Run every generated CAD command through `scripts/run_cad_script_safely.py`. The core architectural review workflow does not require CAD automation when readable PDF or image evidence is available.

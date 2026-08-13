@@ -35,7 +35,6 @@ Read `references/scope-boundary.md` before editing any opinion.
 ## Progressive Reference Routing
 
 - Runtime dependencies and public configuration: `references/runtime-requirements.md`
-
 - Always before editing: `references/scope-boundary.md`
 - Full phase flow and manifest fields: `references/workflow.md`
 - Known failure traps when sources conflict or validation fails: `references/gotchas.md`

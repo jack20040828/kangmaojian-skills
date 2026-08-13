@@ -69,7 +69,7 @@ python install-skill-from-github.py --repo jack20040828/kangmaojian-skills --pat
 
 [![建筑施工图审查工作流程图](media/building-review-workflow.png)](media/building-review-workflow.svg)
 
-当前公开版已通过 28 个匿名回归场景和 6 个 CAD 安全防护测试。仓库不附带中国标准、地方政策或案例库；用户必须提供自己合法取得并确认有效的本地资料。
+当前公开版已通过 50 个匿名回归场景和 6 个 CAD 安全防护测试。仓库不附带中国标准、地方政策或案例库；用户必须提供自己合法取得并确认有效的本地资料。
 
 → [SKILL.md](building-review/SKILL.md) · [高清工作流程图](media/building-review-workflow.svg) · [运行要求](building-review/references/runtime-requirements.md)
 
@@ -121,6 +121,30 @@ python install-skill-from-github.py --repo jack20040828/kangmaojian-skills --pat
 - 不包含真实项目名称、图纸、客户信息、审查报告和证据截图。
 - 两个 Word 范本已清除作者、最后修改者、自定义属性和修订会话标识。
 - GitHub Actions 会复跑匿名回归，并阻止本机路径、私人索引和 Word 隐私元数据进入仓库。
+
+## 🔄 维护者同步
+
+仓库使用 `sync-manifest.json` 对两个开发源 Skill 做逐文件白名单同步。新出现的源文件会被默认阻止，必须先明确归类；本地规范索引、项目资料、成果目录、缓存和未选中的过程资产不会进入公开仓库。
+
+先只读预检：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/sync-public-skills.ps1 -SourceRoot "<同时包含 building-review 和 review-opinion-delivery 的开发源目录>" -Check
+```
+
+预检通过后应用到本地公开仓库：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/sync-public-skills.ps1 -SourceRoot "<开发源目录>" -Apply
+```
+
+一条命令完成应用、提交、推送，并等待 GitHub Actions 验证：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/sync-public-skills.ps1 -SourceRoot "<开发源目录>" -Apply -Publish -Message "Sync public Skills"
+```
+
+同步程序会先在临时目录生成脱敏快照，执行语法检查、公开边界校验和两套 Skill 的完整匿名回归，再写入仓库；结束时还会复核开发源目录的整树哈希没有变化。`-Publish` 只允许从 `main` 发布，且会拒绝无关工作区改动。
 
 ## 🌟 关于
 

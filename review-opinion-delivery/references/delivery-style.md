@@ -2,8 +2,6 @@
 
 This style contract is distilled from reviewer-approved, anonymized Word references. The public package intentionally omits project paths, source hashes, client names, and identifying document metadata.
 
-
-
 The verified reference set uses a single-section internal-review layout with centered page numbers and evidence images placed next to their approved opinions.
 
 ## Page System
@@ -71,14 +69,14 @@ For an empty section, use a compact single heading such as `四、大样图：�
 - The deliverable title changed from `建筑施工图审查意见` to `建筑施工图内审意见`.
 - Several assistant-expanded opinions were shortened back to the reviewer's direct wording.
 - Unsupported regulation paragraphs were replaced with `无` instead of being inferred.
-- Drawing scopes and measurements were corrected to the reviewer-confirmed values without expanding the affected drawings or technical meaning.
+- Drawing scopes and measurements were corrected to the reviewer's values, including the 400 mm opening distance and the reduced JS-07/JS-01 scope for item 10.
 - The reviewer preserved concise actionable statements. v1.2 additionally requires every opinion type to resolve to the canonical 12-type taxonomy, with deterministic typo correction logged.
 - The stair-opening evidence image was enlarged for dimension readability.
-- Evidence cards were corrected to the reviewer-approved facts; final QA must catch stale screenshot text or red boxes left from an earlier draft.
+- The stair-opening evidence card itself was also corrected to the reviewer-approved 400 mm fact; final QA must catch stale screenshot text or red boxes left from an earlier draft.
 - The empty detail section became `四、大样图：无意见`.
 
 These are editorial-authority rules, not new technical-review rules.
 
 ## Second Confirmed Retrospective
 
-In a later anonymized comparison, the reviewer-final version contained fewer opinions, evidence images, and rendered pages because of confirmed deletions, narrowed scopes, and many-to-one consolidations—not because text or evidence was reduced below readability. This confirms that the latest approved Word controls item identity, scope, regulation state, type, evidence density, and layout.
+In a later single-building comparison, the organized draft changed from 25 opinions, 39 images, and 34 rendered pages to a reviewer-final 21 opinions, 28 images, and 12 pages. The reduction came from two true deletions, two narrowed opinions, and two many-to-one consolidations—not from shrinking text or evidence below readability. Five final items intentionally retained `法规条文：无`, and several opinion types were changed to match the final nature of the conclusion. This confirms that the latest approved Word controls item identity, scope, regulation state, type, evidence density, and layout.

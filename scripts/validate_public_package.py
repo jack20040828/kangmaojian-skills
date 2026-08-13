@@ -18,8 +18,6 @@ FORBIDDEN_TEXT = (
     "C:" + "\\Users\\",
     "E:" + r"\沙坪",
     "小金" + "洞",
-    "generated" + "/knowledge-index",
-    "generated" + r"\knowledge-index",
 )
 EXPECTED_LINKS = (
     "building-review/SKILL.md",
@@ -116,7 +114,7 @@ def validate_docx(path: Path, errors: list[str]) -> None:
 
 def validate_repository(root: Path) -> list[str]:
     errors: list[str] = []
-    for required in ("README.md", "README.en.md", "LICENSE", ".gitignore"):
+    for required in ("README.md", "README.en.md", "LICENSE", ".gitignore", "sync-manifest.json"):
         if not (root / required).is_file():
             fail(errors, f"missing repository file: {required}")
     for skill in SKILLS:
@@ -124,10 +122,24 @@ def validate_repository(root: Path) -> list[str]:
     for link in EXPECTED_LINKS:
         if not (root / link).is_file():
             fail(errors, f"README target is missing: {link}")
-    for forbidden_dir in ("generated", "03_审图项目", "04_审图成果", "review_crops", "修复备份"):
+    for forbidden_dir in ("03_审图项目", "04_审图成果", "review_crops", "修复备份"):
         for path in root.rglob(forbidden_dir):
             if path.is_dir():
                 fail(errors, f"forbidden private/generated directory: {path.relative_to(root)}")
+    allowed_generated_file = Path("building-review/generated/review-rules.json")
+    if not (root / allowed_generated_file).is_file():
+        fail(errors, f"missing public runtime catalog: {allowed_generated_file}")
+    for generated_dir in root.rglob("generated"):
+        if not generated_dir.is_dir():
+            continue
+        relative_dir = generated_dir.relative_to(root)
+        if relative_dir != Path("building-review/generated"):
+            fail(errors, f"forbidden private/generated directory: {relative_dir}")
+            continue
+        for item in generated_dir.rglob("*"):
+            relative_item = item.relative_to(root)
+            if item.is_dir() or relative_item != allowed_generated_file:
+                fail(errors, f"forbidden generated content: {relative_item}")
     for path in root.rglob("*"):
         if not path.is_file():
             continue

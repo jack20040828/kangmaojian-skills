@@ -23,6 +23,7 @@ A final opinion must have:
 - screenshot or screenshot exemption reason
 - screenshot strategy and evidence-point records when the current ledger supports them
 - opinion type
+- for v1.4, a resolved noncompliant atomic check, completed evidence chain, and manual reviewer confirmation
 
 ## Professional Filtering
 
@@ -33,6 +34,7 @@ Formal opinions should be few, precise, and delivery-ready:
 - Do not write suspicious-but-unverified items as violations.
 - Do not force screenshots for explanatory design-depth issues when quoting the exact drawing text is clearer.
 - Record why each `verified` issue remains formal after filtering, using `notes` or `professional_filter_check`.
+- Do not auto-fill v1.4 validation gates. `gate_origin=manual`, reviewer identity, confirmation, and review time are required and checked against the final issue.
 - Packaging-only issues such as drawing-stage labels, directory cleanup, or title-block differences normally remain in the matrix rather than the report.
 - Write the opinion as `precise drawing fact -> requirement or conflict -> specific revision action`. Avoid unsupported phrases such as `疑为套用`, `不能采信`, or broad `全面复核` instructions.
 - Do not verify a graphical direction, symbol, or missing-expression conclusion until `graphical_interpretation_check` records a closed legend and drawing-context chain.
@@ -86,7 +88,7 @@ Cases are supporting evidence only. Before using a case, record:
 
 If a case is similar but not fact-matched, do not use it as support.
 
-## v1.2 正式顺序与章节
+## v1.2 and v1.3 正式顺序与章节
 
 - `issue_id` 是稳定身份；不得因为正式报告排序变化而重编号。
 - 只有 `verified` 行填写正式 `display_order`，从1开始连续且不得重复。

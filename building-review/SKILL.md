@@ -19,27 +19,28 @@ Read `references/scope-boundary.md` before accepting borderline or mixed work.
 
 ## Core Workflow
 
-1. Create or identify a review workspace. For an existing project, pass `--root <项目>\03_审图过程` explicitly to `scripts/create_review_workspace.py`.
-2. Inventory drawings before judging them. Complete `drawing_inventory.csv` and `fact_ledger.csv` from design notes, indexes, legends, title blocks, tables, and drawings. Classify every identifiable sheet and close it with a check that names the sheet and links at least one fact from that sheet; “图纸已提供”“大样覆盖完整” are not review conclusions.
-3. Route applicable specialties with `scripts/route_specialties.py`; treat its output as candidates requiring confirmation against project facts.
-4. Search A_审查要点 first, B_核心规范 for formal citations, C_疑难解析 for interpretation, and D_案例与截图 only as non-substitutive reference.
-5. Build `check_matrix.csv` before `issue_candidates.csv`. Keep stable IDs separate from formal display order.
-6. Decide screenshot strategy and record the exact evidence point, red-box target, and necessary context.
-7. Snapshot project sources and used standards with `scripts/snapshot_review_integrity.py`.
-8. Run `scripts/validate_review_package.py <workspace>`. Do not generate Word if it fails.
-9. Generate the proper template report with `scripts/generate_review_report.py`; default output is `<workspace>\output`.
-10. Run `scripts/validate_docx_content.py`, render every page, inspect every rendered page, record QA with `scripts/validate_report_qa.py`, then copy the final DOCX to the user-selected deliverables directory.
+1. Create or identify a review workspace. New workspaces use schema v1.4. For an existing project, pass `--root <项目>\03_审图过程` explicitly to `scripts/create_review_workspace.py`.
+2. Inventory every sheet and extract facts before judging. Complete `drawing_inventory.csv` and `fact_ledger.csv`; unresolved identity or version facts stay `needs_review`.
+3. Read `references/project-profile.md`, complete `project_profile.json`, and obtain reviewer confirmation. Route specialties with `scripts/route_specialties.py --json`; confirm uncertain routes instead of trusting keywords.
+4. Read `references/review-rule-schema.md`. Run `scripts/generate_project_checklist.py <workspace>` after classifying sheets. It expands the snapshotted rule catalog into unreviewed atomic checks; it never supplies compliance conclusions.
+5. Review every atomic check from drawings. Search A_审查要点 for discovery, B_核心规范 for formal citations, C_疑难解析 for interpretation, and D_案例与截图 only for non-substitutive hints. Record applicability facts, drawing facts, comparison, calculations, conclusion, and reviewer gate. Use `scripts/review_calculations.py` for supported numeric comparisons; it never supplies missing inputs or an applicable limit.
+6. Perform technical compliance, design-depth/internal-consistency, and supported-optimization discovery separately. Run `scripts/check_cross_sheet_consistency.py <workspace>` after recording repeated facts; resolve every reported conflict from the drawings. Keep high-risk uncertainty open; do not default it to compliant or discard it.
+7. Build `issue_candidates.csv` only from resolved noncompliant checks. Decide screenshot strategy and record the exact evidence point, red-box target, and necessary context. v1.4 validation gates must be manually reviewer-confirmed.
+8. Snapshot sources, the rule catalog, and every standard used by verified issues or resolved technical checks with `scripts/snapshot_review_integrity.py`.
+9. Run `scripts/audit_review_completeness.py <workspace>`. Fix every open item. Run `scripts/validate_review_package.py <workspace>` only after the audit passes; any later ledger change makes the audit stale.
+10. Generate Word with `scripts/generate_review_report.py`, validate content, render every page, inspect every rendered page, record QA, then copy the final DOCX to the user-selected deliverables directory.
 
 ## Phase References
 
 - Runtime dependencies and public configuration: `references/runtime-requirements.md`
-
 - Intake and phase gates: `references/workflow.md`
 - Scope and task handoff: `references/scope-boundary.md`
 - Drawing facts: `references/evidence-ledger.md`
 - Single-building sheet-family coverage: `references/single-building-coverage.md`
 - Knowledge routing: `references/knowledge-map.md`
 - Check-matrix construction: `references/checklist-rules.md`
+- Project facts and reviewer confirmation: `references/project-profile.md`
+- Executable atomic-rule schema: `references/review-rule-schema.md`
 - Candidate filtering: `references/opinion-rules.md`
 - Screenshot evidence: `references/screenshot-protocol.md`
 - Word structure: `references/report-format.md`
@@ -49,9 +50,15 @@ Read `references/scope-boundary.md` before accepting borderline or mixed work.
 ## Mandatory Gates
 
 - A formal issue must link drawing inventory, project fact, review judgment, and screenshot evidence when visual proof is needed. Technical requirements also require an applicable local source; narrowly defined design-depth issues may use the controlled `citation_mode=none` path.
+- Never prefill `符合`, `reviewed`, validation `通过`, or reviewer confirmation. New checks start `unreviewed/需核验`; scripts may expand required work but may not close it.
+- A v1.4 technical `符合` or `不符合` requires a rule ID resolving to an active B-source rule, sheet-specific facts, comparison record, and required calculation record. Design-depth rules cannot carry technical citations.
+- A v1.4 report requires a reviewer-confirmed project profile, specialty route, three completed discovery tracks, all triggered atomic rules resolved, a current integrity snapshot, and a current passing completion audit.
 - Never cite a standard from memory. Missing, stale, ambiguous, or changed sources stay `needs_review` or `需核验`; do not use `citation_mode=none` to bypass a missing technical basis.
 - Do not generate Word while any identifiable sheet is unclassified or has `review_status=needs_review`.
-- A `reviewed` sheet must link at least one substantive sheet-specific check. A broad check, a check that does not reference the sheet, or a presence-only statement cannot close coverage. Accessibility, waterproofing, roofs, guardrails, stands, rescue openings, and wet rooms require objective dimensions, quantities, locations, slopes, loads, performance levels, or equivalent drawing facts as applicable.
+- A v1.3 or v1.4 `reviewed` sheet must close every required sheet-family topic with matching atomic checks, evidence classes, drawing references, and facts. v1.4 additionally requires every profile-triggered executable rule for that sheet. A broad check, an unrelated number, a check that does not reference the sheet, or a presence-only statement cannot close coverage.
+- Run a project-identity and scope-consistency pass across design notes, specialties, schedules, and title blocks. Treat wrong project names, functions, basement/elevator statements, and stale design bases as technical design-depth candidates rather than packaging noise.
+- Complete function-triggered packets before Word generation. Dormitory, food-service, school, parking, elevator, photovoltaic/solar, wet-room, roof, and wall-detail facts must activate their corresponding topics; unresolved topics block the report.
+- Discover and filter three tracks separately: mandatory noncompliance, design-depth/internal contradiction, and supported optimization advice. Do not let conservative filtering silently discard an unresolved high-risk item; retain it as `needs_review` until the evidence chain closes.
 - A check whose applicability is still `需判断` or whose conclusion is `需核验` cannot support a `verified` issue.
 - Do not verify graphical direction, symbol meaning, or missing-expression claims until the legend and relevant plan/section/detail context form a closed evidence chain.
 - Never copy a case or high-frequency issue into the report without matching project facts and recording differences.
@@ -69,4 +76,4 @@ Read `references/scope-boundary.md` before accepting borderline or mixed work.
 - Set `BUILDING_REVIEW_PROJECT_ROOT` or pass `--root <path>` for workspace creation; otherwise the script uses `./building-review-projects` under the current working directory.
 - Keep raw knowledge files and real project source files unchanged. Store indexes, ledgers, snapshots, screenshots, and drafts outside the raw knowledge base.
 - Prefer local sources. Browse only when local sources cannot resolve a current standard or policy question, or the user explicitly asks for current official status.
-- New single-building v1.2 reports default to `建筑单体施工图内审意见` and the confirmed internal-review section style; explicit report-title and output arguments may override the defaults.
+- New reviews use v1.4 atomic rules and retain the confirmed internal-review titles and section style. v1.1-v1.3 workspaces remain readable for compatibility, but legacy technical closures without precise standard fields are no longer accepted as complete.
