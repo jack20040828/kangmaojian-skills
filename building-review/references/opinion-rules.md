@@ -1,70 +1,64 @@
-# 审查意见规则
+# 审查意见规则（v1.6）
 
-## Candidate Issue Fields
+## 候选意见状态
 
-`issue_candidates.csv` columns:
+`issue_candidates.csv` 保持既有字段。新工作区使用：
 
-`issue_id,status,display_order,report_section,specialty,check_id,fact_ids,drawing_refs,problem,citation_mode,standard_source,standard_display_name,standard_article,standard_requirement,citation_none_reason,judgment,case_refs,needs_screenshot,screenshot_path,screenshot_location,screenshot_strategy,screenshot_reason,screenshot_count,evidence_point,red_box_target,context_required,screenshot_quality,opinion_type,validation_status,notes`
+- `ai_ready`：证据、规则、截图和 AI 验证门禁全部关闭，可进入 Word。
+- `needs_review`：证据或适用性仍不足，留在过程台账。
+- `rejected`：经筛选不形成交付意见，必须记录理由。
+- `delete`：仅用于显式废弃行。
 
-Status values:
-- `verified`
-- `needs_review`
-- `rejected`
-- `delete`
+`verified` 仅供 v1.1-v1.5 兼容读取，v1.6 必须拒绝。
 
-## Final Opinion Requirements
+## ai_ready 条件
 
-A final opinion must have:
-- a matching `check_matrix.csv` row whose `check_id` equals the issue `check_id`
-- drawing reference: drawing name and drawing number
-- precise project fact
-- a specific standard/policy requirement, or a valid design-depth `citation_mode=none` reason
-- judgment explaining why the fact fails
-- screenshot or screenshot exemption reason
-- screenshot strategy and evidence-point records when the current ledger supports them
-- opinion type
-- for v1.4, a resolved noncompliant atomic check, completed evidence chain, and manual reviewer confirmation
+每条 `ai_ready` 意见必须具备：
 
-## Professional Filtering
+- 唯一匹配的已关闭 `check_id`，且该原子检查结论为“不符合”、`forms_issue=yes`。
+- 真实图号和图名；已脱敏时使用 `PDF第N页《图名》`。
+- 可追溯项目事实和 `fact_ids`。
+- 清楚的判断链：图纸事实 → 适用要求或内部矛盾 → 具体修改动作。
+- 合法引用模式、法规条文及12类意见类型。
+- 与意见文字一致的截图，或合规的无截图理由。
+- 必要的计算、跨图、适用性和图形证据链全部关闭。
+- validation log 的 AI 检查项均为通过，`gate_origin=agent`、`stage_completion=AI初审完成`、`completed_at` 有效。
+- 专业筛选理由已写入 `notes`。
 
-Formal opinions should be few, precise, and delivery-ready:
+不得记录人工姓名、“已人工复核”、人工确认、独立双人复核或人工裁决。
 
-- Merge duplicate or overlapping issues before Word generation.
-- Do not keep weak evidence in the final report; mark it `needs_review`.
-- Do not write suspicious-but-unverified items as violations.
-- Do not force screenshots for explanatory design-depth issues when quoting the exact drawing text is clearer.
-- Record why each `verified` issue remains formal after filtering, using `notes` or `professional_filter_check`.
-- Do not auto-fill v1.4 validation gates. `gate_origin=manual`, reviewer identity, confirmation, and review time are required and checked against the final issue.
-- Packaging-only issues such as drawing-stage labels, directory cleanup, or title-block differences normally remain in the matrix rather than the report.
-- Write the opinion as `precise drawing fact -> requirement or conflict -> specific revision action`. Avoid unsupported phrases such as `疑为套用`, `不能采信`, or broad `全面复核` instructions.
-- Do not verify a graphical direction, symbol, or missing-expression conclusion until `graphical_interpretation_check` records a closed legend and drawing-context chain.
+## 专业筛选
 
-## Citation Modes
+- 同一根因和整改动作的重复项先合并。
+- 证据薄弱、规范适用不清或图形解释无法排除歧义的项目保留 `needs_review`，不得写成确定违反。
+- 设计深度问题若精确引用图纸文字更清楚，可不强制截图，但必须写明理由。
+- 仅涉及出图包装、图签、签章或行政报审的内容通常不形成建筑技术意见。
+- 图形方向、符号、缺失表达和跨图矛盾必须先关闭图例、上下文和替代解释。
+- 条件性技术表述可以保留“如适用”“需核验”“需确认规范适用时间”，但不得在 Word 显示流程状态。
 
-- `cited`: required for mandatory clauses, technical thresholds, performance requirements, policy requirements, and any conclusion that claims a drawing violates an external rule. Fill `standard_source`, `standard_display_name`, `standard_article`, and `standard_requirement`. `standard_display_name` is the formal human-readable name and must not contain a path or `.pdf`.
-- `none`: allowed only for the three approved design-depth opinion types when the issue is a drawing-internal contradiction, missing index/name/number, duplicate detail, or incomplete expression that does not claim an external technical threshold. Leave all standard fields empty and fill `citation_none_reason`.
-- Never use `none` because the applicable standard could not be located. Such an item remains `needs_review`.
+## 引用模式
 
-## Opinion Format
+- `cited`：强制性要求、技术阈值、性能要求、政策要求及任何对外部规则的违反判断必须使用。填写 `standard_source`、`standard_display_name`、`standard_article`、`standard_requirement`。显示名不得含路径或 `.pdf`。
+- `none`：仅限批准的设计深度意见类型，且问题是图纸内部矛盾、索引/图名/图号缺失、重复大样或表达不完整，不主张违反外部技术阈值。规范字段留空并填写 `citation_none_reason`。
+- 找不到规范不得使用 `none` 绕过，必须保留 `needs_review`。
 
-Use this structure:
+## Word 结构
+
+每条按以下固定顺序：
 
 ```text
-涉及图纸：图号-图名。
-【审查意见】：...
-【法规条文】：《...》第...条：...
-【意见类型】：...
+1、涉及图纸：PDF第N页《图名》
+【审查意见】：……
+[无标题证据图]
+【法规条文】：《……》第……条：……
+【意见类型】：……
 ```
 
-Only `verified` issues may enter the formal Word report. Keep `needs_review` and `rejected` rows in ledgers for review and training, with a clear reason in `notes`.
+截图置于审查意见和法规条文之间，不写“截图如下”“截图说明”“图纸证据”。合法的 `citation_mode=none` 输出 `【法规条文】：无。`
 
-For a valid `citation_mode=none` issue, render the regulation line exactly as `【法规条文】：无。`
+## 12类意见类型
 
-When screenshots are inserted, place them after `【审查意见】` and before `【法规条文】`. Do not add delivery text such as `截图如下` or `截图说明` unless the user explicitly asks for a supporting evidence appendix.
-
-## 12 Opinion Types
-
-Use exactly one:
+必须且只能使用下列一类：
 
 - 消防安全强制性条文，必须修改（消防安全）
 - 一般性条文，必须修改（消防安全）
@@ -79,23 +73,14 @@ Use exactly one:
 - 设计深度，必须修改（其它）
 - 设计深度，建议修改（其它）
 
-## Case Use
+## 案例使用
 
-Cases are supporting evidence only. Before using a case, record:
-- matching facts
-- different facts
-- why the case is still relevant
+D类案例只辅助发现与差异比对。使用前记录相同事实、不同事实及仍可参考的原因；案例不得替代项目图纸事实或B类规范。
 
-If a case is similar but not fact-matched, do not use it as support.
+## 顺序与章节
 
-## v1.2 and v1.3 正式顺序与章节
-
-- `issue_id` 是稳定身份；不得因为正式报告排序变化而重编号。
-- 只有 `verified` 行填写正式 `display_order`，从1开始连续且不得重复。
-- 单体 `report_section` 只能是：`设计说明`、`平面图`、`立面剖面图`、`大样图`。
-- 总图 `report_section` 只能是：`总图设计说明`、`总图设计图纸`。
-- `verified`意见必须填写 `judgment`、合法引用模式和专业筛选理由。
-- `validation_log.csv` 中 `graphical_interpretation_check` 与 `opinion_wording_check` 必须通过。
-- `needs_review`、`rejected`、`delete` 不得进入Word，也不得占用正式显示顺序。
-- 同一根因和同一整改动作的重复意见先合并，再确定正式顺序。
-- v1.1报告生成器只服从显式章节和顺序；旧工作区才使用历史关键词分类和CSV行顺序。
+- `issue_id` 是稳定身份，不随排序重编号。
+- 只有 `ai_ready` 填写 `display_order`，从1开始连续且不得重复。
+- 单体章节：`设计说明`、`平面图`、`立面剖面图`、`大样图`。
+- 总图章节：`总图设计说明`、`总图设计图纸`。
+- 非 `ai_ready` 行不得进入 Word，也不得占用正式显示顺序。

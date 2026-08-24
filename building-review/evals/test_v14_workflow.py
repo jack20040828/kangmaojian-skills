@@ -17,6 +17,7 @@ SCRIPTS = SKILL_DIR / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from route_specialties import routes  # noqa: E402
+from validate_review_package import valid_coverage_topics  # noqa: E402
 
 
 def run(args: list[str], expected: int, contains: str = "") -> subprocess.CompletedProcess[str]:
@@ -96,7 +97,15 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="building-review-v14-") as temp_value:
         temp = Path(temp_value)
         created = run(
-            [python, str(SCRIPTS / "create_review_workspace.py"), "匿名v1.4项目", "--root", str(temp / "reviews")],
+            [
+                python,
+                str(SCRIPTS / "create_review_workspace.py"),
+                "匿名v1.4项目",
+                "--root",
+                str(temp / "reviews"),
+                "--schema-version",
+                "1.4",
+            ],
             0,
         )
         workspace = Path(created.stdout.strip().splitlines()[-1])
@@ -140,6 +149,17 @@ def main() -> int:
         write_rows(workspace / "drawing_inventory.csv", [inventory])
         write_rows(workspace / "fact_ledger.csv", [fact])
         confirmed_profile(workspace / "project_profile.json")
+        wet_profile = json.loads((workspace / "project_profile.json").read_text(encoding="utf-8"))
+        wet_profile["facts"]["wet_rooms"].update(
+            status="confirmed",
+            value=True,
+            fact_ids=["F001"],
+            notes="匿名平面包含湿房间。",
+        )
+        (workspace / "project_profile.json").write_text(
+            json.dumps(wet_profile, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
 
         routed = run([python, str(SCRIPTS / "route_specialties.py"), str(workspace), "--json"], 0)
         routed_payload = json.loads(routed.stdout)
@@ -156,6 +176,15 @@ def main() -> int:
         checks = read_rows(workspace / "check_matrix.csv")
         catalog = json.loads((SKILL_DIR / "generated" / "review-rules.json").read_text(encoding="utf-8"))
         rules_by_id = {rule["rule_id"]: rule for rule in catalog["rules"]}
+        catalog_waterproofing_topics = {
+            "wet_room_waterproofing",
+            "exterior_wall_waterproofing",
+            "roof_waterproofing",
+        }
+        if not catalog_waterproofing_topics.issubset(valid_coverage_topics(catalog)):
+            raise AssertionError("REG-42: catalog-defined waterproofing topics are not valid v1.4 topics")
+        if not any(check["coverage_topic"] == "wet_room_waterproofing" for check in checks):
+            raise AssertionError("REG-43: wet-room profile did not expand its catalog-defined topic")
         for check in checks:
             rule = rules_by_id[check["rule_id"]]
             check.update(
@@ -199,6 +228,15 @@ def main() -> int:
 
         write_rows(workspace / "check_matrix.csv", checks)
         write_rows(workspace / "drawing_inventory.csv", inventory_rows)
+        mismatched_topic = [dict(item) for item in checks]
+        mismatch_index = next(
+            index for index, item in enumerate(mismatched_topic)
+            if item["coverage_topic"] == "wet_room_waterproofing"
+        )
+        mismatched_topic[mismatch_index]["coverage_topic"] = "fire_egress"
+        write_rows(workspace / "check_matrix.csv", mismatched_topic)
+        run(validate, 1, "does not match executable rule")
+        write_rows(workspace / "check_matrix.csv", checks)
         anonymous_standards = temp / "anonymous-standards"
         anonymous_standards.mkdir()
         index_files = []
@@ -268,8 +306,25 @@ def main() -> int:
         )
         empty_results = temp / "empty-results.json"
         empty_results.write_text('{"cases": []}\n', encoding="utf-8")
+        pending_only_cases = temp / "pending-only-gold.json"
+        pending_payload = json.loads((SKILL_DIR / "evals" / "gold-cases.json").read_text(encoding="utf-8"))
+        pending_payload["cases"] = [
+            case for case in pending_payload["cases"]
+            if case.get("status") == "pending_reviewer_confirmation"
+        ]
+        pending_only_cases.write_text(
+            json.dumps(pending_payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
         run(
-            [python, str(SCRIPTS / "run_gold_evals.py"), "--results", str(empty_results)],
+            [
+                python,
+                str(SCRIPTS / "run_gold_evals.py"),
+                "--cases",
+                str(pending_only_cases),
+                "--results",
+                str(empty_results),
+            ],
             2,
             "no reviewer-approved gold cases",
         )
@@ -324,7 +379,7 @@ def main() -> int:
             '"status": "pass"',
         )
 
-    print("PASS: 12 v1.4 workflow and release-gate scenarios completed")
+    print("PASS: 14 v1.4 workflow and release-gate scenarios completed")
     return 0
 
 

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" fill="white"/>
+  <path d="M120 80V280M500 80V280M120 180H500" stroke="#111" stroke-width="4" fill="none"/>
+  <path d="M120 180l24-12v24zM500 180l-24-12v24z" fill="#111"/>
+  <text x="280" y="165" font-family="Arial" font-size="28">2900</text>
+  <text x="20" y="335" font-family="Arial" font-size="18">Synthetic dimension fixture</text>
+</svg>

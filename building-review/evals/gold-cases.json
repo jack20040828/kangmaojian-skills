@@ -58,6 +58,26 @@
       "approved_gold_path": "",
       "approved_gold_sha256": "",
       "expected_issues": []
+    },
+    {
+      "id": "GOLD-CANDIDATE-006",
+      "status": "pending_reviewer_confirmation",
+      "report_type": "single",
+      "source_paths": [],
+      "gold_opinion_candidates": [],
+      "approved_gold_path": "",
+      "approved_gold_sha256": "",
+      "expected_issues": []
+    },
+    {
+      "id": "GOLD-CANDIDATE-007",
+      "status": "pending_reviewer_confirmation",
+      "report_type": "single",
+      "source_paths": [],
+      "gold_opinion_candidates": [],
+      "approved_gold_path": "",
+      "approved_gold_sha256": "",
+      "expected_issues": []
     }
   ]
 }

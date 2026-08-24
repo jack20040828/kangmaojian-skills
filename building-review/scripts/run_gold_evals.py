@@ -65,6 +65,16 @@ def validate_cases(payload: dict) -> list[str]:
                 for field in ["drawing_ref", "root_cause", "category"]:
                     if not str(issue.get(field, "")).strip():
                         errors.append(f"{case_id}/{issue.get('id', '')}: missing {field}")
+            prohibited = case.get("prohibited_findings", [])
+            if not isinstance(prohibited, list):
+                errors.append(f"{case_id}: prohibited_findings must be a list")
+                prohibited = []
+            prohibited_ids = [str(item.get("id", "")).strip() for item in prohibited]
+            if any(not value for value in prohibited_ids) or len(prohibited_ids) != len(set(prohibited_ids)):
+                errors.append(f"{case_id}: prohibited finding IDs must be non-empty and unique")
+            for finding in prohibited:
+                if not str(finding.get("reason", "")).strip():
+                    errors.append(f"{case_id}/{finding.get('id', '')}: missing prohibited reason")
     return errors
 
 
@@ -84,6 +94,8 @@ def score(payload: dict, results: dict) -> tuple[dict, list[str]]:
     correct_citations = 0
     mixed_root_count = 0
     unsupported_verified_count = 0
+    prohibited_total = 0
+    prohibited_absent = 0
     for case in approved:
         case_id = case["id"]
         result = result_map.get(case_id)
@@ -109,6 +121,20 @@ def score(payload: dict, results: dict) -> tuple[dict, list[str]]:
                 cited_verified += 1
                 if finding.get("citation_correct") is True:
                     correct_citations += 1
+        prohibited_outcomes = {
+            item.get("prohibited_id"): item
+            for item in result.get("prohibited_findings", [])
+        }
+        for prohibited in case.get("prohibited_findings", []):
+            prohibited_total += 1
+            outcome = prohibited_outcomes.get(prohibited["id"], {}).get("outcome")
+            if outcome not in {"absent", "present"}:
+                errors.append(f"{case_id}/{prohibited['id']}: prohibited finding outcome is required")
+            elif outcome == "present":
+                false_positives += 1
+                errors.append(f"{case_id}/{prohibited['id']}: prohibited finding was reported")
+            else:
+                prohibited_absent += 1
         false_positives += int(result.get("false_positive_count", 0))
         mixed_root_count += int(result.get("mixed_root_count", 0))
         unsupported_verified_count += int(result.get("unsupported_verified_count", 0))
@@ -119,6 +145,8 @@ def score(payload: dict, results: dict) -> tuple[dict, list[str]]:
         "citation_accuracy": correct_citations / cited_verified if cited_verified else 0.0,
         "mixed_root_count": mixed_root_count,
         "unsupported_verified_count": unsupported_verified_count,
+        "prohibited_finding_count": prohibited_total,
+        "prohibited_absent_count": prohibited_absent,
         "approved_case_count": len(approved),
         "expected_issue_count": expected_total,
     }

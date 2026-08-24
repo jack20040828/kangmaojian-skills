@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "cases": [
+    {
+      "case_id": "GOLD-009-8-RESIDENTIAL",
+      "false_positive_count": 0,
+      "mixed_root_count": 0,
+      "unsupported_verified_count": 0,
+      "findings": [
+        {"expected_issue_id": "R8-01", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-02", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-03", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-04", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-05", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-06", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-07", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-08", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-09", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-10", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-11", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-12", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-13", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-14", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-15", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-16", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "R8-17", "outcome": "found", "verified": true, "citation_correct": true}
+      ],
+      "prohibited_findings": [
+        {"prohibited_id": "R8-P01", "outcome": "absent"},
+        {"prohibited_id": "R8-P02", "outcome": "absent"},
+        {"prohibited_id": "R8-P03", "outcome": "absent"}
+      ]
+    },
+    {
+      "case_id": "GOLD-010-RESIDENTIAL-HOLDOUT",
+      "false_positive_count": 0,
+      "mixed_root_count": 0,
+      "unsupported_verified_count": 0,
+      "findings": [
+        {"expected_issue_id": "HOLDOUT-SOLAR", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "HOLDOUT-EXTERIOR-WATERPROOF", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "HOLDOUT-BATHROOM-COF", "outcome": "found", "verified": true, "citation_correct": true},
+        {"expected_issue_id": "HOLDOUT-STAIR-HANDRAIL", "outcome": "found", "verified": true, "citation_correct": true}
+      ],
+      "prohibited_findings": [
+        {"prohibited_id": "HOLDOUT-NO-HEIGHT-ISSUE", "outcome": "absent"},
+        {"prohibited_id": "HOLDOUT-NO-ACCESS-ISSUE", "outcome": "absent"},
+        {"prohibited_id": "HOLDOUT-NO-RESCUE-ISSUE", "outcome": "absent"},
+        {"prohibited_id": "HOLDOUT-NO-ROOF-WATERPROOF-ISSUE", "outcome": "absent"},
+        {"prohibited_id": "HOLDOUT-NO-PUBLIC-COF-ISSUE", "outcome": "absent"},
+        {"prohibited_id": "HOLDOUT-NO-DRAINAGE-ISSUE", "outcome": "absent"}
+      ]
+    }
+  ]
+}

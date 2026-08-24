@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" fill="white"/>
+  <path d="M100 240H520" stroke="#111" stroke-width="5"/>
+  <path d="M160 240L420 100" stroke="#1565c0" stroke-width="8"/>
+  <path d="M420 100l-42 3 19 35z" fill="#1565c0"/>
+  <text x="20" y="335" font-family="Arial" font-size="18">Synthetic direction fixture</text>
+</svg>

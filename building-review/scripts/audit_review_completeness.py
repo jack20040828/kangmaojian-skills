@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write a hash-bound v1.4 completion audit and list all blocking open items."""
+"""Write a hash-bound v1.4-v1.6 completion audit and list all blocking open items."""
 
 from __future__ import annotations
 
@@ -38,8 +38,8 @@ def main() -> int:
     errors, warnings = validate_workspace(root, require_completion_audit=False)
     manifest_path = root / "review_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
-    if str(manifest.get("schema_version", "")) != "1.4":
-        errors.append("completion audit is available only for schema_version 1.4")
+    if str(manifest.get("schema_version", "")) not in {"1.4", "1.5", "1.6"}:
+        errors.append("completion audit is available only for schema_version 1.4, 1.5, or 1.6")
     catalog_path = Path(str(manifest.get("rule_catalog_snapshot", {}).get("path", "")))
     catalog_hash = sha256_file(catalog_path) if catalog_path.exists() else ""
     grouped: dict[str, list[str]] = {}
@@ -61,6 +61,8 @@ def main() -> int:
         print(f"FAIL: {len(errors)} blocking item(s); audit written to {output}")
         for name, items in sorted(grouped.items()):
             print(f"- {name}: {len(items)}")
+            for item in items:
+                print(f"  - {item}")
         return 1
     print(f"PASS: completion audit written to {output}")
     return 0

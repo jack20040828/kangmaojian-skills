@@ -1,7 +1,7 @@
 {
-  "schema_version": "1.0",
-  "catalog_version": "2026-08-12",
-  "rule_count": 80,
+  "schema_version": "1.1",
+  "catalog_version": "2026-08-18",
+  "rule_count": 94,
   "rules": [
     {
       "rule_id": "ACCESS-2.1.1-CONTINUOUS-ROUTE",
@@ -45,7 +45,24 @@
         "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
         "article": "第2.1.1条",
         "requirement": "城市开敞空间、建筑场地、建筑内部及其之间应提供连贯的无障碍通行流线。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.1.1-CONTINUOUS-ROUTE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "ACCESS-2.2.2-ROUTE-WIDTH",
@@ -88,7 +105,24 @@
         "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
         "article": "第2.2.2条",
         "requirement": "无障碍通道通行净宽不应小于1.20m，人员密集公共场所不应小于1.80m。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.2.2-ROUTE-WIDTH-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "ACCESS-2.3.1-RAMP-SLOPE-RISE",
@@ -134,7 +168,24 @@
         "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
         "article": "第2.3.1条",
         "requirement": "轮椅坡道横向坡度不得大于1:50，纵向坡度一般不得大于1:12；受限条件及每段提升高度还应满足条文规定。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.3.1-RAMP-SLOPE-RISE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "ACCESS-2.3.2-RAMP-WIDTH",
@@ -177,7 +228,24 @@
         "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
         "article": "第2.3.2条",
         "requirement": "轮椅坡道通行净宽不应小于1.20m。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.3.2-RAMP-WIDTH-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "ACCESS-2.4.1-ACCESSIBLE-ENTRANCE-TYPE",
@@ -221,7 +289,24 @@
         "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
         "article": "第2.4.1条",
         "requirement": "无障碍出入口应采用平坡出入口、台阶与轮椅坡道组合或台阶与升降平台组合之一。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.4.1-ACCESSIBLE-ENTRANCE-TYPE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "ACCESS-2.4.2-ENTRANCE-PLATFORM",
@@ -264,7 +349,24 @@
         "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
         "article": "第2.4.2条",
         "requirement": "除平坡入口外，无障碍入口门前应设平台；门完全开启时平台净深度不应小于1.50m，入口上方应设雨篷。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.4.2-ENTRANCE-PLATFORM-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "ACCESS-2.6.1-ELEVATOR-LOBBY",
@@ -317,7 +419,24 @@
         "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
         "article": "第2.6.1条",
         "requirement": "无障碍电梯候梯厅应满足轮椅回转、公共建筑候梯深度、呼叫按钮、盲文提示、运行显示和抵达音响要求。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.6.1-ELEVATOR-LOBBY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "ACCESS-3.2.4-PUBLIC-TOILET",
@@ -367,7 +486,86 @@
         "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
         "article": "第3.2.4条",
         "requirement": "公共建筑每层男女公共卫生间应分别至少设置一个满足无障碍要求的卫生间，或在其附近至少设置一个独立无障碍厕所。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-3.2.4-PUBLIC-TOILET-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-3.4-ACCESSIBLE-DWELLING",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility",
+      "review_families": [
+        "平面图"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍住房套号",
+        "连续无障碍通道",
+        "户型实施条件"
+      ],
+      "comparison_method": "对照说明声明、首层套号和户型详图，逐项核对无障碍住房实施闭环。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第3.4.1条～第3.4.8条",
+        "requirement": "无障碍住房应与无障碍通道连接，并落实轮椅进出和回转、无障碍卫生间和厨房、床侧通道、低位窗控、救助呼叫及适用门禁等要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-3.4-01",
+          "description": "项目存在应落实的无障碍住房要求。",
+          "profile_field": "accessible_requirement",
+          "operator": "equals",
+          "expected": true,
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "design_note",
+          "plan",
+          "detail"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "CIVIL-5.3.2-PUBLIC-STAIR-WIDTH",
@@ -408,7 +606,24 @@
         "display_name": "《民用建筑通用规范》GB 55031-2022",
         "article": "第5.3.2条",
         "requirement": "供日常交通用的公共楼梯梯段最小净宽应按使用特征、人流股数和每股0.55m确定，并不少于2股人流宽度。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.3.2-PUBLIC-STAIR-WIDTH-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "CIVIL-5.3.7-STAIR-HEADROOM",
@@ -449,7 +664,24 @@
         "display_name": "《民用建筑通用规范》GB 55031-2022",
         "article": "第5.3.7条",
         "requirement": "公共楼梯平台上下过道净高不应小于2.00m，梯段净高不应小于2.20m。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.3.7-STAIR-HEADROOM-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "CIVIL-5.3.8-STAIR-RISER-COUNT",
@@ -488,7 +720,24 @@
         "display_name": "《民用建筑通用规范》GB 55031-2022",
         "article": "第5.3.8条",
         "requirement": "公共楼梯每个梯段踏步级数不应少于2级且不应超过18级。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.3.8-STAIR-RISER-COUNT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "CIVIL-5.3.9-STAIR-TREAD-RISER",
@@ -530,7 +779,24 @@
         "display_name": "《民用建筑通用规范》GB 55031-2022",
         "article": "第5.3.9条",
         "requirement": "公共楼梯踏步最小宽度和最大高度应符合表5.3.9；螺旋和扇形踏步还应满足内侧控制点宽度要求。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.3.9-STAIR-TREAD-RISER-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "CIVIL-6.2.4-WINDOW-SILL-DRAINAGE",
@@ -564,7 +830,24 @@
         "display_name": "《民用建筑通用规范》GB 55031-2022",
         "article": "第6.2.4条",
         "requirement": "外墙洞口和门窗处应采取防止墙体变形裂缝的加强措施，外窗台应采取排水、防水构造措施。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-6.2.4-WINDOW-SILL-DRAINAGE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "CIVIL-6.5.6-LOW-WINDOW-GUARD",
@@ -607,7 +890,24 @@
         "display_name": "《民用建筑通用规范》GB 55031-2022",
         "article": "第6.5.6条",
         "requirement": "除住宅外民用建筑临空窗窗台净高低于规定条件时应设置防护设施，防护高度不得小于0.80m。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-6.5.6-LOW-WINDOW-GUARD-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "CIVIL-6.6.1-GUARD-HEIGHT",
@@ -652,7 +952,24 @@
         "display_name": "《民用建筑通用规范》GB 55031-2022",
         "article": "第6.6.1条",
         "requirement": "阳台、外廊、中庭、上人屋面和楼梯等临空部位应设牢固栏杆，垂直高度不应小于1.10m；存在可踏部位时应从可踏部位顶面起算。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-6.6.1-GUARD-HEIGHT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "CIVIL-6.6.3-CHILD-GUARD",
@@ -695,7 +1012,24 @@
         "display_name": "《民用建筑通用规范》GB 55031-2022",
         "article": "第6.6.3条",
         "requirement": "少年儿童专用活动场所栏杆应防止攀滑，采用垂直杆件时净间距不应大于0.11m。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-6.6.3-CHILD-GUARD-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "DEPTH-COVERAGE-ACCESSIBILITY",
@@ -719,7 +1053,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ACCESSIBILITY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ACCESSIBILITY-DETAIL",
@@ -743,7 +1094,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ACCESSIBILITY-DETAIL-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ACCESSIBLE-ELEVATOR",
@@ -786,7 +1154,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ACCESSIBLE-ELEVATOR-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ACCESSIBLE-ROOM",
@@ -819,7 +1204,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ACCESSIBLE-ROOM-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ACCESSIBLE-ROOM-DETAIL",
@@ -852,7 +1254,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ACCESSIBLE-ROOM-DETAIL-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ACCESSIBLE-ROUTE-GRADIENT",
@@ -876,7 +1295,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ACCESSIBLE-ROUTE-GRADIENT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-CODE-BASIS-CONSISTENCY",
@@ -901,7 +1337,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-CODE-BASIS-CONSISTENCY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-CROSS-DRAWING-CONSISTENCY",
@@ -925,7 +1378,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-CROSS-DRAWING-CONSISTENCY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-DETAIL-IMPLEMENTABILITY",
@@ -949,7 +1419,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-DETAIL-IMPLEMENTABILITY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-DETAIL-TRACEABILITY",
@@ -974,7 +1461,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-DETAIL-TRACEABILITY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-DOCUMENT-TRACEABILITY",
@@ -999,7 +1503,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-DOCUMENT-TRACEABILITY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-DOOR-WINDOW-IDENTITY",
@@ -1023,7 +1544,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-DOOR-WINDOW-IDENTITY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-DOOR-WINDOW-SAFETY",
@@ -1047,7 +1585,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-DOOR-WINDOW-SAFETY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-DORMITORY-ACOUSTICS",
@@ -1081,7 +1636,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-DORMITORY-ACOUSTICS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-DORMITORY-REFUSE",
@@ -1114,7 +1686,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-DORMITORY-REFUSE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-FACADE-SAFETY-WEATHER",
@@ -1138,7 +1727,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-FACADE-SAFETY-WEATHER-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-FIRE-EGRESS",
@@ -1162,7 +1768,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-FIRE-EGRESS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-FIRE-RESCUE-OPENINGS",
@@ -1186,7 +1809,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-FIRE-RESCUE-OPENINGS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-FOOD-WET-ROOM-VERTICAL",
@@ -1220,7 +1860,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-FOOD-WET-ROOM-VERTICAL-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-FUNCTION-LAYOUT",
@@ -1244,7 +1901,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-FUNCTION-LAYOUT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-HEIGHT-CLEARANCE",
@@ -1268,7 +1942,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-HEIGHT-CLEARANCE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-HEIGHT-ELEVATION",
@@ -1292,7 +1983,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-HEIGHT-ELEVATION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-MATERIAL-PERFORMANCE",
@@ -1316,7 +2024,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-MATERIAL-PERFORMANCE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-OPENINGS-RESCUE",
@@ -1340,7 +2065,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-OPENINGS-RESCUE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-PARAPET-FLASHING",
@@ -1364,7 +2106,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-PARAPET-FLASHING-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-PARKING-SPECIAL-SPACES",
@@ -1389,7 +2148,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-PARKING-SPECIAL-SPACES-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-PEDESTRIAN-VEHICLE-RELATIONSHIP",
@@ -1413,7 +2189,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-PEDESTRIAN-VEHICLE-RELATIONSHIP-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-PROJECT-APPLICABILITY",
@@ -1437,7 +2230,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-PROJECT-APPLICABILITY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-PROJECT-IDENTITY-FUNCTION",
@@ -1462,7 +2272,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-PROJECT-IDENTITY-FUNCTION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-PROJECT-SCOPE-CONSISTENCY",
@@ -1487,7 +2314,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-PROJECT-SCOPE-CONSISTENCY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-RENEWABLE-ENERGY-SAFETY",
@@ -1511,7 +2355,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-RENEWABLE-ENERGY-SAFETY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ROOF-ACCESS",
@@ -1535,7 +2396,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ROOF-ACCESS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ROOF-DRAINAGE",
@@ -1559,7 +2437,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ROOF-DRAINAGE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ROOF-EXIT",
@@ -1583,7 +2478,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ROOF-EXIT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ROOF-FALL-PROTECTION",
@@ -1607,7 +2519,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ROOF-FALL-PROTECTION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-ROOF-GUARD",
@@ -1631,7 +2560,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-ROOF-GUARD-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-SAFETY-COORDINATION",
@@ -1655,7 +2601,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-SAFETY-COORDINATION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-SITE-ACCESSIBLE-ROUTE",
@@ -1680,7 +2643,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-SITE-ACCESSIBLE-ROUTE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-SITE-ASSEMBLY-SPACE",
@@ -1713,7 +2693,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-SITE-ASSEMBLY-SPACE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-SITE-DESIGN-PARAMETERS",
@@ -1737,7 +2734,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-SITE-DESIGN-PARAMETERS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-SITE-ELEVATION-RELATIONSHIP",
@@ -1761,7 +2775,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-SITE-ELEVATION-RELATIONSHIP-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-SITE-FIRE-ACCESS",
@@ -1786,7 +2817,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-SITE-FIRE-ACCESS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-SITE-FUNCTION-SPACE",
@@ -1811,7 +2859,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-SITE-FUNCTION-SPACE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-SITE-VERTICAL-DRAINAGE",
@@ -1835,7 +2900,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-SITE-VERTICAL-DRAINAGE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-STAIR-GEOMETRY",
@@ -1859,7 +2941,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-STAIR-GEOMETRY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-STAIR-GUARD",
@@ -1883,7 +2982,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-STAIR-GUARD-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-VERTICAL-RELATIONSHIP",
@@ -1907,7 +3023,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-VERTICAL-RELATIONSHIP-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-WATERPROOFING-DETAIL",
@@ -1931,7 +3064,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-WATERPROOFING-DETAIL-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-WET-ROOM-DRAINAGE",
@@ -1955,7 +3105,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-WET-ROOM-DRAINAGE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-WET-ROOM-HYGIENE",
@@ -1979,7 +3146,24 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-WET-ROOM-HYGIENE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "DEPTH-COVERAGE-WINDOW-SILL-DRAINAGE",
@@ -2003,7 +3187,159 @@
       "comparison_method": "核对图纸表达是否完整、内部一致、与相关视图及索引闭合；不得以图纸存在代替实质核对。",
       "calculation_required": false,
       "risk_level": "medium",
-      "basis": {}
+      "basis": {},
+      "applicability_conditions": [
+        {
+          "condition_id": "DEPTH-COVERAGE-WINDOW-SILL-DRAINAGE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
+    },
+    {
+      "rule_id": "ENERGY-5.2.1-SOLAR-SYSTEM",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "007建筑节能专项",
+      "coverage_topic": "renewable_energy_safety",
+      "review_families": [
+        "屋面图"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "建设性质",
+        "太阳能系统类型",
+        "屋面设备及接口",
+        "设计说明"
+      ],
+      "comparison_method": "先确认是否为新建建筑，再交叉核对目录、节能说明和屋面图中的太阳能系统表达。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "007建筑节能专项/B建筑节能核心规范/GB55015-2021建筑节能与可再生能源利用通用规范.pdf",
+        "sha256": "37e6355d7adb71d1ff3d5047374f25f36d584c7671ff950204a04d96f813ea43",
+        "display_name": "《建筑节能与可再生能源利用通用规范》GB 55015-2021",
+        "article": "第5.2.1条",
+        "requirement": "新建建筑应安装太阳能系统。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ENERGY-5.2.1-01",
+          "description": "项目属于新建建筑。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "新建建筑",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "absence",
+        "required_roles": [
+          "directory",
+          "design_note",
+          "roof_plan"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-2.2.3-RESCUE-OPENINGS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "openings_rescue",
+      "review_families": [
+        "立面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "地上层数",
+        "防火分区",
+        "消防救援口数量、尺寸、开启方式及标识"
+      ],
+      "comparison_method": "先确认第三层及以上适用范围，再逐层核对立面和门窗表中的消防救援口。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第2.2.3条",
+        "requirement": "建筑外墙应设置消防救援口；有外窗的建筑应自第三层起每层设置，每个防火分区在对应救援操作面范围内不应少于2个，并满足尺寸、开启或破拆及永久标识要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-2.2.3-01",
+          "description": "建筑地上层数不少于3层。",
+          "profile_field": "floors_above",
+          "operator": "minimum",
+          "expected": 3,
+          "outcome_when_false": "not_applicable"
+        },
+        {
+          "condition_id": "FIRE-2.2.3-02",
+          "description": "建筑外墙存在外窗并需结合防火分区设置救援口。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在外窗及对应防火分区",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "elevation",
+          "schedule",
+          "design_note"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "FIRE-7.1.1-EGRESS-BASIS",
@@ -2039,7 +3375,24 @@
         "display_name": "《建筑防火通用规范》GB 55037-2022",
         "article": "第7.1.1条",
         "requirement": "建筑疏散出口、疏散楼梯和避难设施应与使用功能、火灾危险性、耐火等级、高度或层数、埋深、面积及人员条件相适应。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.1-EGRESS-BASIS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "FIRE-7.1.2-EXIT-COUNT-WIDTH",
@@ -2072,7 +3425,24 @@
         "display_name": "《建筑防火通用规范》GB 55037-2022",
         "article": "第7.1.2条",
         "requirement": "疏散出口应分散布置，房间疏散门应直接通向安全出口；出口宽度和数量应满足安全疏散，各层楼梯净宽度应按相应上下部楼层控制值确定。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.2-EXIT-COUNT-WIDTH-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "FIRE-7.1.3-TRAVEL-DISTANCE",
@@ -2105,7 +3475,24 @@
         "display_name": "《建筑防火通用规范》GB 55037-2022",
         "article": "第7.1.3条",
         "requirement": "最大疏散距离应结合耐火等级、火灾危险性、空间高度、楼梯形式和人员特点确定；房间内任一点至疏散门的距离还应满足条文规定。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.3-TRAVEL-DISTANCE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "FIRE-7.1.4-MINIMUM-WIDTH",
@@ -2138,7 +3525,24 @@
         "display_name": "《建筑防火通用规范》GB 55037-2022",
         "article": "第7.1.4条",
         "requirement": "疏散出口门、室外疏散楼梯、疏散走道和疏散楼梯的净宽度不得小于条文规定的最低值。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.4-MINIMUM-WIDTH-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "FIRE-7.1.5-EGRESS-CLEARANCE",
@@ -2171,7 +3575,24 @@
         "display_name": "《建筑防火通用规范》GB 55037-2022",
         "article": "第7.1.5条",
         "requirement": "疏散通道、走道和出口不得有影响疏散的物体，明显位置应设标志，净高度不得小于2.1m，防火分区分隔处应设疏散门。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.5-EGRESS-CLEARANCE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "FIRE-7.1.6-EGRESS-DOOR-DIRECTION",
@@ -2206,7 +3627,24 @@
         "display_name": "《建筑防火通用规范》GB 55037-2022",
         "article": "第7.1.6条",
         "requirement": "除条文允许情形外疏散出口门应为平开门或具备平开功能；规定场所和部位的疏散门应向疏散方向开启。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.6-EGRESS-DOOR-DIRECTION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "FIRE-7.1.7-DOOR-WIDTH-IMPACT",
@@ -2241,7 +3679,579 @@
         "display_name": "《建筑防火通用规范》GB 55037-2022",
         "article": "第7.1.7条",
         "requirement": "疏散出口门应能从两侧手动开启；门完全开启时不得减少楼梯平台或疏散走道有效净宽，门禁应具备火灾自动释放和内部易开启功能。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.7-DOOR-WIDTH-IMPACT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "RES-4.1.10-BATHROOM-COF",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "material_performance",
+      "review_families": [
+        "材料做法表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "卫生间地面材料",
+        "静摩擦系数COF"
+      ],
+      "comparison_method": "核对卫生间地面材料性能指标并与COF 0.6比较。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.1.10条",
+        "requirement": "卫生间地面应采用防滑铺装，地面静摩擦系数COF不应小于0.6。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.1.10-01",
+          "description": "住宅设置卫生间。",
+          "profile_field": "wet_rooms",
+          "operator": "equals",
+          "expected": true,
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "material_schedule"
+        ],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "RES-4.1.12-WET-AREA-LEVEL",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "vertical_relationship",
+      "review_families": [
+        "设计说明",
+        "平面图"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "厨房、卫生间、封闭阳台完成面标高",
+        "相邻空间标高",
+        "斜坡过渡"
+      ],
+      "comparison_method": "计算各涉水房间与相邻空间完成面高差并核对斜坡过渡。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.1.12条",
+        "requirement": "厨房、卫生间、封闭阳台与相邻空间地面高差不应大于0.015m，并应以斜坡过渡。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.1.12-01",
+          "description": "住宅存在厨房、卫生间或封闭阳台。",
+          "profile_field": "wet_rooms",
+          "operator": "equals",
+          "expected": true,
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "design_note",
+          "plan",
+          "section"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "RES-4.1.15-BALCONY-GUARD",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "roof_fall_protection",
+      "review_families": [
+        "墙身大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "阳台栏杆净高",
+        "可踏面"
+      ],
+      "comparison_method": "从正确起算面量取各阳台栏杆净高并与1.20m比较。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.1.15条",
+        "requirement": "阳台栏杆净高不应低于1.20m。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.1.15-01",
+          "description": "住宅设置阳台栏杆。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在阳台栏杆",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "dimension",
+        "required_roles": [
+          "design_note",
+          "detail",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "RES-4.1.2-CLEAR-HEIGHT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "height_clearance",
+      "review_families": [
+        "剖面图"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "卧室净高",
+        "起居室净高"
+      ],
+      "comparison_method": "量取各户型卧室、起居室净高并与2.60m逐项比较。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.1.2条第2款",
+        "requirement": "卧室、起居室室内净高不应低于2.60m。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.1.2-CH-01",
+          "description": "被测空间为住宅卧室或起居室。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "卧室或起居室",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "dimension",
+        "required_roles": [
+          "section",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "RES-4.1.2-STOREY-HEIGHT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "height_clearance",
+      "review_families": [
+        "剖面图"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "住宅标准层层高"
+      ],
+      "comparison_method": "量取各住宅层层高并与3.00m逐层比较。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.1.2条第1款",
+        "requirement": "住宅层高不应低于3.00m。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.1.2-SH-01",
+          "description": "审查对象属于住宅层。",
+          "profile_field": "building_use",
+          "operator": "contains",
+          "expected": "住宅",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "dimension",
+        "required_roles": [
+          "section",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "RES-4.2.2-STAIR-HORIZONTAL-HANDRAIL",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "stair_guard",
+      "review_families": [
+        "楼梯大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "楼梯水平段长度",
+        "扶手高度"
+      ],
+      "comparison_method": "核对水平段长度条件并从正确起算面量取扶手高度，与1.20m比较。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.2.2条第3款",
+        "requirement": "楼梯水平段栏杆长度大于0.50m时，其水平段扶手高度不应小于1.20m。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.2.2-01",
+          "description": "楼梯水平段栏杆长度大于0.50m。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "水平段长度大于0.50m",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "dimension",
+        "required_roles": [
+          "design_note",
+          "stair_detail",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "RES-4.2.8-PUBLIC-GUARD",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "roof_fall_protection",
+      "review_families": [
+        "墙身大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "公共临空栏杆净高",
+        "可踏面"
+      ],
+      "comparison_method": "从正确起算面量取各公共临空栏杆净高并与1.20m比较。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.2.8条",
+        "requirement": "外廊、回廊、内天井、室外楼梯、上人屋面等公共临空栏杆净高不应低于1.20m。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.2.8-01",
+          "description": "住宅存在公共临空部位。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在公共临空部位",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "dimension",
+        "required_roles": [
+          "design_note",
+          "detail",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "RES-4.2.9-PUBLIC-AREA-COF",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "material_performance",
+      "review_families": [
+        "材料做法表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "公共交通空间地面材料",
+        "静摩擦系数COF"
+      ],
+      "comparison_method": "核对公共出入口、走廊、楼梯和电梯厅地面材料性能指标并与COF 0.6比较。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.2.9条",
+        "requirement": "公共出入口内外、公共走廊、公共楼梯、电梯厅等地面应采用防滑铺装，地面静摩擦系数COF不应小于0.6。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.2.9-01",
+          "description": "住宅设置公共出入口、公共走廊、公共楼梯或电梯厅。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在适用公共交通空间",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "material_schedule"
+        ],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "WATER-4.4.1-ROOF-LAYER-COUNT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "006建筑防水专项",
+      "coverage_topic": "roof_waterproofing",
+      "review_families": [
+        "材料做法表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "屋面形式",
+        "屋面防水等级",
+        "防水层材料和道数"
+      ],
+      "comparison_method": "核对平屋面防水等级并逐层计数独立防水层。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "006建筑防水专项/B建筑防水核心规范/GB55030-2022建筑与市政工程防水通用规范.pdf",
+        "sha256": "abeafb4f90a5d9107701567b0274c66ae92f02f3d4d481e891af8dcf0b28421c",
+        "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
+        "article": "第4.4.1条",
+        "requirement": "防水等级为一级的平屋面，防水层不应少于3道。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.4.1-01",
+          "description": "屋面属于平屋面。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "平屋面",
+          "outcome_when_false": "not_applicable"
+        },
+        {
+          "condition_id": "WATER-4.4.1-02",
+          "description": "屋面防水等级为一级。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "一级防水",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "design_note",
+          "material_schedule",
+          "detail"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "WATER-4.4.3-ROOF-DRAINAGE-SLOPE",
@@ -2276,7 +4286,94 @@
         "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
         "article": "第4.4.3条",
         "requirement": "平屋面排水坡度不应小于2%；采用结构找坡时坡度不应小于3%；混凝土屋面檐沟、天沟纵向坡度不应小于1%。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.4.3-ROOF-DRAINAGE-SLOPE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
+    },
+    {
+      "rule_id": "WATER-4.5.2-EXTERIOR-WALL-LAYERS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "006建筑防水专项",
+      "coverage_topic": "exterior_wall_waterproofing",
+      "review_families": [
+        "材料做法表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "外墙结构类型",
+        "外墙防水等级",
+        "外墙防水层道数和材料"
+      ],
+      "comparison_method": "确认砌体或填充墙外墙及防水等级后，核对防水层道数和材料组合。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "006建筑防水专项/B建筑防水核心规范/GB55030-2022建筑与市政工程防水通用规范.pdf",
+        "sha256": "abeafb4f90a5d9107701567b0274c66ae92f02f3d4d481e891af8dcf0b28421c",
+        "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
+        "article": "第4.5.2条",
+        "requirement": "一级防水的砌体结构或填充墙外墙，防水层不应少于2道；采用2道时应包含防水砂浆及防水涂料或其他防水材料。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.5.2-01",
+          "description": "外墙属于砌体结构或填充墙外墙。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "砌体或填充墙外墙",
+          "outcome_when_false": "not_applicable"
+        },
+        {
+          "condition_id": "WATER-4.5.2-02",
+          "description": "外墙防水等级为一级。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "一级防水",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "design_note",
+          "material_schedule",
+          "detail"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "WATER-4.5.3-WINDOW-HEAD-DRIP",
@@ -2308,7 +4405,24 @@
         "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
         "article": "第4.5.3条第2款",
         "requirement": "门窗洞口上楣应设置滴水线。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.5.3-WINDOW-HEAD-DRIP-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "WATER-4.5.3-WINDOW-SILL-SLOPE",
@@ -2341,7 +4455,93 @@
         "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
         "article": "第4.5.3条第4款",
         "requirement": "窗台处应设置排水板和滴水线等排水构造措施，排水坡度不应小于5%。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.5.3-WINDOW-SILL-SLOPE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
+    },
+    {
+      "rule_id": "WATER-4.6.1-INTERIOR-FLOOR-LAYERS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "006建筑防水专项",
+      "coverage_topic": "wet_room_waterproofing",
+      "review_families": [
+        "材料做法表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "卫生间、厨房及有水房间的防水等级",
+        "楼地面防水层道数和材料"
+      ],
+      "comparison_method": "按卫生间、厨房及其他有水房间分别核对楼地面防水层道数及材料组合。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "rule_pack": "residential_core_v1",
+      "absence_is_noncompliant": true,
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "006建筑防水专项/B建筑防水核心规范/GB55030-2022建筑与市政工程防水通用规范.pdf",
+        "sha256": "abeafb4f90a5d9107701567b0274c66ae92f02f3d4d481e891af8dcf0b28421c",
+        "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
+        "article": "第4.6.1条",
+        "requirement": "一级防水的室内楼地面防水层不应少于2道，且至少有1道防水涂料或防水卷材。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.6.1-01",
+          "description": "项目存在有防水要求的室内房间。",
+          "profile_field": "wet_rooms",
+          "operator": "equals",
+          "expected": true,
+          "outcome_when_false": "not_applicable"
+        },
+        {
+          "condition_id": "WATER-4.6.1-02",
+          "description": "对应室内楼地面防水等级为一级。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "一级防水",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "design_note",
+          "material_schedule",
+          "detail"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "WATER-4.6.2-INTERIOR-WALL-LAYER",
@@ -2382,7 +4582,24 @@
         "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
         "article": "第4.6.2条",
         "requirement": "室内墙面防水层不应少于1道。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.6.2-INTERIOR-WALL-LAYER-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "WATER-4.6.3-INTERIOR-FLOOR-SLOPE",
@@ -2424,7 +4641,24 @@
         "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
         "article": "第4.6.3条",
         "requirement": "有防水要求的楼地面应设排水坡并坡向地漏或排水设施，排水坡度不应小于1.0%。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.6.3-INTERIOR-FLOOR-SLOPE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     },
     {
       "rule_id": "WATER-4.6.4-WALL-UPTURN-HEIGHT",
@@ -2467,7 +4701,24 @@
         "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
         "article": "第4.6.4条",
         "requirement": "淋浴区墙面防水层翻起高度不应小于2000mm且不低于淋浴喷淋口高度；盥洗池盆等用水处不应小于1200mm；其他部位泛水翻起高度不应小于250mm。"
-      }
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.6.4-WALL-UPTURN-HEIGHT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": false
     }
   ]
 }

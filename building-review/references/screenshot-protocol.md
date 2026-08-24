@@ -2,6 +2,8 @@
 
 Screenshots are evidence, not decoration.
 
+v1.6 distinguishes two uses. `graphic_evidence_chain.csv` proves the professional interpretation used to close an atomic check; `issue_candidates.csv` controls what is inserted into the Word report. The same crop may serve both only when it satisfies both records. A Word screenshot exemption never exempts a rule-required graphic evidence chain.
+
 ## When Required
 
 Required when:
@@ -33,6 +35,16 @@ Prefer one precise evidence image for a single-location issue. Do not add extra 
 6. Do not red-box a whole page, whole table, or whole plan unless the whole element is the evidence point.
 7. Save the number of screenshots required by the strategy.
 8. Record screenshot path, location, evidence point, red-box target, and context requirement in `issue_candidates.csv`.
+
+## Professional Graphic Chain
+
+For every required evidence role, record one `graphic_evidence_chain.csv` row with the exact drawing role, source, page, drawing number/name, semantic location, graphic element, observed fact, interpretation, fact IDs, screenshot, source quality, and `completed_at`. v1.6 does not record a reviewer name.
+
+- Use `vector` when linework/text can be inspected at source quality, `raster_high` when the render remains clearly readable, and `raster_limited` when aliasing, blur, overlap, or resolution limits interpretation.
+- A required chain cannot be closed from `raster_limited` rows alone.
+- Direction, symbol, absence, and cross-sheet claims must record at least one plausible `alternative_interpretation` and the objective `elimination_basis` from the legend, plan, elevation, section, detail, schedule, dimension, or index.
+- For absence claims, include every rule-required likely location; one local crop cannot prove whole-set absence.
+- If any required role is missing or the alternative cannot be eliminated, set the chain/check to `needs_review`.
 
 ## Self-Check
 

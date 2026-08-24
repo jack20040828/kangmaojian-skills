@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" fill="white"/>
+  <line x1="320" y1="30" x2="320" y2="310" stroke="#777" stroke-width="2" stroke-dasharray="8 8"/>
+  <text x="130" y="55" font-family="Arial" font-size="22">PLAN</text>
+  <rect x="70" y="90" width="200" height="150" fill="none" stroke="#111" stroke-width="4"/>
+  <circle cx="170" cy="165" r="28" fill="none" stroke="#c62828" stroke-width="5"/>
+  <text x="430" y="55" font-family="Arial" font-size="22">SECTION</text>
+  <path d="M370 240H570M400 240V110H540V240" fill="none" stroke="#111" stroke-width="4"/>
+  <rect x="455" y="150" width="32" height="52" fill="none" stroke="#c62828" stroke-width="5"/>
+  <text x="20" y="335" font-family="Arial" font-size="18">Synthetic cross-sheet fixture</text>
+</svg>

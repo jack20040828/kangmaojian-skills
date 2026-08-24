@@ -8,6 +8,7 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+from review_rules import REQUIRED_RULE_PACKS
 from validate_review_package import FAMILY_REQUIRED_TOPICS, FUNCTION_TRIGGER_TOPICS
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -72,12 +73,50 @@ def coverage_shells() -> list[dict]:
     return rules
 
 
+def default_applicability_conditions(rule: dict) -> list[dict]:
+    return [
+        {
+            "condition_id": f"{rule['rule_id']}-SCOPE",
+            "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+            "profile_field": "",
+            "operator": "manual",
+            "expected": "适用",
+            "outcome_when_false": "not_applicable",
+        }
+    ]
+
+
+def enrich_rule(rule: dict, profiles: dict) -> dict:
+    enriched = dict(rule)
+    profile = profiles.get(rule.get("rule_id", ""), {})
+    enriched["applicability_conditions"] = profile.get(
+        "applicability_conditions",
+        default_applicability_conditions(rule),
+    )
+    enriched["graphic_evidence_requirements"] = profile.get(
+        "graphic_evidence_requirements",
+        {
+            "required": False,
+            "claim_type": "pending",
+            "required_roles": [],
+            "sensitive_to_ambiguity": False,
+        },
+    )
+    enriched["independent_review_required"] = profile.get(
+        "independent_review_required",
+        rule.get("risk_level") == "high",
+    )
+    return enriched
+
+
 def validate_rule(rule: dict, seen: set[str]) -> list[str]:
     errors: list[str] = []
     required = {
         "rule_id", "status", "authority_mode", "specialty", "coverage_topic",
         "review_families", "report_types", "trigger", "required_facts",
         "comparison_method", "calculation_required", "risk_level", "basis",
+        "applicability_conditions", "graphic_evidence_requirements",
+        "independent_review_required",
     }
     missing = sorted(required - set(rule))
     if missing:
@@ -95,6 +134,30 @@ def validate_rule(rule: dict, seen: set[str]) -> list[str]:
         errors.append(f"{rule_id}: invalid risk_level")
     if not rule["review_families"] or not rule["report_types"] or not rule["required_facts"]:
         errors.append(f"{rule_id}: families, report types, and required facts must be non-empty")
+    conditions = rule.get("applicability_conditions")
+    if not isinstance(conditions, list) or not conditions:
+        errors.append(f"{rule_id}: applicability_conditions must be a non-empty list")
+    else:
+        condition_ids = [str(item.get("condition_id", "")).strip() for item in conditions if isinstance(item, dict)]
+        if len(condition_ids) != len(conditions) or any(not value for value in condition_ids):
+            errors.append(f"{rule_id}: applicability conditions require stable IDs")
+        elif len(condition_ids) != len(set(condition_ids)):
+            errors.append(f"{rule_id}: applicability condition IDs must be unique")
+        for condition in conditions:
+            if not isinstance(condition, dict):
+                continue
+            for field in ["description", "operator", "expected", "outcome_when_false"]:
+                if not str(condition.get(field, "")).strip():
+                    errors.append(f"{rule_id}/{condition.get('condition_id', '')}: missing {field}")
+            if condition.get("outcome_when_false") not in {"not_applicable", "needs_review"}:
+                errors.append(f"{rule_id}/{condition.get('condition_id', '')}: invalid outcome_when_false")
+    graphic = rule.get("graphic_evidence_requirements")
+    if not isinstance(graphic, dict) or not isinstance(graphic.get("required"), bool):
+        errors.append(f"{rule_id}: graphic_evidence_requirements is invalid")
+    elif graphic.get("required") and not graphic.get("required_roles"):
+        errors.append(f"{rule_id}: required graphic evidence requires roles")
+    if not isinstance(rule.get("independent_review_required"), bool):
+        errors.append(f"{rule_id}: independent_review_required must be boolean")
     if rule["authority_mode"] == "normative":
         basis = rule["basis"]
         for field in ["source_role", "relative_path", "sha256", "display_name", "article", "requirement"]:
@@ -111,7 +174,13 @@ def build(source: Path, knowledge_index: Path) -> dict:
     payload = json.loads(source.read_text(encoding="utf-8"))
     index = json.loads(knowledge_index.read_text(encoding="utf-8"))
     index_entries = {item.get("relative_path", ""): item for item in index.get("files", [])}
-    rules = coverage_shells() + list(payload.get("rules", []))
+    profiles = payload.get("professional_profiles", {})
+    if not isinstance(profiles, dict):
+        raise ValueError("professional_profiles must be an object")
+    rules = [
+        enrich_rule(rule, profiles)
+        for rule in coverage_shells() + list(payload.get("rules", []))
+    ]
     seen: set[str] = set()
     errors = [error for rule in rules for error in validate_rule(rule, seen)]
     for rule in rules:
@@ -127,10 +196,22 @@ def build(source: Path, knowledge_index: Path) -> dict:
             errors.append(f"{rule['rule_id']}: indexed source role is not B_核心规范")
         if entry.get("sha256") != basis.get("sha256"):
             errors.append(f"{rule['rule_id']}: B-source hash differs from the knowledge index")
+    rules_by_id = {rule.get("rule_id", ""): rule for rule in rules}
+    for pack_id, required_ids in REQUIRED_RULE_PACKS.items():
+        missing = sorted(required_ids - set(rules_by_id))
+        if missing:
+            errors.append(f"required rule pack {pack_id} is missing: {', '.join(missing)}")
+        mismatched = sorted(
+            rule_id
+            for rule_id in required_ids & set(rules_by_id)
+            if rules_by_id[rule_id].get("rule_pack") != pack_id
+        )
+        if mismatched:
+            errors.append(f"required rule pack {pack_id} has untagged rules: {', '.join(mismatched)}")
     if errors:
         raise ValueError("\n".join(errors))
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "catalog_version": payload.get("catalog_version", ""),
         "rule_count": len(rules),
         "rules": sorted(rules, key=lambda item: item["rule_id"]),

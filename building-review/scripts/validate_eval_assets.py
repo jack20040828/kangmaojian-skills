@@ -82,10 +82,23 @@ def main() -> int:
         regression = load_json(regression_path)
         if not isinstance(regression, list) or not regression:
             errors.append("regression-cases.json must contain a non-empty list")
-        elif len(regression) != 50:
-            errors.append(f"regression-cases.json must contain 50 cases, found {len(regression)}")
+        elif len(regression) != 68:
+            errors.append(f"regression-cases.json must contain 68 cases, found {len(regression)}")
     except Exception as error:
         errors.append(f"invalid regression-cases.json: {error}")
+    try:
+        ambiguity = load_json(skill_dir / "evals" / "graphic-ambiguity-cases.json")
+        cases = ambiguity.get("cases", []) if isinstance(ambiguity, dict) else []
+        if ambiguity.get("schema_version") != "1.0" or len(cases) != 12:
+            errors.append("graphic-ambiguity-cases.json must use schema_version 1.0 and contain 12 cases")
+        elif len({case.get("id") for case in cases}) != 12:
+            errors.append("graphic ambiguity case IDs are not unique")
+        for case in cases:
+            fixture = skill_dir / "evals" / str(case.get("fixture", ""))
+            if not fixture.exists() or fixture.stat().st_size == 0:
+                errors.append(f"graphic ambiguity fixture is missing or empty: {fixture}")
+    except Exception as error:
+        errors.append(f"invalid graphic-ambiguity-cases.json: {error}")
     try:
         gold = load_json(gold_path)
         if not isinstance(gold, dict) or gold.get("schema_version") != "1.0":
@@ -98,7 +111,7 @@ def main() -> int:
         for error in errors:
             print(f"FAIL: {error}")
         return 1
-    print(f"PASS: {len(routing)} routing cases, 50 regressions, and gold metadata are structurally valid")
+    print(f"PASS: {len(routing)} routing cases, 68 regressions, 12 graphic ambiguity cases, and gold metadata are structurally valid")
     return 0
 
 

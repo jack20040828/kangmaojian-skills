@@ -1,6 +1,6 @@
 interface:
   display_name: "建筑审图"
-  short_description: "依据图纸事实和本地规范形成建筑专业审查意见"
-  default_prompt: "Use $building-review 仅对建筑专业施工图开展新技术审查：逐张清点并关闭图纸族覆盖状态，建立事实台账和审查矩阵，再检索本地规范、控制图形误判、筛选少而准的意见并逐页验证Word；不得凭记忆补规范或越专业。"
+  short_description: "AI独立完成建筑施工图初审并交付正式范本Word"
+  default_prompt: "Use $building-review 由AI独立完整开展建筑专业施工图初审：逐张清点图纸，关闭事实、规则、计算、跨图与图形证据链，强制使用本地知识库A/B/C/D四层资料，只把ai_ready意见写入正式范本格式的【AI初审】Word并逐页验证；不得等待或虚构人工确认、复核、裁决，不得凭记忆补规范或越专业。"
 policy:
   allow_implicit_invocation: true

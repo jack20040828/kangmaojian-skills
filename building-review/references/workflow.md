@@ -1,147 +1,54 @@
-# 审图工作流
+# 建筑施工图 AI 初审工作流（v1.6）
 
-## Phase 0 接收与建档
+## 1. 建立隔离工作区
 
-Create a project workspace before reviewing. Store all intermediate files there.
+在项目 `03_审图过程` 下创建 schema v1.6 工作区。复制源文件，记录 SHA-256，保留真实项目输入和既有成果不变。manifest 必须包含 `review_stage: "ai_initial"`。
 
-Required output:
-- `drawing_inventory.csv`
-- `fact_ledger.csv`
-- `project_profile.json`
-- `check_matrix.csv`
-- `issue_candidates.csv`
-- `validation_log.csv`
-- `screenshots/`
-- `output/`
-- `completion_audit.json`（逐项完成后生成）
-Project-local `output/` is for working files. Formal review reports generated without an explicit `--output` path must be written under `<project-workspace>\04_审图成果\`.
+## 2. 图纸清点与事实台账
 
-## Phase 1 图纸清点
+清点所有源文件和每张图纸。无文字层 PDF 逐页渲染并视觉检查。完成 `drawing_inventory.csv` 和 `fact_ledger.csv`，未知或图面不清的内容保持需核验，不得猜测。
 
-Inventory every submitted file and every drawing sheet that can be identified.
+## 3. AI 完成项目画像与路由
 
-Record:
-- source file
-- page or sheet number
-- drawing name
-- drawing number
-- discipline
-- scale if visible
-- whether the page contains notes, legends, title block, index, tables, plan, elevation, section, detail, or schedule
-- extraction confidence
-- `review_family`, `review_status`, linked check IDs, and the reason for `not_applicable`
+按照 `project-profile.md` 关闭项目事实和专项路由。全流程不请求人工确认、不写人工姓名、不生成任何人工复核或裁决字段。
 
-For single-building work, read `single-building-coverage.md`. Do not start issue writing before the inventory exists. Do not generate Word while an identifiable sheet is blank or `needs_review`.
+## 4. 展开并执行原子检查
 
-## Phase 2 事实台账
+快照规则目录，运行 `generate_project_checklist.py`。逐张关闭图纸族覆盖、项目事实、规则适用性、必要计算、跨图一致性和图形证据链。
 
-Extract facts from drawings before judging compliance.
+本地知识库四层资料全部必用并在 manifest 中记录来源和用途：
 
-Always include:
-- design notes and design basis
-- title blocks and drawing stage
-- technical/economic indicators
-- fire classification, height, area, floors, occupancy, parking, accessible parking, green-building and energy-saving statements when present
-- dimensions, elevations, coordinates, fire separation, evacuation, waterproofing, accessibility, equipment-room, and local-policy facts relevant to the project
+- A类审查要点：发现问题、展开检查主题。
+- B类核心规范：正式引用和技术判定。
+- C类疑难解析：解决适用范围、版本与解释问题。
+- D类案例与截图：辅助发现和差异比对，不得替代图纸事实或B类规范。
 
-If a value is explicitly shown, record the value. Do not write `需核实` merely because it was easy to miss.
+## 5. 形成候选意见
 
-## Phase 3 项目画像与专项路由
+只有已关闭的“不符合”原子检查可以形成候选意见。技术依据、图纸事实或图形解释不足时，候选项留在过程台账，不得输出为确定意见。
 
-For v1.4, complete and reviewer-confirm `project_profile.json` before choosing the review path. Unknown facts do not justify `不适用`; they keep related rules open.
+对每条意见确定报告章节、连续顺序、真实图纸定位、法规条文、12类意见类型及截图策略。技术上需要条件表达时可保留“如适用”“需核验”“需确认规范适用时间”等限定，但不得显示流程状态。
 
-Choose only the needed review path after Phase 1 and Phase 2:
-- 总图
-- 民用建筑单体
-- 工业建筑单体
-- 改造装修
-- 园林绿化
-- policy-only or consultation task
+## 6. AI 验证门禁
 
-For 建筑专业施工图技术审查:
-- Do not review administrative submission materials, planning permits, geotechnical reports, qualifications, stamps, signatures, or registered-professional seal validity.
-- Do not review structural, plumbing, electrical, or HVAC drawings themselves.
-- Do review architectural drawing completeness, project attributes, and architectural responsibilities for fire safety, energy, green building, accessibility, waterproofing, civil defense, curtain wall, decoration, food-service, and similar specialties.
+v1.6 通过条件：
 
-For each active specialty, read or search A_审查要点 first through a user-built `knowledge-index.json` or `scripts/search_knowledge.py`. Use B_核心规范 for article citations, C_疑难解析 for judgment support, and D_案例与截图 only after fact matching.
+- 意见状态为 `ai_ready`。
+- 检查矩阵 `completion_gate=AI初审完成`。
+- validation log 每项检查为通过，`gate_origin=agent`，`stage_completion=AI初审完成`。
+- 项目画像、专项路由和三条发现路径已关闭。
+- A/B/C/D 四层知识使用记录齐全。
+- 图纸覆盖、适用性、计算、跨图与图形证据链全部关闭。
+- 快照和 completion audit 当前有效。
 
-Function facts trigger specialties. If the fact ledger shows dormitory, hotel, canteen, restaurant, kitchen, school, parking, charging, accessibility, waterproofing, green-building, energy-saving, carbon-reduction, Hunan local policy, or special fire-review facts, activate the matching specialty and convert its A_审查要点 into check rows. Do not rely on general civil-building checks when a function-specific specialty applies.
+v1.6 不创建或要求 `independent_review_log.csv`，不接受 `verified`，不填写人工姓名或“已人工复核”。
 
-## Phase 4 原子审查矩阵
+## 7. 正式范本 Word
 
-After the project profile and sheet families are ready, run `scripts/generate_project_checklist.py <workspace>`. It creates `unreviewed/需核验` rows from the executable catalog. Never programmatically promote them to `符合` or mark drawings reviewed.
+运行 `generate_review_report.py`。单体和总图均直接继承正式范本；正文结构、字体、图片、页码和12类说明与最终正式意见一致。唯一可见阶段差异是标题前缀 `【AI初审】`。
 
-Create `check_matrix.csv` before writing candidate issues. After recording repeated facts from different sheets, run `scripts/check_cross_sheet_consistency.py <workspace>` and record each conflict in the design-depth discovery track. The comparator only reports differing recorded values; it cannot decide which sheet is correct.
+运行 `validate_docx_content.py` 后，使用 Microsoft Word 导出并逐页检查。修正全部截断、重叠、乱码、孤立标题、异常留白和图片问题。通过后仅复制最终 DOCX 到项目 `04_审图成果`。
 
-For every applicable active specialty, turn A_审查要点 items into checkable rows. For each row, record:
-- specialty and check_id
-- source review point
-- applicability
-- required drawing fact
-- actual drawing fact and location
-- standard source and article
-- conclusion: `符合`, `不符合`, `需核验`, or `不适用`
-- whether it forms a candidate/final issue
-- reason when it does not form a formal opinion
-- v1.4 rule ID, atomic ID, decision state, applicability basis, discovery track, comparison method and record, calculation record, open reason, and reviewer gate
+## 8. 后续外部流程
 
-Only `不符合` and selected high-risk `需核验` items become candidate issues. Do not write formal opinions directly from user notes, OCR snippets, or high-frequency cases; every formal issue must pass through the matrix.
-
-## Phase 5 候选意见验证
-
-Validate each candidate issue before final report:
-- the issue has a matching `check_matrix.csv` row by `check_id`
-- drawing fact exists in `fact_ledger.csv`
-- local standard/source was searched or opened
-- standard citation is specific enough to re-check
-- specialty route is correct
-- high-frequency case is matched only as supporting reference
-- screenshot positioning is recorded when screenshot is required
-- screenshot strategy is recorded as `none`, `single`, `multiple`, or `shared`
-- the citation strategy is `cited` or the narrowly controlled design-depth `none` path
-- drawing references contain the linked drawing number and drawing name; PDF page is supplementary only
-- graphical interpretation and opinion wording gates are passed
-- the candidate has passed professional filtering: merge duplicates, delete non-issues, downgrade weak evidence to `needs_review`, and keep only issues a construction drawing reviewer would deliver to the owner/designer
-- opinion type is one of the 12 approved categories
-
-Candidate status values:
-- `verified`: evidence complete; may enter formal Word.
-- `needs_review`: plausible but incomplete; keep in ledgers only.
-- `rejected`: checked and not a formal issue; keep reason in ledgers.
-- `delete`: remove from final consideration.
-
-If any validation check fails, fix the candidate, downgrade it to `needs_review`, or mark it `rejected/delete`.
-
-## Phase 5.5 截图证据复核
-
-Decide screenshot strategy before Word generation:
-- `none`: no screenshot is inserted; use only when the exact text is already quoted or the issue is purely explanatory. Record the exemption reason.
-- `single`: default for one local evidence point.
-- `multiple`: two or more screenshots are indispensable, such as a cross-sheet conflict; record why one screenshot cannot prove the issue.
-- `shared`: one screenshot is intentionally reused by several related issues; record the shared evidence reason.
-
-For every required screenshot, record the evidence point, red-box target, and context that must remain visible. The screenshot must let the owner or designer see where to revise without reading the working ledgers.
-
-## Phase 6 Word 报告
-
-First snapshot sources, the executable rule catalog, and all used standards. Run `scripts/audit_review_completeness.py`; resolve every listed open item. Then run `scripts/validate_review_package.py`. Generate Word only after both pass. Any later change to the manifest, profile, or ledgers invalidates the completion audit.
-
-The final report must contain only `verified` issues and must follow `references/report-format.md`. Do not include working ledgers, review scope, basis, conclusions, screenshot explanations, or evidence summaries in the formal Word unless the user explicitly asks for a separate supporting document.
-
-## v1.4 完整性与交付门禁
-
-新工作区执行以下顺序：
-
-1. `review_manifest.json` 固定 `schema_version=1.4`、`report_type` 和规则目录快照；验证器与生成器继续兼容读取v1.1至v1.3工作区。
-2. 图纸与派生资料放入工作区 `source/`，不得修改项目原件。
-3. 填写并由审查人确认 `project_profile.json`；未知事实保持开放，地区政策按所在地触发。
-4. 每张可识别图纸填写 `review_family`，运行 `scripts/generate_project_checklist.py` 展开全部图纸族和项目事实触发的原子规则。新检查默认 `unreviewed/需核验`。
-5. 运行 `scripts/route_specialties.py --json` 并由审查人确认；任何不确定路由、已触发主题或原子规则未闭合时保持 `needs_review`。
-6. 分别完成技术条文、设计深度/内部矛盾和优化建议三次发现；运行 `check_cross_sheet_consistency.py` 核对跨图重复事实，解决或保留每个冲突，并在项目画像中记录完成情况。
-7. 每条已关闭技术检查记录图纸事实、B类条文、比较过程和必要计算；高风险项必须人工复核。再合并同一根因、拆开混合根因。
-8. 正式意见填写稳定 `issue_id`、连续 `display_order`、明确章节、引用模式和人工验证门禁。
-9. 运行 `snapshot_review_integrity.py`，记录全部source、规则目录以及正式意见和技术闭环实际使用的规范哈希。
-10. 运行 `audit_review_completeness.py`，清零开放项后运行 `validate_review_package.py`。
-11. 通过后生成Word，完成内容校验、逐页渲染和视觉QA，最后复制到项目 `04_审图成果`。
-
-`validation_log.csv` 的 `layout_check` 不代表最终Word视觉QA。生成前允许保持 `待检查`；最终门禁只认渲染后的 `report_qa.json`。
+人工复核、人工补缺和最终意见整理均属于本技能之外的后续流程。本技能不等待这些步骤，也不宣称它们已完成。

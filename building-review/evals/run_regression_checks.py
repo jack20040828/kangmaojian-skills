@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run anonymous end-to-end regression gates for building-review v1.1-v1.3."""
+"""Run anonymous end-to-end regression gates for building-review v1.1-v1.6."""
 
 from __future__ import annotations
 
@@ -154,8 +154,8 @@ def none_issue(issue_id: str, check_id: str, order: str) -> dict[str, str]:
 
 def main() -> int:
     metadata = json.loads((SKILL_DIR / "evals" / "regression-cases.json").read_text(encoding="utf-8"))
-    if len(metadata) != 50:
-        raise AssertionError("regression metadata must contain 50 cases")
+    if len(metadata) != 68:
+        raise AssertionError("regression metadata must contain 68 cases")
     python = sys.executable
     keep_dir = os.environ.get("BUILDING_REVIEW_KEEP_TEMP", "")
     if keep_dir:
@@ -291,15 +291,13 @@ def main() -> int:
         write_rows(workspace / "issue_candidates.csv", [base_issue, excluded])
         run(snapshot, 0)
         run(validate, 0)
-        report = workspace / "output" / "report.docx"
+        report = workspace / "output" / "【AI初审】匿名项目建筑施工图审查意见.docx"
         generate = [
             python,
             str(SCRIPTS / "generate_review_report.py"),
             str(workspace),
             "--project-name",
             "匿名项目",
-            "--report-title",
-            "建筑施工图审查意见",
             "--output",
             str(report),
         ]
@@ -343,7 +341,7 @@ def main() -> int:
         write_rows(workspace / "validation_log.csv", [])
         run(snapshot, 0)
         run(validate, 0)
-        zero_report = workspace / "output" / "zero.docx"
+        zero_report = workspace / "output" / "【AI初审】匿名项目建筑施工图审查意见.docx"
         run(generate[:-1] + [str(zero_report)], 0)
         run([python, str(SCRIPTS / "validate_docx_content.py"), str(workspace), str(zero_report)], 0)
 
@@ -484,7 +482,7 @@ def main() -> int:
         write_rows(workspace / "issue_candidates.csv", [unexplained_multiple])
         run(validate, 1, "multiple requires screenshot_reason")
 
-        # v1.2 default report: internal-review title/style plus cited and no-citation display.
+        # v1.2 compatibility read: current formal AI-initial title/style plus cited and no-citation display.
         second_check = check("C002", "I002")
         second_none = none_issue("I002", "C002", "2")
         write_rows(workspace / "check_matrix.csv", [base_check, second_check])
@@ -499,18 +497,18 @@ def main() -> int:
             "匿名项目",
         ], 0)
         default_report = Path(default_generate.stdout.strip().splitlines()[-1])
-        expected_name = f"【建单内审】匿名项目{date.today().isoformat()}.docx"
+        expected_name = "【AI初审】匿名项目建筑施工图审查意见.docx"
         if default_report.name != expected_name:
             raise AssertionError(f"unexpected v1.2 default report name: {default_report.name}")
         run([python, str(SCRIPTS / "validate_docx_content.py"), str(workspace), str(default_report)], 0)
         default_doc = Document(default_report)
         default_text = "\n".join(paragraph.text for paragraph in default_doc.paragraphs)
         expected_date = f"{date.today().year}年{date.today().month}月{date.today().day}日"
-        for marker in ["建筑单体施工图内审意见", "设计说明：", expected_date, "《匿名规范》第1条", "【法规条文】：无。"]:
+        for marker in ["【AI初审】匿名项目建筑施工图审查意见", "设计说明：", expected_date, "《匿名规范》第1条", "【法规条文】：无。"]:
             if marker not in default_text:
                 raise AssertionError(f"v1.2 default report missing: {marker}")
-        if "一、设计说明：" in default_text or ".pdf" in default_text.casefold():
-            raise AssertionError("v1.2 default report leaked a legacy heading or PDF filename")
+        if "建筑单体施工图内审意见" in default_text or ".pdf" in default_text.casefold():
+            raise AssertionError("v1.2 compatibility report leaked a legacy title or PDF filename")
 
         # v1.3: a reviewed sheet closes only after every required coverage topic is resolved.
         set_schema_version(workspace, "1.3")
@@ -708,10 +706,13 @@ def main() -> int:
         v13_report = Path(v13_generate.stdout.strip().splitlines()[-1])
         run([python, str(SCRIPTS / "validate_docx_content.py"), str(workspace), str(v13_report)], 0)
         v13_text = "\n".join(paragraph.text for paragraph in Document(v13_report).paragraphs)
-        if "建筑单体施工图内审意见" not in v13_text or "《匿名规范》第1条" not in v13_text:
-            raise AssertionError("v1.3 report did not preserve the confirmed internal-review format")
+        if "【AI初审】匿名项目建筑施工图审查意见" not in v13_text or "《匿名规范》第1条" not in v13_text:
+            raise AssertionError("v1.3 compatibility report did not use the current formal AI-initial format")
 
-    run([python, str(SKILL_DIR / "evals" / "test_v14_workflow.py")], 0, "12 v1.4 workflow")
+    run([python, str(SKILL_DIR / "evals" / "test_v14_workflow.py")], 0, "14 v1.4 workflow")
+    run([python, str(SKILL_DIR / "evals" / "test_v15_professional_review.py")], 0, "12 v1.5 graphic")
+    run([python, str(SKILL_DIR / "evals" / "test_v16_ai_initial_review.py")], 0, "v1.6 autonomous single/site")
+    run([python, str(SKILL_DIR / "evals" / "test_residential_rule_pack.py")], 0, "6 residential rule-pack")
     run([python, str(SKILL_DIR / "evals" / "test_review_calculations.py")], 0, "5 deterministic calculation")
     run([python, str(SKILL_DIR / "evals" / "test_cross_sheet_consistency.py")], 0, "4 cross-sheet consistency")
     print(f"PASS: {len(metadata)} anonymous regression scenarios completed")

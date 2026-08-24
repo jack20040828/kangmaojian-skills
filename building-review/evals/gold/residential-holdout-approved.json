@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "case_id": "GOLD-010-RESIDENTIAL-HOLDOUT",
+  "expected_issues": [
+    {
+      "id": "HOLDOUT-SOLAR",
+      "risk": "high",
+      "drawing_ref": "节能说明、屋面图",
+      "root_cause": "新建住宅未设置太阳能系统",
+      "category": "建筑节能"
+    },
+    {
+      "id": "HOLDOUT-EXTERIOR-WATERPROOF",
+      "risk": "high",
+      "drawing_ref": "材料做法表",
+      "root_cause": "一级防水砌体填充外墙仅1道防水层",
+      "category": "建筑防水"
+    },
+    {
+      "id": "HOLDOUT-BATHROOM-COF",
+      "risk": "high",
+      "drawing_ref": "材料做法表",
+      "root_cause": "卫生间地面COF为0.55，小于0.6",
+      "category": "住宅安全"
+    },
+    {
+      "id": "HOLDOUT-STAIR-HANDRAIL",
+      "risk": "high",
+      "drawing_ref": "楼梯大样",
+      "root_cause": "大于0.50m的楼梯水平段扶手高度仅1.10m",
+      "category": "住宅安全"
+    }
+  ],
+  "prohibited_findings": [
+    {"id": "HOLDOUT-NO-HEIGHT-ISSUE", "reason": "层高和净高均达到限值"},
+    {"id": "HOLDOUT-NO-ACCESS-ISSUE", "reason": "无障碍住房实施闭环完整"},
+    {"id": "HOLDOUT-NO-RESCUE-ISSUE", "reason": "消防救援口数量和表达完整"},
+    {"id": "HOLDOUT-NO-ROOF-WATERPROOF-ISSUE", "reason": "一级防水平屋面已设置3道防水"},
+    {"id": "HOLDOUT-NO-PUBLIC-COF-ISSUE", "reason": "公共交通空间COF达到0.6"},
+    {"id": "HOLDOUT-NO-DRAINAGE-ISSUE", "reason": "厨房、卫生间和阳台均有排水设施及1%坡度"}
+  ]
+}

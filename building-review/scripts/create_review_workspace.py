@@ -16,7 +16,7 @@ from pathlib import Path
 DEFAULT_PROJECT_ROOT = Path(
     os.environ.get("BUILDING_REVIEW_PROJECT_ROOT", str(Path.cwd() / "building-review-projects"))
 ).expanduser()
-SCHEMA_VERSION = "1.4"
+SCHEMA_VERSION = "1.6"
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 RULE_CATALOG = SKILL_DIR / "generated" / "review-rules.json"
@@ -82,6 +82,11 @@ TEMPLATES = {
         "not_forming_reason",
         "open_reason",
         "reviewer_gate",
+        "graphic_claim_type",
+        "graphic_chain_ids",
+        "graphic_gate_reason",
+        "applicability_decision_ids",
+        "independent_review_id",
         "notes",
     ],
     "issue_candidates.csv": [
@@ -139,7 +144,102 @@ TEMPLATES = {
         "result",
         "notes",
     ],
+    "graphic_evidence_chain.csv": [
+        "chain_id",
+        "check_id",
+        "evidence_role",
+        "source_file",
+        "page",
+        "drawing_ref",
+        "location",
+        "graphic_element",
+        "observed_fact",
+        "interpretation",
+        "alternative_interpretation",
+        "elimination_basis",
+        "fact_ids",
+        "screenshot_path",
+        "source_quality",
+        "status",
+        "reviewer_name",
+        "reviewed_at",
+        "notes",
+    ],
+    "applicability_decisions.csv": [
+        "decision_id",
+        "check_id",
+        "rule_id",
+        "condition_id",
+        "condition_description",
+        "expected_value",
+        "actual_value",
+        "result",
+        "fact_ids",
+        "drawing_refs",
+        "status",
+        "reviewer_name",
+        "reviewed_at",
+        "notes",
+    ],
+    "independent_review_log.csv": [
+        "review_id",
+        "check_id",
+        "primary_reviewer",
+        "primary_reviewer_type",
+        "primary_decision",
+        "primary_reviewed_at",
+        "secondary_reviewer",
+        "secondary_reviewer_type",
+        "secondary_decision",
+        "secondary_reviewed_at",
+        "blind_input_scope",
+        "agreement",
+        "adjudicator",
+        "adjudicator_type",
+        "adjudicated_decision",
+        "adjudicated_at",
+        "status",
+        "notes",
+    ],
 }
+
+V15_LEDGER_NAMES = {
+    "graphic_evidence_chain.csv",
+    "applicability_decisions.csv",
+    "independent_review_log.csv",
+}
+
+V16_LEDGER_NAMES = {
+    "graphic_evidence_chain.csv",
+    "applicability_decisions.csv",
+}
+
+V16_TEMPLATES = {
+    "check_matrix.csv": [
+        field for field in TEMPLATES["check_matrix.csv"]
+        if field not in {"reviewer_gate", "independent_review_id"}
+    ] + ["completion_gate"],
+    "validation_log.csv": [
+        field for field in TEMPLATES["validation_log.csv"]
+        if field not in {
+            "independent_review_check", "reviewer_confirmation", "reviewer_name", "reviewed_at"
+        }
+    ] + ["stage_completion", "completed_at"],
+    "graphic_evidence_chain.csv": [
+        field for field in TEMPLATES["graphic_evidence_chain.csv"]
+        if field not in {"reviewer_name", "reviewed_at"}
+    ] + ["completed_at"],
+    "applicability_decisions.csv": [
+        field for field in TEMPLATES["applicability_decisions.csv"]
+        if field not in {"reviewer_name", "reviewed_at"}
+    ] + ["completed_at"],
+}
+
+
+def headers_for(schema_version: str, filename: str) -> list[str]:
+    if schema_version == "1.6" and filename in V16_TEMPLATES:
+        return V16_TEMPLATES[filename]
+    return TEMPLATES[filename]
 
 PROFILE_FACT_KEYS = [
     "location_province", "location_city", "building_use", "industrial_building",
@@ -159,7 +259,25 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def initial_profile(report_type: str) -> dict:
+def initial_profile(report_type: str, schema_version: str) -> dict:
+    if schema_version == "1.6":
+        return {
+            "schema_version": "1.1",
+            "review_stage": "ai_initial",
+            "ai_review_completed": False,
+            "completed_at": "",
+            "report_type": report_type,
+            "facts": {
+                key: {"status": "unknown", "value": "", "fact_ids": [], "notes": ""}
+                for key in PROFILE_FACT_KEYS
+            },
+            "route_completion": {"status": "not_started", "completed_at": "", "notes": ""},
+            "discovery_tracks": {
+                "technical_compliance": {"status": "not_started", "notes": ""},
+                "design_depth": {"status": "not_started", "notes": ""},
+                "optimization": {"status": "not_started", "notes": ""},
+            },
+        }
     return {
         "schema_version": "1.0",
         "confirmed": False,
@@ -196,6 +314,7 @@ def main() -> int:
     parser.add_argument("project_name")
     parser.add_argument("--root", type=Path, default=DEFAULT_PROJECT_ROOT)
     parser.add_argument("--report-type", choices=["single", "site"], default="single")
+    parser.add_argument("--schema-version", choices=["1.4", "1.5", "1.6"], default=SCHEMA_VERSION)
     args = parser.parse_args()
 
     if args.root.resolve() == DEFAULT_PROJECT_ROOT.resolve():
@@ -210,26 +329,35 @@ def main() -> int:
     for name in ["source", "screenshots", "output"]:
         (folder / name).mkdir(exist_ok=True)
     for filename, headers in TEMPLATES.items():
+        allowed_ledgers = V15_LEDGER_NAMES if args.schema_version == "1.5" else (
+            V16_LEDGER_NAMES if args.schema_version == "1.6" else set()
+        )
+        if filename in V15_LEDGER_NAMES and filename not in allowed_ledgers:
+            continue
         path = folder / filename
         if not path.exists():
-            write_csv(path, headers)
+            write_csv(path, headers_for(args.schema_version, filename))
 
     profile_path = folder / "project_profile.json"
     if not profile_path.exists():
         profile_path.write_text(
-            json.dumps(initial_profile(args.report_type), ensure_ascii=False, indent=2) + "\n",
+            json.dumps(initial_profile(args.report_type, args.schema_version), ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
 
     manifest_path = folder / "review_manifest.json"
     if not manifest_path.exists():
         manifest = {
-            "schema_version": SCHEMA_VERSION,
+            "schema_version": args.schema_version,
+            "review_stage": "ai_initial" if args.schema_version == "1.6" else "",
             "project_name": args.project_name,
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "report_type": args.report_type,
             "source_integrity": [],
-            "knowledge_snapshot": {},
+            "knowledge_snapshot": {
+                "required_layers": ["A", "B", "C", "D"] if args.schema_version == "1.6" else [],
+                "layers": {},
+            },
             "rule_catalog_snapshot": {
                 "path": str(RULE_CATALOG.resolve()) if RULE_CATALOG.exists() else "",
                 "sha256": sha256_file(RULE_CATALOG) if RULE_CATALOG.exists() else "",

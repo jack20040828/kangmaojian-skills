@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs><pattern id="h" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#111" stroke-width="3"/></pattern></defs>
+  <rect width="640" height="360" fill="white"/>
+  <rect x="80" y="70" width="220" height="180" fill="url(#h)" stroke="#111" stroke-width="3"/>
+  <rect x="370" y="95" width="54" height="54" fill="url(#h)" stroke="#111"/>
+  <text x="445" y="132" font-family="Arial" font-size="22">Legend A</text>
+  <text x="20" y="335" font-family="Arial" font-size="18">Synthetic symbol and legend fixture</text>
+</svg>

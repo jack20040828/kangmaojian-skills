@@ -44,13 +44,13 @@ python install-skill-from-github.py --repo jack20040828/kangmaojian-skills --pat
 
 > 先把每张图纸看见了什么说清楚，再谈它是否符合要求。
 
-用于总图、建筑单体和建筑专项施工图技术审查。它先建立图纸清单和事实台账，再按项目事实路由专项、检索用户自己的合法本地规范、形成检查矩阵，最后只把证据闭合且通过验证的意见写入 Word。
+用于总图、建筑单体和建筑专项施工图技术审查。schema v1.6 由 AI 独立完成图纸清点、事实提取、专项路由、知识检索、规范核查、跨图检查、证据闭合和 Word 验收，不设置人工确认、人工复核或人工裁决门禁。只有达到 `ai_ready` 的意见才会进入 AI 初审 Word。
 
 适合：
 
 - 建筑总图、建筑单体及建筑专业负责的消防、无障碍、防水、节能、绿建等专项审查。
 - 需要逐张关闭图纸覆盖状态、保留规范依据和证据截图的内部技术审查。
-- 需要生成并逐页核验建筑施工图内审意见 Word。
+- 需要直接生成并逐页核验正式范本格式的 AI 初审意见 Word。
 
 不适合：
 
@@ -64,12 +64,12 @@ python install-skill-from-github.py --repo jack20040828/kangmaojian-skills --pat
 ```text
 用 building-review 审查这套建筑单体施工图
 做一次建筑总图施工图技术审查
-检查这套建筑图纸并形成有证据的审查意见
+检查这套建筑图纸并形成有证据的 AI 初审意见
 ```
 
 [![建筑施工图审查工作流程图](media/building-review-workflow.png)](media/building-review-workflow.svg)
 
-当前公开版已通过 50 个匿名回归场景和 6 个 CAD 安全防护测试。仓库不附带中国标准、地方政策或案例库；用户必须提供自己合法取得并确认有效的本地资料。
+当前公开版已通过 68 个匿名回归场景和 6 个 CAD 安全防护测试。v1.6 强制使用本地知识库 A 类审查要点、B 类核心规范、C 类疑难解析和 D 类案例，并以图纸事实和 B 类规范作为正式结论依据。仓库不附带中国标准、地方政策或案例库；用户必须提供自己合法取得并确认有效的本地资料。单体和总图报告均继承正式审查意见范本，唯一可见区别是标题增加 `【AI初审】`。
 
 → [SKILL.md](building-review/SKILL.md) · [高清工作流程图](media/building-review-workflow.svg) · [运行要求](building-review/references/runtime-requirements.md)
 
@@ -148,7 +148,7 @@ powershell -ExecutionPolicy Bypass -File scripts/sync-public-skills.ps1 -SourceR
 
 ## 🌟 关于
 
-这些 Skill 来自实际建筑施工图内审流程中的反复使用、复核和修订。公开它们，是希望把“证据链、专业边界、人工权威和逐页验收”做成可复用的工作习惯。
+这些 Skill 来自实际建筑施工图内审流程中的反复使用、复核和修订。公开它们，是希望把“证据链、专业边界、结论门禁和逐页验收”做成可复用的工作习惯。
 
 有问题或改进建议，欢迎在 Issues 中提出。
 

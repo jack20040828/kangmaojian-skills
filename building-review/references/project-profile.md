@@ -1,26 +1,44 @@
-# 项目画像
+# 项目画像与专项路由（v1.6）
 
-v1.4 在逐项审图前必须完成 `project_profile.json`。项目画像只记录已经从图纸取得或经审查人确认的事实，不是对项目的猜测。
+项目画像是 AI 初审的规则适用入口。它只记录可追溯的项目事实和 AI 完成状态，不设置人工确认、签名或裁决字段。
 
-## 状态
+## 新工作区结构
 
-每项事实使用：
+v1.6 的 `project_profile.json` 使用：
 
-- `confirmed`：值已由图纸事实支持，填写 `fact_ids`。
-- `not_applicable`：确实不适用，并在 `notes` 中写明原因。
-- `unknown`：尚不能确定；相关规则保持未决并阻断正式报告。
+- `schema_version: "1.1"`
+- `review_stage: "ai_initial"`
+- `ai_review_completed: true|false`
+- `completed_at`
+- `report_type: single|site`
+- `facts`
+- `route_completion`
+- `discovery_tracks`
 
-## 必填事实
+不得包含 `confirmed`、`confirmed_by`、`confirmed_at` 或 `route_confirmation` 等 legacy 人工字段。
 
-包括所在地、建筑使用性质、工业属性、是否留宿、面积、高度、层数、火灾危险性、耐火等级、使用人数、喷淋、地下室、电梯、无障碍要求、上人屋面、有水房间、停车、光伏或太阳能、饮食、宿舍或旅馆、学校、办公及儿童活动功能。
+## 项目事实
 
-`confirmed=true` 只表示审查人确认项目画像已经核对，不会把仍为 `unknown` 的关键事实变成已知。关键事实未知时，完成度验证仍失败。
+每个事实必须使用下列状态之一：
 
-## 专项和三次发现
+- `ai_completed`：AI 已从本地图纸事实关闭，必须填写 `value` 和至少一个 `fact_id`。
+- `not_applicable`：项目事实明确证明不适用，必须填写理由。
+- `unknown`：仍无法由图纸确认。任何必需事实保持 unknown 时，不得完成项目画像或生成 Word。
 
-- `route_confirmation.confirmed`：审查人已经核对专项路由结果。
-- `discovery_tracks.technical_compliance`：技术条文检查。
-- `discovery_tracks.design_depth`：设计深度、套图残留和内部矛盾检查。
-- `discovery_tracks.optimization`：有依据的优化建议检查。
+事实必须能回指 `fact_ledger.csv`，不得用经验、项目名称关键词或案例替代。
 
-三个发现路径均需设为 `completed` 并留下简短记录，不能由程序自动填写。
+## 专项路由
+
+运行 `scripts/route_specialties.py --json` 得到候选专项和触发理由。AI 依据项目画像、图纸和本地解析资料逐项判断：
+
+- 已关闭时写 `route_completion.status = "AI初审完成"` 并记录 `completed_at`。
+- 规则适用仍有歧义时，在过程台账保持开放；不得默认为适用或不适用，也不得创建人工确认门禁。
+- 住宅、宿舍/旅馆、饮食、学校、车库、屋面、湿房间、电梯、光伏等功能触发包必须完整展开。
+
+## 三条发现路径
+
+`technical_compliance`、`design_depth`、`optimization` 均须由 AI 逐项完成并填写实质性 notes。只有三个状态均为 `completed`，才可设置 `ai_review_completed=true`。
+
+## 兼容
+
+v1.1-v1.5 工作区继续按各自旧字段读取，不迁移、不伪改。新建项目只能使用 v1.6。

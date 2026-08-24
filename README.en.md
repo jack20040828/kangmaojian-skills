@@ -44,13 +44,13 @@ Start a new agent session after installation so the skills are rediscovered.
 
 > State what each drawing actually shows before deciding whether it complies.
 
-Use this Skill for architectural site-plan, single-building, and architecture-owned specialty review. It inventories every identifiable sheet, records drawing facts, routes applicable specialties, searches the user's own lawful local sources, builds a check matrix, and writes only verified issues into a page-reviewed Word report.
+Use this Skill for architectural site-plan, single-building, and architecture-owned specialty review. In schema v1.6 the agent independently inventories sheets, records facts, routes specialties, searches the user's lawful local sources, checks standards and cross-sheet consistency, closes evidence, and validates Word output without human confirmation, review, or adjudication gates. Only `ai_ready` findings enter the AI-initial report.
 
 Good for:
 
 - Architectural site plans, single-building drawings, and architecture-owned fire-safety, accessibility, waterproofing, energy, and green-building topics.
 - Internal technical review that needs per-sheet closure, source citations, and evidence screenshots.
-- Evidence-linked architectural review reports with page-by-page Word QA.
+- AI-initial architectural review reports in the formal delivery template, with page-by-page Word QA.
 
 Not for:
 
@@ -64,12 +64,12 @@ Example prompts:
 ```text
 Use building-review to inspect this architectural single-building drawing set.
 Run an evidence-driven architectural site-plan review.
-Review these architectural drawings and produce verified opinions with evidence.
+Review these architectural drawings and produce AI-initial opinions with evidence.
 ```
 
 [![Building review workflow](media/building-review-workflow.png)](media/building-review-workflow.svg)
 
-The public version passes 50 anonymous regression scenarios and 6 CAD safety-guard tests. No Chinese standards, local policies, or case library are bundled; users must supply lawfully obtained and current local sources.
+The public version passes 68 anonymous regression scenarios and 6 CAD safety-guard tests. v1.6 requires four local knowledge layers: A review checklists, B core standards, C interpretation notes, and D cases; drawing facts and layer-B standards remain the basis for formal conclusions. No Chinese standards, local policies, or case library are bundled. Single-building and site-plan reports inherit the formal Word templates, with `【AI初审】` as the only visible stage distinction in the title.
 
 → [SKILL.md](building-review/SKILL.md) · [High-resolution workflow](media/building-review-workflow.svg) · [Runtime requirements](building-review/references/runtime-requirements.md)
 

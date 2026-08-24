@@ -81,6 +81,7 @@ Cases cannot replace standards. If a case and a standard conflict, re-check the 
 - 只有在已限定专项时使用 `search_knowledge.py --deep --specialty <专项>`，避免无差别扫描整个知识库。
 - PDF返回 `scan_or_unreadable` 或深度检索提示“需视觉/OCR核验”时，必须打开原文件或执行OCR，不得把无文本当成无规定。
 - A类资料用于展开检查项，B类资料用于正式引用，C类资料辅助解释，D类资料只能提供发现方向和截图经验。
-- `route_specialties.py --json` 输出候选专项、触发理由和最低 `required_topics`，不证明专项必然适用；确认适用后必须把对应主题逐项写入v1.3检查矩阵。
-- `verified`意见引用的规范必须能唯一解析到索引文件，并进入工作区 `knowledge_snapshot.used_standards`。
+- `route_specialties.py --json` 输出候选专项、触发理由和最低 `required_topics`，不证明专项必然适用；AI依据项目事实关闭路由后必须把对应主题逐项写入检查矩阵。
+- v1.6 必须使用 A/B/C/D 四层资料，并在 `knowledge_snapshot.layers` 为每层记录 `status=used`、来源和实际用途。D类案例不得替代项目事实或B类规范。
+- `ai_ready`意见引用的规范必须能唯一解析到索引文件，并进入工作区 `knowledge_snapshot.used_standards`。
 - 知识库整体哈希或已引用规范哈希发生变化时，原验证失效；不得沿用旧的“通过”状态。

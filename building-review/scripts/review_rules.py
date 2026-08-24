@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shared v1.4 project-profile and executable-rule helpers."""
+"""Shared v1.4-v1.6 project-profile and executable-rule helpers."""
 
 from __future__ import annotations
 
@@ -9,6 +9,25 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_RULE_CATALOG = SKILL_DIR / "generated" / "review-rules.json"
+
+REQUIRED_RULE_PACKS = {
+    "residential_core_v1": {
+        "RES-4.1.2-STOREY-HEIGHT",
+        "RES-4.1.2-CLEAR-HEIGHT",
+        "ACCESS-3.4-ACCESSIBLE-DWELLING",
+        "ENERGY-5.2.1-SOLAR-SYSTEM",
+        "FIRE-2.2.3-RESCUE-OPENINGS",
+        "WATER-4.4.1-ROOF-LAYER-COUNT",
+        "WATER-4.6.1-INTERIOR-FLOOR-LAYERS",
+        "WATER-4.5.2-EXTERIOR-WALL-LAYERS",
+        "RES-4.1.12-WET-AREA-LEVEL",
+        "RES-4.1.10-BATHROOM-COF",
+        "RES-4.2.9-PUBLIC-AREA-COF",
+        "RES-4.1.15-BALCONY-GUARD",
+        "RES-4.2.8-PUBLIC-GUARD",
+        "RES-4.2.2-STAIR-HORIZONTAL-HANDRAIL",
+    }
+}
 
 
 def load_catalog(path: Path = DEFAULT_RULE_CATALOG) -> dict:
@@ -48,8 +67,24 @@ def condition_state(profile: dict, condition: dict) -> str:
     if not field or profile_state(profile, field) == "unknown":
         return "uncertain"
     actual = normalized(profile_value(profile, field))
-    allowed = {normalized(value) for value in condition.get("values", [])}
-    return "active" if actual in allowed else "inactive"
+    comparisons: list[bool] = []
+    if "values" in condition:
+        allowed = {normalized(value) for value in condition.get("values", [])}
+        comparisons.append(actual in allowed)
+    if "contains" in condition:
+        actual_text = str(actual).casefold()
+        tokens = [str(normalized(value)).casefold() for value in condition.get("contains", [])]
+        comparisons.append(any(token and token in actual_text for token in tokens))
+    for key, operator in (("minimum", lambda value, limit: value >= limit), ("maximum", lambda value, limit: value <= limit)):
+        if key not in condition:
+            continue
+        try:
+            comparisons.append(operator(float(profile_value(profile, field)), float(condition[key])))
+        except (TypeError, ValueError):
+            return "uncertain"
+    if not comparisons:
+        return "uncertain"
+    return "active" if all(comparisons) else "inactive"
 
 
 def evaluate_trigger(trigger: dict, profile: dict) -> str:

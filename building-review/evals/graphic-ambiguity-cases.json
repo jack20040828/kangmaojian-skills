@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "fixture_notice": "Synthetic graphics only; no real project drawings or conclusions.",
+  "cases": [
+    {"id": "REG-57", "fixture": "fixtures/graphic-ambiguity/cross-sheet.svg", "mutation": "closed_chain", "expected": "pass", "expected_fragment": ""},
+    {"id": "REG-58", "fixture": "fixtures/graphic-ambiguity/cross-sheet.svg", "mutation": "missing_required_role", "expected": "fail", "expected_fragment": "required graphic evidence roles are missing"},
+    {"id": "REG-59", "fixture": "fixtures/graphic-ambiguity/dimension.svg", "mutation": "missing_screenshot", "expected": "fail", "expected_fragment": "resolved graphic evidence requires a screenshot"},
+    {"id": "REG-60", "fixture": "fixtures/graphic-ambiguity/direction.svg", "mutation": "raster_only", "expected": "fail", "expected_fragment": "raster_limited evidence alone cannot close a graphic claim"},
+    {"id": "REG-61", "fixture": "fixtures/graphic-ambiguity/direction.svg", "mutation": "ambiguity_unresolved", "expected": "fail", "expected_fragment": "requires an alternative interpretation and elimination basis"},
+    {"id": "REG-62", "fixture": "fixtures/graphic-ambiguity/symbol-legend.svg", "mutation": "pending_claim", "expected": "fail", "expected_fragment": "pending graphic claim classification blocks resolution"},
+    {"id": "REG-63", "fixture": "fixtures/graphic-ambiguity/cross-sheet.svg", "mutation": "applicability_unknown", "expected": "fail", "expected_fragment": "unknown applicability result blocks resolution"},
+    {"id": "REG-64", "fixture": "fixtures/graphic-ambiguity/cross-sheet.svg", "mutation": "not_applicable_without_exclusion", "expected": "fail", "expected_fragment": "requires a fact-backed failed exclusion condition"},
+    {"id": "REG-65", "fixture": "fixtures/graphic-ambiguity/dimension.svg", "mutation": "condition_unresolved", "expected": "fail", "expected_fragment": "applicability decision is unresolved"},
+    {"id": "REG-66", "fixture": "fixtures/graphic-ambiguity/symbol-legend.svg", "mutation": "same_reviewer", "expected": "fail", "expected_fragment": "primary and secondary reviewers must differ"},
+    {"id": "REG-67", "fixture": "fixtures/graphic-ambiguity/symbol-legend.svg", "mutation": "no_human_reviewer", "expected": "fail", "expected_fragment": "at least one independent reviewer must be human"},
+    {"id": "REG-68", "fixture": "fixtures/graphic-ambiguity/cross-sheet.svg", "mutation": "disagreement_unadjudicated", "expected": "fail", "expected_fragment": "disagreement requires human adjudication"}
+  ]
+}

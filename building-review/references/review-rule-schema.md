@@ -1,43 +1,47 @@
-# 可执行审查规则
+# 可执行审查规则（v1.6）
 
-`generated/review-rules.json` 是 v1.4 审查矩阵的唯一可执行规则目录。它由
-`scripts/build_review_rules.py` 从 `references/review-rules-core.json` 生成；不得直接手改生成文件。
+`generated/review-rules.json` 是审查矩阵的唯一可执行规则目录，由 `references/review-rules-core.json` 经 `scripts/build_review_rules.py` 生成；不得直接修改生成文件。
 
 ## 规则字段
 
-- `rule_id`：稳定且唯一的规则编号。
-- `status`：仅 `active` 可进入新项目检查表。
-- `authority_mode`：
-  - `normative`：可支持技术符合或不符合结论，必须关联本地 B 类规范、条文和要求。
-  - `design_depth`：只检查图纸表达、内部矛盾和可实施性；不得主张外部技术阈值。
-- `specialty`：所属专项。
-- `coverage_topic`：所属覆盖主题。
-- `review_families`：适用图纸族。
-- `report_types`：`single`、`site` 或两者。
-- `trigger`：由 `project_profile.json` 事实决定是否激活。事实未知时规则保持候选并生成未决检查，不能静默跳过。
-- `required_facts`：必须从图纸取得的事实。
-- `comparison_method`：要求的比较或核对方法。
-- `calculation_required`：为 `true` 时，关闭检查前必须记录计算输入、公式和结果。
-- `risk_level`：`high`、`medium` 或 `normal`。
-- `basis`：规范性规则的本地 B 类来源、显示名称、条文和要求。
+每条规则至少包含：
 
-## 关闭条件
+- 稳定 `rule_id`、规则包、专项、适用图纸族和覆盖主题。
+- `authority_mode`：`normative` 或 `design_depth`。
+- `basis`：规范规则必须唯一解析到本地 B_核心规范的相对路径、SHA-256、条文和要求。
+- `applicability_conditions`：逐项条件、期望值及 false 时的结果。
+- `required_facts`、`comparison_method`、必要计算要求。
+- `graphic_evidence_requirements`：是否必需、claim type、证据角色和歧义敏感性。
+- 规则包与项目功能触发条件。
 
-v1.4 原子检查只有同时具备下列内容才可设为 `resolved`：
+目录中的 legacy `independent_review_required` 仅供 v1.5 兼容。v1.6 不创建独立人工复核台账，也不把该字段作为完成门禁。
 
-1. 明确的适用性及其项目事实依据；
-2. 本张图纸的事实、`fact_ids` 和图纸定位；
-3. 比较方法及比较记录；
-4. 规范性规则对应的 B 类来源、条文和要求；
-5. 需要计算时的计算记录；
-6. `符合`、`不符合` 或证据充分的 `不适用` 结论。
+## v1.6 原子检查关闭条件
 
-缺一项时使用 `unreviewed` 或 `needs_review`，结论保持 `需核验`。一个覆盖主题只有在该图纸所有已触发原子规则都关闭后才算关闭。
+原子检查只有同时具备下列内容才可设为 `resolved`：
 
-## 来源边界
+1. 规则 ID 与当前快照一致。
+2. 图纸族、页码/图号/图名和项目事实可追溯。
+3. 所有适用条件均有 `actual_value`、`fact_ids`、`drawing_refs`、结果和 `completed_at`；`unknown` 阻断关闭。
+4. `actual_fact`、比较方法和比较记录完整。
+5. 规则要求计算时，计算输入来自事实台账且计算记录完整。
+6. 规范结论与 B 类 basis 的来源、条文和要求完全一致。
+7. 图形 claim 已分类；所需角色全部进入 `graphic_evidence_chain.csv`，有截图、观察事实、解释、来源质量和 `completed_at`。
+8. 对方向、符号、缺失和跨图等歧义敏感 claim，记录至少一个合理替代解释及排除依据。
+9. `completion_gate=AI初审完成`；不得出现 `reviewer_gate`、`independent_review_id` 或人工姓名。
+10. “不适用”必须由项目范围的正向事实支持，不能把“图纸未表达应有措施”当作不适用理由。
 
-- A 类资料用于发现和拆分规则。
-- B 类资料是 `normative` 规则的正式依据。
-- C 类资料只用于解释适用边界。
-- D 类案例只用于发现方向，不能写入 `basis`。
-- 找不到准确 B 类条文的技术要求不得伪造为活动规范规则。
+规范规则的结论可为 `符合`、`不符合`、`不适用`；证据或适用性未关闭时保持 `需核验`，不得设为 resolved。
+
+## 权限边界
+
+- A类审查要点可发现问题但不能作为正式规范引用。
+- B类核心规范支撑技术结论。
+- C类疑难解析解决适用、版本和解释问题。
+- D类案例只辅助发现与差异比对。
+- 设计深度规则不得伪装成外部技术条文。
+- 脚本只能展开工作项和验证一致性，不能预填专业结论或 AI 完成状态。
+
+## 兼容
+
+v1.4/v1.5 继续按原字段与各自门禁读取；既有工作区不迁移。新建项目只能使用 v1.6。

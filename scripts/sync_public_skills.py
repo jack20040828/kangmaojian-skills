@@ -71,8 +71,8 @@ def transform_building_skill(rel: str, text: str) -> str:
     if rel == "SKILL.md":
         text = replace_regex_once(
             text,
-            r"then copy the final DOCX to `<项目>\\04_审图成果`\.",
-            "then copy the final DOCX to the user-selected deliverables directory.",
+            r"then copy only the final DOCX to `<项目>\\04_审图成果`\.",
+            "then copy only the final DOCX to the user-selected deliverables directory.",
             rel,
         )
         text = replace_once(
@@ -100,21 +100,7 @@ def transform_building_skill(rel: str, text: str) -> str:
             rel,
         )
 
-    if rel == "references/workflow.md":
-        return replace_once(
-            text,
-            "through `generated/knowledge-index.json` or `scripts/search_knowledge.py`",
-            "through a user-built `knowledge-index.json` or `scripts/search_knowledge.py`",
-            rel,
-        )
-
     if rel == "references/single-building-retrospective.md":
-        for old, new in (
-            ("## 第二次终稿复盘：体育馆单体", "## 第二次终稿复盘：匿名体育馆单体"),
-            ("## 第三次终稿复盘：中学生活综合楼总图与单体", "## 第三次终稿复盘：匿名中学生活综合楼总图与单体"),
-            ("## 第四次过程复盘：生产值班用房假完成", "## 第四次过程复盘：匿名生产值班用房假完成"),
-        ):
-            text = replace_once(text, old, new, rel)
         return text
 
     if rel == "scripts/build_knowledge_index.py":
