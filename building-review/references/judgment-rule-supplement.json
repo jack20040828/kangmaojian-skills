@@ -1,0 +1,97 @@
+{
+  "catalog_version": "2026-09-19-r3",
+  "overrides": {
+    "ENERGY-3.1.18-RESIDENTIAL-WINDOW-FLOOR-RATIO": {"object_linkage": "room_window"},
+    "FIRE-7.1.5-EGRESS-CLEARANCE": {"obligations": [
+      {"id": "height", "kind": "numeric", "requirement": "疏散通道、走道、出口净高", "operator": ">=", "threshold": "2.1", "unit": "m"},
+      {"id": "obstruction", "kind": "judgment", "requirement": "无影响人员疏散的物体"},
+      {"id": "sign", "kind": "judgment", "requirement": "明显位置设指示标志"},
+      {"id": "compartment_door", "kind": "judgment", "conditional": true, "requirement": "防火分区分隔处疏散门及适用条件"}
+    ]},
+    "WATER-4.6.4-WALL-UPTURN-HEIGHT": {"obligations": [
+      {"id": "shower_height", "kind": "numeric", "conditional": true, "requirement": "淋浴区墙面防水翻起高度", "operator": ">=", "threshold": "2000", "unit": "mm"},
+      {"id": "shower_outlet", "kind": "judgment", "conditional": true, "requirement": "淋浴区防水高度不低于喷淋口高度"},
+      {"id": "basin_height", "kind": "numeric", "conditional": true, "requirement": "盥洗池盆等用水处防水高度", "operator": ">=", "threshold": "1200", "unit": "mm"},
+      {"id": "other_height", "kind": "numeric", "conditional": true, "requirement": "其他部位泛水翻起高度", "operator": ">=", "threshold": "250", "unit": "mm"},
+      {"id": "water_migration", "kind": "judgment", "requirement": "防止水流入非用水房间的措施"}
+    ]},
+    "WATER-4.5.3-WINDOW-SILL-SLOPE": {"obligations": [
+      {"id": "slope", "kind": "numeric", "requirement": "窗台排水坡度", "operator": ">=", "threshold": "5", "unit": "%"},
+      {"id": "drainage", "kind": "judgment", "requirement": "排水板和滴水线等排水构造"}
+    ]},
+    "DEPTH-COVERAGE-CODE-BASIS-CONSISTENCY": {"obligations": [
+      {"id": "page_basis", "kind": "judgment", "requirement": "本说明页或专篇列出的各项设计依据、版本和适用日期"},
+      {"id": "cross_note", "kind": "judgment", "requirement": "总说明与本专篇依据的对应关系；合并意见后仍保留本页整改对象"}
+    ]}
+  },
+  "rules": [
+    {
+      "rule_id": "RES-4.1.14-NEW-DWELLING-DOOR", "status": "active", "authority_mode": "normative",
+      "specialty": "013住宅建筑专项", "coverage_topic": "door_window_safety",
+      "review_families": ["平面图", "其他大样", "门窗表"], "report_types": ["single"],
+      "trigger": {"all": [{"field": "building_use", "contains": ["住宅", "residential"]}]},
+      "required_facts": ["新建住宅适用事实", "户门位置和门框完成后通行净宽"],
+      "comparison_method": "确认新建住宅适用条件；逐户门核对完成面通行净宽，洞口宽度不得直接等同净宽。",
+      "calculation_required": true, "risk_level": "high",
+      "judgment_requirements": {"obligations": [{"id": "clear_width", "kind": "numeric", "requirement": "新建住宅户门通行净宽", "operator": ">=", "threshold": "0.90", "unit": "m"}]},
+      "basis": {"relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf", "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e", "source_role": "B_核心规范", "display_name": "《住宅项目规范》GB 55038-2025", "article": "第4.1.14条", "requirement": "新建住宅建筑户门通行净宽不应小于0.90m。既有住宅及其他房间门应另按本条适用要求判断。"}
+    },
+    {
+      "rule_id": "RES-6.1.2-PARTITION-ACOUSTICS", "status": "active", "authority_mode": "normative",
+      "specialty": "008建筑环境专项", "coverage_topic": "material_performance",
+      "review_families": ["设计说明", "材料做法表"], "report_types": ["single"],
+      "trigger": {"all": [{"field": "building_use", "contains": ["住宅", "residential"]}]},
+      "required_facts": ["卧室分户墙及分户楼板空气声隔声指标", "其他分户墙楼板空气声隔声指标", "卧室起居室楼板撞击声指标"],
+      "comparison_method": "分别核对对象和声学指标；不得混用空气声隔声量与撞击声声压级。",
+      "calculation_required": true, "risk_level": "high",
+      "judgment_requirements": {"obligations": [
+        {"id": "bedroom", "kind": "numeric", "conditional": true, "requirement": "卧室分户墙楼板DnT,w+C", "operator": ">=", "threshold": "50", "unit": "dB"},
+        {"id": "other", "kind": "numeric", "conditional": true, "requirement": "其他分户墙楼板DnT,w+C", "operator": ">=", "threshold": "48", "unit": "dB"},
+        {"id": "impact", "kind": "numeric", "conditional": true, "requirement": "卧室起居室楼板计权标准化撞击声压级", "operator": "<=", "threshold": "65", "unit": "dB"}
+      ]},
+      "basis": {"relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf", "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e", "source_role": "B_核心规范", "display_name": "《住宅项目规范》GB 55038-2025", "article": "第6.1.2条", "requirement": "卧室分户墙楼板两侧房间DnT,w+C不小于50dB，其他分户墙楼板不小于48dB；卧室起居室楼板计权标准化撞击声压级不大于65dB。"}
+    },
+    {
+      "rule_id": "RES-6.1.3-FACADE-ACOUSTICS", "status": "active", "authority_mode": "normative",
+      "specialty": "008建筑环境专项", "coverage_topic": "material_performance",
+      "review_families": ["设计说明", "门窗表", "材料做法表"], "report_types": ["single"],
+      "trigger": {"all": [{"field": "building_use", "contains": ["住宅", "residential"]}]},
+      "required_facts": ["外墙隔声指标", "交通干线侧卧室外门窗适用事实及隔声指标", "其他外门窗隔声指标"],
+      "comparison_method": "按外墙、临街朝交通干线侧卧室外门窗及其他外门窗分别核对Rw+Ctr。",
+      "calculation_required": true, "risk_level": "high",
+      "judgment_requirements": {"obligations": [
+        {"id": "wall", "kind": "numeric", "conditional": true, "requirement": "外墙Rw+Ctr", "operator": ">=", "threshold": "45", "unit": "dB"},
+        {"id": "traffic_window", "kind": "numeric", "conditional": true, "requirement": "临街朝交通干线侧卧室外门窗Rw+Ctr", "operator": ">=", "threshold": "35", "unit": "dB"},
+        {"id": "other_window", "kind": "numeric", "conditional": true, "requirement": "其他外门窗Rw+Ctr", "operator": ">=", "threshold": "30", "unit": "dB"}
+      ]},
+      "basis": {"relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf", "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e", "source_role": "B_核心规范", "display_name": "《住宅项目规范》GB 55038-2025", "article": "第6.1.3条", "requirement": "住宅外墙Rw+Ctr不小于45dB；临街朝交通干线侧卧室外门窗不小于35dB，其他外门窗不小于30dB。"}
+    },
+    {
+      "rule_id": "ENV-2.1.3-EXTERNAL-NOISE", "status": "active", "authority_mode": "normative",
+      "specialty": "008建筑环境专项", "coverage_topic": "material_performance",
+      "review_families": ["设计说明"], "report_types": ["single"], "trigger": {"always": true},
+      "required_facts": ["主要功能房间使用性质", "声环境功能区及限值修正条件", "昼夜限值、测量时段和关闭门窗条件"],
+      "comparison_method": "依表2.1.3逐类核对外部噪声限值及条件；不得忽略声环境功能区的5dB修正，也不得替代设备噪声指标。",
+      "calculation_required": false, "risk_level": "high",
+      "basis": {"relative_path": "008建筑环境专项/B建筑环境核心规范/GB55016-2021建筑环境通用规范.pdf", "sha256": "dc01efd74df00585b4698146446c22a7db8563d12491ec41e4c8cfaf752459cd", "source_role": "B_核心规范", "display_name": "《建筑环境通用规范》GB 55016-2021", "article": "第2.1.3条及表2.1.3", "requirement": "睡眠房间昼间40dB、夜间30dB；日常生活房间40dB。适用条件、其他功能房间、测量时段及2、3、4类声环境功能区可放宽5dB的条件按本条执行。"}
+    },
+    {
+      "rule_id": "GREEN-HUNAN-ARTICLE12-DESIGN-NOTES", "status": "active", "authority_mode": "normative",
+      "specialty": "020绿色建筑专项", "coverage_topic": "project_applicability",
+      "review_families": ["设计说明", "目录索引"], "report_types": ["single"],
+      "trigger": {"all": [{"field": "location_province", "contains": ["湖南"]}]},
+      "required_facts": ["湖南省绿色建筑条例项目适用条件", "绿色建筑设计说明正文及目录对应"],
+      "comparison_method": "查找实际绿色建筑设计说明，目录无编号或页码不能独立证明说明缺失。",
+      "calculation_required": false, "risk_level": "medium",
+      "basis": {"relative_path": "020绿色建筑专项/B绿色建筑核心规范/湖南省绿色建筑发展条例（2021年）.docx", "sha256": "a37b11278dc9ff7904ee27237cc52ec4fa06ee45d15112c26e7214e22f3fa417", "source_role": "B_核心规范", "display_name": "《湖南省绿色建筑发展条例》", "article": "第十二条", "requirement": "设计单位应当按照绿色建筑标准和控制性详细规划确定的绿色建筑等级要求进行设计，编制绿色建筑设计说明。"}
+    },
+    {
+      "rule_id": "DEPTH-SPECIALTY-NOTES-COORDINATION", "status": "active", "authority_mode": "design_depth",
+      "specialty": "001建筑设计文件编制深度专项", "coverage_topic": "project_applicability",
+      "review_families": ["设计说明", "目录索引"], "report_types": ["single", "site"], "trigger": {"always": true},
+      "required_facts": ["无障碍专项说明与设施要求的表达及适用事实", "防水专项说明与节点做法的对应及适用事实", "绿色建筑专项说明与目录的对应及适用事实"],
+      "comparison_method": "逐专项查正文、专篇和目录；只形成已证明的内部表达缺漏，外部规范要求另用对应B类规则，不以索引困难判设计错误。",
+      "calculation_required": false, "risk_level": "medium", "basis": {}
+    }
+  ]
+}

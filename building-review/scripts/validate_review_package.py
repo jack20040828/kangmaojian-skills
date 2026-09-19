@@ -62,7 +62,7 @@ VALID_APPLICABILITY = {"适用", "不适用", "需判断"}
 VALID_CONCLUSIONS = {"符合", "不符合", "需核验", "不适用"}
 VALID_SCREENSHOT_STRATEGIES = {"none", "single", "multiple", "shared"}
 SCREENSHOT_REQUIRED_STRATEGIES = {"single", "multiple", "shared"}
-SUPPORTED_SCHEMA_VERSIONS = {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6"}
+SUPPORTED_SCHEMA_VERSIONS = {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7"}
 VALID_REVIEW_FAMILIES = {
     "设计说明",
     "目录索引",
@@ -468,7 +468,7 @@ def validate_integrity(
     if not isinstance(snapshot, dict) or not snapshot.get("corpus_sha256"):
         errors.append("knowledge_snapshot is missing; run snapshot_review_integrity.py")
         return errors
-    if schema_version == "1.6":
+    if schema_version in {"1.6", "1.7"}:
         required_layers = snapshot.get("required_layers")
         if required_layers != ["A", "B", "C", "D"]:
             errors.append("v1.6 knowledge_snapshot.required_layers must be A, B, C, D")
@@ -511,10 +511,10 @@ def validate_integrity(
             issue.get("standard_source", "").strip(),
         )
         for issue in verified
-        if schema_version not in {"1.2", "1.3", "1.4", "1.5", "1.6"}
+        if schema_version not in {"1.2", "1.3", "1.4", "1.5", "1.6", "1.7"}
         or issue.get("citation_mode", "").strip().lower() == "cited"
     ]
-    if schema_version in {"1.4", "1.5", "1.6"}:
+    if schema_version in {"1.4", "1.5", "1.6", "1.7"}:
         cited_records.extend(
             (
                 check.get("check_id", "").strip() or "[missing check_id]",
@@ -1087,9 +1087,11 @@ def load_v14_catalog(root: Path, manifest: dict) -> tuple[dict, list[str], str]:
 def workspace_input_hashes(root: Path) -> dict[str, str]:
     names = ["review_manifest.json", "project_profile.json", *REQUIRED_FILES]
     schema_version, _manifest = load_manifest(root)
+    if schema_version == "1.7":
+        names.append("judgment_evidence.json")
     if schema_version == "1.5":
         names.extend(V15_REQUIRED_FILES)
-    elif schema_version == "1.6":
+    elif schema_version in {"1.6", "1.7"}:
         names.extend(V16_REQUIRED_FILES)
     return {name: sha256_file(root / name) for name in names if (root / name).exists()}
 
@@ -1169,7 +1171,7 @@ def validate_workspace(root: Path, require_completion_audit: bool = True) -> tup
     v13 = schema_version == "1.3"
     v14 = schema_version == "1.4"
     v15 = schema_version == "1.5"
-    v16 = schema_version == "1.6"
+    v16 = schema_version in {"1.6", "1.7"}
     v15plus = v15 or v16
     v14plus = v14 or v15plus
     modern = v12 or v13 or v14plus
@@ -1769,6 +1771,10 @@ def validate_workspace(root: Path, require_completion_audit: bool = True) -> tup
                 ai_initial=v16,
             )
         )
+    if schema_version == "1.7":
+        from judgment_evidence import validate as validate_judgment
+        errors.extend(validate_judgment(root, checks, rules_by_id, facts_by_id, issues,
+                                       {g["chain_id"]: g for g in graphic_rows}))
     if versioned:
         errors.extend(validate_integrity(root, manifest, verified, checks, schema_version))
     if v14plus and require_completion_audit:

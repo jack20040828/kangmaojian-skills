@@ -177,10 +177,17 @@ def build(source: Path, knowledge_index: Path) -> dict:
     profiles = payload.get("professional_profiles", {})
     if not isinstance(profiles, dict):
         raise ValueError("professional_profiles must be an object")
+    supplement_path = source.with_name("judgment-rule-supplement.json")
+    supplement = json.loads(supplement_path.read_text(encoding="utf-8")) if supplement_path.exists() else {}
     rules = [
         enrich_rule(rule, profiles)
-        for rule in coverage_shells() + list(payload.get("rules", []))
+        for rule in coverage_shells() + list(payload.get("rules", [])) + supplement.get("rules", [])
     ]
+    by_id = {r["rule_id"]: r for r in rules}
+    for rule_id, requirements in supplement.get("overrides", {}).items():
+        if rule_id not in by_id:
+            raise ValueError(f"judgment override refers to unknown rule: {rule_id}")
+        by_id[rule_id]["judgment_requirements"] = requirements
     seen: set[str] = set()
     errors = [error for rule in rules for error in validate_rule(rule, seen)]
     for rule in rules:
@@ -212,7 +219,7 @@ def build(source: Path, knowledge_index: Path) -> dict:
         raise ValueError("\n".join(errors))
     return {
         "schema_version": "1.1",
-        "catalog_version": payload.get("catalog_version", ""),
+        "catalog_version": supplement.get("catalog_version", payload.get("catalog_version", "")),
         "rule_count": len(rules),
         "rules": sorted(rules, key=lambda item: item["rule_id"]),
     }

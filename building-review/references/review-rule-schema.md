@@ -60,4 +60,4 @@ python scripts/audit_high_frequency_rule_sources.py `
 
 ## 兼容
 
-v1.4/v1.5 继续按原字段与各自门禁读取；既有工作区不迁移。新建项目只能使用 v1.6。
+v1.4-v1.6 继续按原字段与各自门禁读取；既有工作区不迁移。新建项目使用 v1.7，另按 `judgment-evidence-v17.md` 关闭义务级判断与交付筛选；规则增补源为 `judgment-rule-supplement.json`，不能直接改生成目录。

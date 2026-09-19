@@ -19,7 +19,7 @@ Read `references/scope-boundary.md` before accepting borderline or mixed work.
 
 ## Core Workflow
 
-1. Create or identify a review workspace. New workspaces use schema v1.6 with `review_stage: ai_initial`. For an existing project, pass `--root <项目>\03_审图过程` explicitly to `scripts/create_review_workspace.py`. Schemas v1.1-v1.5 remain readable compatibility formats; do not migrate an existing workspace in place.
+1. Create or identify a review workspace. New workspaces use schema v1.7 with `review_stage: ai_initial`. For an existing project, pass `--root <项目>\03_审图过程` explicitly to `scripts/create_review_workspace.py`. Schemas v1.1-v1.6 remain readable compatibility formats; do not migrate an existing workspace in place.
 2. Inventory every sheet and extract facts before judging. Complete `drawing_inventory.csv` and `fact_ledger.csv`; unresolved identity or version facts stay `needs_review`.
 3. Read `references/project-profile.md`; the AI completes `project_profile.json`, records `ai_review_completed`, and closes specialty routing with `AI初审完成`. Route specialties with `scripts/route_specialties.py --json`; resolve uncertain routes from project facts and keep unsupported routes open rather than asking for a human confirmation gate.
 4. Read `references/review-rule-schema.md`. Run `scripts/generate_project_checklist.py <workspace>` after classifying sheets. It expands the snapshotted rule catalog into unreviewed atomic checks plus v1.6 applicability and graphic-evidence placeholders; it never supplies compliance conclusions. For a residential single-building profile, ensure that `residential_core_v1` is present in full; missing drawings do not waive a packet rule and the package gate will block completion.
@@ -33,6 +33,8 @@ Read `references/scope-boundary.md` before accepting borderline or mixed work.
 ## Phase References
 
 - Runtime dependencies and public configuration: `references/runtime-requirements.md`
+- For every v1.7 review, read `references/judgment-evidence-v17.md` before closing checks or screening issues. Complete obligation-level comparisons, room-window associations when required, counterevidence searches, and responsibility/value screening in `judgment_evidence.json`; package validation and the completion audit enforce this ledger. Neither missing issue IDs nor populated prose fields prove compliance.
+
 - Intake and phase gates: `references/workflow.md`
 - Scope and task handoff: `references/scope-boundary.md`
 - Drawing facts: `references/evidence-ledger.md`
@@ -78,4 +80,4 @@ Read `references/scope-boundary.md` before accepting borderline or mixed work.
 - Set `BUILDING_REVIEW_PROJECT_ROOT` or pass `--root <path>` for workspace creation; otherwise the script uses `./building-review-projects` under the current working directory.
 - Keep raw knowledge files and real project source files unchanged. Store indexes, ledgers, snapshots, screenshots, and drafts outside the raw knowledge base.
 - Prefer local sources. Browse only when local sources cannot resolve a current standard or policy question, or the user explicitly asks for current official status.
-- New reviews use schema v1.6 and directly deliver a formal-format AI initial-review DOCX. v1.1-v1.5 workspaces remain readable for compatibility, but new workspaces never wait for or fabricate human confirmation, review, or adjudication.
+- New reviews use schema v1.7 and directly deliver a formal-format AI initial-review DOCX. v1.1-v1.6 workspaces remain readable for compatibility, but new workspaces never wait for or fabricate human confirmation, review, or adjudication.

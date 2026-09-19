@@ -135,7 +135,7 @@ def validate_docx(root: Path, docx_path: Path) -> list[str]:
     title, filename = report_identity(report_type, project_name)
     sections = SINGLE_SECTIONS if report_type == "single" else SITE_SECTIONS
     template_path = SINGLE_TEMPLATE if report_type == "single" else SITE_TEMPLATE
-    reportable_status = "ai_ready" if schema_version == "1.6" else "verified"
+    reportable_status = "ai_ready" if schema_version in {"1.6", "1.7"} else "verified"
     issues = [row for row in rows(root / "issue_candidates.csv") if row.get("status", "").strip() == reportable_status]
     issues.sort(key=lambda row: int(row.get("display_order", "0") or 0))
 

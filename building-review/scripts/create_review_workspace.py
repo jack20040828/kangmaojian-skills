@@ -16,7 +16,7 @@ from pathlib import Path
 DEFAULT_PROJECT_ROOT = Path(
     os.environ.get("BUILDING_REVIEW_PROJECT_ROOT", str(Path.cwd() / "building-review-projects"))
 ).expanduser()
-SCHEMA_VERSION = "1.6"
+SCHEMA_VERSION = "1.7"
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 RULE_CATALOG = SKILL_DIR / "generated" / "review-rules.json"
@@ -237,7 +237,7 @@ V16_TEMPLATES = {
 
 
 def headers_for(schema_version: str, filename: str) -> list[str]:
-    if schema_version == "1.6" and filename in V16_TEMPLATES:
+    if schema_version in {"1.6", "1.7"} and filename in V16_TEMPLATES:
         return V16_TEMPLATES[filename]
     return TEMPLATES[filename]
 
@@ -260,7 +260,7 @@ def sha256_file(path: Path) -> str:
 
 
 def initial_profile(report_type: str, schema_version: str) -> dict:
-    if schema_version == "1.6":
+    if schema_version in {"1.6", "1.7"}:
         return {
             "schema_version": "1.1",
             "review_stage": "ai_initial",
@@ -314,7 +314,7 @@ def main() -> int:
     parser.add_argument("project_name")
     parser.add_argument("--root", type=Path, default=DEFAULT_PROJECT_ROOT)
     parser.add_argument("--report-type", choices=["single", "site"], default="single")
-    parser.add_argument("--schema-version", choices=["1.4", "1.5", "1.6"], default=SCHEMA_VERSION)
+    parser.add_argument("--schema-version", choices=["1.4", "1.5", "1.6", "1.7"], default=SCHEMA_VERSION)
     args = parser.parse_args()
 
     if args.root.resolve() == DEFAULT_PROJECT_ROOT.resolve():
@@ -325,12 +325,15 @@ def main() -> int:
         )
 
     folder = args.root / f"{date.today().isoformat()}-{slugify(args.project_name)}"
+    existing_manifest = folder / "review_manifest.json"
+    if existing_manifest.exists() and json.loads(existing_manifest.read_text(encoding="utf-8")).get("schema_version") != args.schema_version:
+        parser.error("existing workspace uses another schema; do not migrate it in place")
     folder.mkdir(parents=True, exist_ok=True)
     for name in ["source", "screenshots", "output"]:
         (folder / name).mkdir(exist_ok=True)
     for filename, headers in TEMPLATES.items():
         allowed_ledgers = V15_LEDGER_NAMES if args.schema_version == "1.5" else (
-            V16_LEDGER_NAMES if args.schema_version == "1.6" else set()
+            V16_LEDGER_NAMES if args.schema_version in {"1.6", "1.7"} else set()
         )
         if filename in V15_LEDGER_NAMES and filename not in allowed_ledgers:
             continue
@@ -349,13 +352,13 @@ def main() -> int:
     if not manifest_path.exists():
         manifest = {
             "schema_version": args.schema_version,
-            "review_stage": "ai_initial" if args.schema_version == "1.6" else "",
+            "review_stage": "ai_initial" if args.schema_version in {"1.6", "1.7"} else "",
             "project_name": args.project_name,
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "report_type": args.report_type,
             "source_integrity": [],
             "knowledge_snapshot": {
-                "required_layers": ["A", "B", "C", "D"] if args.schema_version == "1.6" else [],
+                "required_layers": ["A", "B", "C", "D"] if args.schema_version in {"1.6", "1.7"} else [],
                 "layers": {},
             },
             "rule_catalog_snapshot": {
@@ -365,6 +368,11 @@ def main() -> int:
         }
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    if args.schema_version == "1.7":
+        from judgment_evidence import LEDGER
+        judgment_path = folder / LEDGER
+        if not judgment_path.exists():
+            judgment_path.write_text(json.dumps({"schema_version": "1.0", "checks": [], "issue_screening": []}), encoding="utf-8")
     print(folder)
     return 0
 

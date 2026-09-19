@@ -253,7 +253,7 @@ def finish_sentence(text: str) -> str:
 
 
 def regulation_text(issue: dict[str, str], schema_version: str) -> str:
-    if schema_version in {"1.2", "1.3", "1.4", "1.5", "1.6"} and issue.get("citation_mode", "").strip().lower() == "none":
+    if schema_version in {"1.2", "1.3", "1.4", "1.5", "1.6", "1.7"} and issue.get("citation_mode", "").strip().lower() == "none":
         return "无。"
     source = issue.get("standard_display_name", "").strip()
     if not source:
@@ -311,7 +311,7 @@ def build_report(args: argparse.Namespace) -> Path:
     if args.report_title and args.report_title != title:
         raise RuntimeError(f"--report-title must be exactly: {title}")
     output = (args.output or root / "output" / filename).resolve()
-    reportable_status = "ai_ready" if schema_version == "1.6" else "verified"
+    reportable_status = "ai_ready" if schema_version in {"1.6", "1.7"} else "verified"
     issues = [row for row in rows(root / "issue_candidates.csv") if row.get("status", "").strip() == reportable_status]
     issues.sort(key=lambda row: int(row.get("display_order", "0") or 0))
     grouped = {key: [] for key, _heading in sections}

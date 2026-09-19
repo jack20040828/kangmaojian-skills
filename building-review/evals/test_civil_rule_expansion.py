@@ -58,10 +58,10 @@ def main() -> int:
     rules = catalog["rules"]
     rules_by_id = {rule["rule_id"]: rule for rule in rules}
 
-    if catalog.get("catalog_version") != "2026-08-24-r2" or catalog.get("rule_count") != 156:
+    if catalog.get("catalog_version") != "2026-09-19-r3" or catalog.get("rule_count") != 162:
         raise AssertionError("CIVIL-01: catalog version or total count is incorrect")
     modes = Counter(rule["authority_mode"] for rule in rules)
-    if modes != {"normative": 105, "design_depth": 51}:
+    if modes != {"normative": 110, "design_depth": 52}:
         raise AssertionError(f"CIVIL-01: authority-mode counts are incorrect: {dict(modes)}")
     civil_rules = [rule for rule in rules if rule.get("specialty") == "004民用建筑专项"]
     if len(civil_rules) != 22:

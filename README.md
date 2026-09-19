@@ -44,7 +44,7 @@ python install-skill-from-github.py --repo jack20040828/kangmaojian-skills --pat
 
 > 先把每张图纸看见了什么说清楚，再谈它是否符合要求。
 
-用于总图、建筑单体和建筑专项施工图技术审查。schema v1.6 由 AI 独立完成图纸清点、事实提取、专项路由、知识检索、规范核查、跨图检查、证据闭合和 Word 验收，不设置人工确认、人工复核或人工裁决门禁。只有达到 `ai_ready` 的意见才会进入 AI 初审 Word。
+用于总图、建筑单体和建筑专项施工图技术审查。新建工作区使用 schema v1.7，由 AI 独立完成图纸清点、事实提取、专项路由、知识检索、规范核查、跨图检查、证据闭合和 Word 验收，不设置人工确认、人工复核或人工裁决门禁。只有达到 `ai_ready` 的意见才会进入 AI 初审 Word。v1.7 增加义务级数值比较、房间与窗的对象关联、反证检查及设计整改责任筛选；旧工作区不自动迁移。
 
 适合：
 
@@ -69,7 +69,7 @@ python install-skill-from-github.py --repo jack20040828/kangmaojian-skills --pat
 
 [![建筑施工图审查工作流程图](media/building-review-workflow.png)](media/building-review-workflow.svg)
 
-当前公开版已通过 68 个匿名回归场景和 6 个 CAD 安全防护测试。v1.6 强制使用本地知识库 A 类审查要点、B 类核心规范、C 类疑难解析和 D 类案例，并以图纸事实和 B 类规范作为正式结论依据。仓库不附带中国标准、地方政策或案例库；用户必须提供自己合法取得并确认有效的本地资料。单体和总图报告均继承正式审查意见范本，唯一可见区别是标题增加 `【AI初审】`。
+审图测试分别运行既有68项匿名回归、6项 CAD 安全测试、规则扩充与高频映射测试，以及 v1.7 判断证据和整包出稿回归。运行目录包含162条规则。四层本地知识资料仍分别用于发现、正式依据、适用性解释和案例比较；脚本校验不能代替实际识图。仓库不附带中国标准、地方政策、真实项目或私有索引；用户必须提供自己合法取得并确认有效的本地资料。单体和总图报告仍继承正式范本，标题保留 `【AI初审】`。
 
 → [SKILL.md](building-review/SKILL.md) · [高清工作流程图](media/building-review-workflow.svg) · [运行要求](building-review/references/runtime-requirements.md)
 

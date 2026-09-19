@@ -199,12 +199,16 @@ def main() -> int:
         return 1
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     schema_version = str(manifest.get("schema_version", ""))
-    if schema_version == "1.6":
+    if schema_version in {"1.6", "1.7"}:
         convert_v16_records(records, applicability_records, graphic_records)
     write_rows(target, headers_for(schema_version, "check_matrix.csv"), records)
     if target.resolve() == (workspace / "check_matrix.csv").resolve():
+        if schema_version == "1.7":
+            from judgment_evidence import LEDGER, placeholders
+            ledger = placeholders(records, {r["rule_id"]: r for r in catalog["rules"]})
+            (workspace / LEDGER).write_text(json.dumps(ledger, ensure_ascii=False, indent=2), encoding="utf-8")
         write_rows(inventory_path, TEMPLATES["drawing_inventory.csv"], inventory)
-        if schema_version in {"1.5", "1.6"}:
+        if schema_version in {"1.5", "1.6", "1.7"}:
             write_rows(
                 workspace / "applicability_decisions.csv",
                 headers_for(schema_version, "applicability_decisions.csv"),

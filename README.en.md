@@ -44,7 +44,7 @@ Start a new agent session after installation so the skills are rediscovered.
 
 > State what each drawing actually shows before deciding whether it complies.
 
-Use this Skill for architectural site-plan, single-building, and architecture-owned specialty review. In schema v1.6 the agent independently inventories sheets, records facts, routes specialties, searches the user's lawful local sources, checks standards and cross-sheet consistency, closes evidence, and validates Word output without human confirmation, review, or adjudication gates. Only `ai_ready` findings enter the AI-initial report.
+Use this independent Skill for architectural site-plan, single-building, and architecture-owned specialty review. New workspaces use schema v1.7, adding obligation-level numeric comparisons, room-to-window associations, counterevidence checks, and design-responsibility screening to the autonomous AI review. Only `ai_ready` findings enter the report. Existing workspaces remain readable and are not migrated in place; no human confirmation or adjudication gates are introduced.
 
 Good for:
 
@@ -69,7 +69,7 @@ Review these architectural drawings and produce AI-initial opinions with evidenc
 
 [![Building review workflow](media/building-review-workflow.png)](media/building-review-workflow.svg)
 
-The public version passes 68 anonymous regression scenarios and 6 CAD safety-guard tests. v1.6 requires four local knowledge layers: A review checklists, B core standards, C interpretation notes, and D cases; drawing facts and layer-B standards remain the basis for formal conclusions. No Chinese standards, local policies, or case library are bundled. Single-building and site-plan reports inherit the formal Word templates, with `【AI初审】` as the only visible stage distinction in the title.
+The review suite runs the existing 68 anonymous regression scenarios, 6 CAD safety tests, rule-expansion and source-mapping checks, plus v1.7 judgment and end-to-end report tests. The runtime catalog contains 162 rules. Four local knowledge layers remain distinct: discovery, authoritative standards, interpretation, and cases. Deterministic validation does not prove visual interpretation. No standards, real projects, or private indexes are bundled. Reports retain the formal templates and the `【AI初审】` title marker.
 
 → [SKILL.md](building-review/SKILL.md) · [High-resolution workflow](media/building-review-workflow.svg) · [Runtime requirements](building-review/references/runtime-requirements.md)
 

@@ -1,6 +1,6 @@
 # Word 正式审查意见格式（v1.6）
 
-新建工作区使用 v1.6。`issue_candidates.csv` 中只有 `ai_ready` 意见进入 Word，`report_section` 和 `display_order` 决定章节与连续编号。v1.1-v1.5 仅作兼容读取。
+新建工作区使用 v1.7。`issue_candidates.csv` 中只有 `ai_ready` 意见进入 Word，`report_section` 和 `display_order` 决定章节与连续编号。v1.1-v1.6 按原版本兼容读取；v1.7 另受 `judgment-evidence-v17.md` 约束。
 
 Use the existing templates:
 

@@ -30,6 +30,9 @@ jobs:
         run: |
           python -X utf8 building-review/evals/run_regression_checks.py
           python -X utf8 building-review/evals/test_cad_automation_guard.py
+          python -X utf8 building-review/evals/test_civil_rule_expansion.py
+          python -X utf8 building-review/evals/test_high_frequency_rule_mapping.py
+          python -X utf8 building-review/evals/test_v17_judgment_evidence.py
       - name: Run review-opinion-delivery regressions
         run: |
           python -X utf8 review-opinion-delivery/evals/run_regression_checks.py

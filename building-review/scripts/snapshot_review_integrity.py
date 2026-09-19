@@ -99,10 +99,10 @@ def main() -> int:
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     schema_version = manifest.get("schema_version")
-    if schema_version not in {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6"}:
+    if schema_version not in {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7"}:
         print("FAIL: integrity snapshots require schema_version 1.1 through 1.6")
         return 1
-    if schema_version in {"1.4", "1.5", "1.6"} and not args.rule_catalog.exists():
+    if schema_version in {"1.4", "1.5", "1.6", "1.7"} and not args.rule_catalog.exists():
         print(f"FAIL: rule catalog not found: {args.rule_catalog}")
         return 1
     index = json.loads(args.index.read_text(encoding="utf-8"))
@@ -126,10 +126,10 @@ def main() -> int:
 
     used: dict[str, dict] = {}
     for issue in csv_rows(issue_path):
-        reportable_status = "ai_ready" if schema_version == "1.6" else "verified"
+        reportable_status = "ai_ready" if schema_version in {"1.6", "1.7"} else "verified"
         if issue.get("status", "").strip() != reportable_status:
             continue
-        if schema_version in {"1.2", "1.3", "1.4", "1.5", "1.6"} and issue.get("citation_mode", "").strip().lower() == "none":
+        if schema_version in {"1.2", "1.3", "1.4", "1.5", "1.6", "1.7"} and issue.get("citation_mode", "").strip().lower() == "none":
             continue
         source = issue.get("standard_source", "").strip()
         if not source:
@@ -154,7 +154,7 @@ def main() -> int:
             "sha256": entry["sha256"],
         }
 
-    if schema_version in {"1.4", "1.5", "1.6"}:
+    if schema_version in {"1.4", "1.5", "1.6", "1.7"}:
         check_path = root / "check_matrix.csv"
         if not check_path.exists():
             errors.append("check_matrix.csv is missing")
@@ -193,7 +193,7 @@ def main() -> int:
     manifest["source_integrity"] = source_records
     existing_knowledge = manifest.get("knowledge_snapshot", {})
     manifest["knowledge_snapshot"] = {
-        "required_layers": existing_knowledge.get("required_layers", ["A", "B", "C", "D"] if schema_version == "1.6" else []),
+        "required_layers": existing_knowledge.get("required_layers", ["A", "B", "C", "D"] if schema_version in {"1.6", "1.7"} else []),
         "layers": existing_knowledge.get("layers", {}),
         "index_path": str(args.index.resolve()),
         "index_sha256": sha256_file(args.index),
@@ -203,7 +203,7 @@ def main() -> int:
         "specialty_count": index.get("specialty_count", 0),
         "used_standards": [used[key] for key in sorted(used)],
     }
-    if schema_version in {"1.4", "1.5", "1.6"}:
+    if schema_version in {"1.4", "1.5", "1.6", "1.7"}:
         manifest["rule_catalog_snapshot"] = {
             "path": str(args.rule_catalog.resolve()),
             "sha256": sha256_file(args.rule_catalog),
