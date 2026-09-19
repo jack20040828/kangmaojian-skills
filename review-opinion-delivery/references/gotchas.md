@@ -20,7 +20,7 @@ Apply these constraints when the matching situation appears. Do not load this fi
 - A red box alone is not enough. Retain the minimum drawing title, number, axis, room, dimension, or neighboring context needed to locate the change.
 - Rebuild or recheck an evidence card after any wording, number, scope, or drawing-reference change. A stale card is a delivery failure.
 - Reusing one evidence image across items is allowed only when the manifest records the same PDF provenance and the image genuinely proves every linked item.
-- Do not expose provenance machinery in the formal deliverable. Notes, note IDs, 得到大脑, evidence-source labels, PDF pages, mark numbers, crop coordinates, and red-box instructions remain internal even when they are required in the manifest.
+- Do not expose provenance machinery in the formal deliverable. Notes, note IDs, 得到大脑, evidence-source labels, mark numbers, crop coordinates, and red-box instructions remain internal. Only explicit user authorization enables the strict v1.3 PDF page/title locator; it does not permit other process traces.
 - Do not wrap every crop in a blue title/footer card. Default to one focused compact image; compose related panels only when one opinion genuinely needs cross-drawing proof.
 
 ## Manifest and Word

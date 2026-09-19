@@ -101,7 +101,7 @@ Verify and format this already-approved architectural internal-review report.
 
 [![Opinion delivery workflow](media/review-opinion-delivery-workflow.png)](media/review-opinion-delivery-workflow.svg)
 
-The public version passes the anonymous v1.1 package regression and the v1.2 correction, process-trace, evidence-card, opinion-type, and semantic-diff regressions.
+New delivery workspaces use schema v1.3 without automatically migrating older workspaces. Independent editorial gates protect withdrawn sources, compare approved fields exactly, verify claim/image objects, separate crop and mark geometry, synchronize stable-ID references, support explicitly authorized PDF page/title locators, and bind full-page QA to current document hashes. No technical-review matrix is imported. Tests include existing v1.1/v1.2 regressions and 17 paired v1.3 anonymous cases.
 
 → [SKILL.md](review-opinion-delivery/SKILL.md) · [High-resolution workflow](media/review-opinion-delivery-workflow.svg) · [Runtime requirements](review-opinion-delivery/references/runtime-requirements.md)
 
@@ -111,7 +111,7 @@ The public version passes the anonymous v1.1 package regression and the v1.2 cor
 |---|---|
 | Both skills | Python 3.11+, `python-docx`, and Microsoft Word or LibreOffice for DOCX rendering |
 | building-review | `pypdf`; Windows plus AutoCAD/Core Console only when CAD automation is needed |
-| review-opinion-delivery | `Pillow`, `pypdfium2`; Word COM export is available on Windows |
+| review-opinion-delivery | `Pillow`, `pypdfium2`, `pypdf`; Word COM export is available on Windows |
 
 See each skill's `runtime-requirements.md` for dependencies and environment variables. The scripts validate traceability, formatting, and consistency. They do not replace professional architectural judgment or statutory construction-drawing review.
 

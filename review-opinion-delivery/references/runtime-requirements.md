@@ -6,6 +6,7 @@
 - `python-docx` for Word generation, comparison, and content validation.
 - `Pillow` for evidence-image composition and anonymous regression fixtures.
 - `pypdfium2` for rendering marked PDF pages.
+- `pypdf` for v1.3 exported-PDF page completeness validation.
 - Microsoft Word, LibreOffice, or another reliable DOCX-to-PDF renderer for page-by-page visual QA.
 
 ## Configuration

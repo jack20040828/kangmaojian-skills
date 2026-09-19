@@ -30,6 +30,9 @@ def main() -> int:
         return 1
     with qa_path.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
+    from page_qa_integrity import enabled, errors as integrity_errors
+    if enabled(qa_path):
+        errors.extend(integrity_errors(qa_path, rows))
     if not rows:
         errors.append("report_qa.csv has no page rows")
 

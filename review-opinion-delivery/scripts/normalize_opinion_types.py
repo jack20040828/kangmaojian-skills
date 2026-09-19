@@ -79,6 +79,8 @@ def main() -> int:
                 }
             )
             item["opinion_type"] = after
+            if item.get("approved_content", {}).get("opinion_type") == before:
+                item["approved_content"]["opinion_type"] = after
             note = str(item.get("editorial_change_note", "")).strip()
             correction_note = f"意见类型由“{before}”纠正为“{after}”"
             item["editorial_change_note"] = f"{note}；{correction_note}" if note else correction_note

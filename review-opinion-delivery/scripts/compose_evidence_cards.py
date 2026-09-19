@@ -54,13 +54,24 @@ def build_panel(base: Path, spec: dict, target_width: int) -> Image.Image:
         raise FileNotFoundError(f"Rendered PDF page not found: {source_image}")
     crop = require_box(spec["crop"], "crop")
     with Image.open(source_image) as image:
+        if "source_problem_boxes" in spec:
+            from evidence_geometry import prepare_crop
+            crop, limited = prepare_crop(crop, spec["source_problem_boxes"], image.size)
+            spec["resolved_geometry"] = {"crop_box": list(crop), "problem_boxes": spec["source_problem_boxes"],
+                                         "source_size": list(image.size), "limited_axes": limited}
         panel = image.convert("RGB").crop(crop)
 
     draw = ImageDraw.Draw(panel)
     stroke = max(5, round(panel.width / 260))
-    for index, raw_box in enumerate(spec.get("red_boxes", []), start=1):
+    boxes = spec.get("red_boxes", [])
+    color = spec.get("mark_color", RED)
+    if color not in {RED, "red", "#ff0000"} and not spec.get("color_authorization_ref"):
+        raise ValueError("Non-red marks require user color authorization")
+    if "source_problem_boxes" in spec:
+        boxes = [[b[0]-crop[0], b[1]-crop[1], b[2]-crop[0], b[3]-crop[1]] for b in spec["source_problem_boxes"]]
+    for index, raw_box in enumerate(boxes, start=1):
         box = require_box(raw_box, f"red_boxes[{index}]")
-        draw.rounded_rectangle(box, radius=max(5, stroke * 2), outline=RED, width=stroke)
+        draw.rectangle(box, outline=color, width=stroke)
 
     if panel.width != target_width:
         height = round(panel.height * target_width / panel.width)
@@ -100,7 +111,8 @@ def build_card(base: Path, spec: dict, font_path: Path, bold_font_path: Path) ->
     y = header_h
     for panel in panels:
         canvas.paste(panel, (margin, y))
-        draw.rectangle((margin, y, width - margin, y + panel.height), outline=LINE, width=2)
+        if style == "decorated":
+            draw.rectangle((margin, y, width - margin, y + panel.height), outline=LINE, width=2)
         y += panel.height + gap
     y -= gap
     if show_footer:
@@ -110,6 +122,9 @@ def build_card(base: Path, spec: dict, font_path: Path, bold_font_path: Path) ->
     output = resolve(base, spec["output"])
     output.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(output, dpi=(220, 220), optimize=True)
+    if any("resolved_geometry" in panel for panel in spec["panels"]):
+        output.with_suffix(".geometry.json").write_text(json.dumps(
+            [p.get("resolved_geometry", {}) for p in spec["panels"]], ensure_ascii=False, indent=2), encoding="utf-8")
     return output
 
 

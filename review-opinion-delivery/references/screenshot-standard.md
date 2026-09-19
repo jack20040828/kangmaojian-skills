@@ -25,7 +25,7 @@ Do not use AutoCAD/T20/model-space/paper-space/DWG-viewer screenshots in the for
 
 ## Manifest Fields
 
-In v1.2, every opinion uses an `evidence_images` array. Each PDF-provenanced image records:
+In v1.2/v1.3, every opinion uses an `evidence_images` array. For v1.3 also follow `delivery-contract-v13.md`: independent crop/problem coordinates, 2–3× context, user-authorized colors, claim/object verification, image hash, Word crop/display size and image-replacement history. Each PDF-provenanced image records:
 
 - `image_path`;
 - `source_pdf` ending in `.pdf`;

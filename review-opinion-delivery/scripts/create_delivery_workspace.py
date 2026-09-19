@@ -91,9 +91,15 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=DEFAULT_ROOT)
     parser.add_argument("--report-title", default="建筑施工图内审意见")
     parser.add_argument("--report-date", default="")
+    parser.add_argument("--schema-version", choices=["1.0", "1.1", "1.2", "1.3"], default="1.3")
     args = parser.parse_args()
 
     workspace = args.root / f"{date.today().isoformat()}-{slugify(args.project_name)}"
+    manifest_path = workspace / "delivery_manifest.json"
+    if manifest_path.exists():
+        existing = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if existing.get("schema_version", "1.0") != args.schema_version:
+            raise SystemExit("Existing workspace has a different schema; no automatic migration")
     for relative in [
         "source/notes",
         "source/dwg",
@@ -109,7 +115,7 @@ def main() -> int:
     manifest_path = workspace / "delivery_manifest.json"
     if not manifest_path.exists():
         manifest = {
-            "schema_version": "1.2",
+            "schema_version": args.schema_version,
             "project_name": args.project_name,
             "report_title": args.report_title,
             "report_date": args.report_date or chinese_date(date.today()),
@@ -118,6 +124,9 @@ def main() -> int:
             "footer_note": DEFAULT_NOTE,
             "items": [],
         }
+        if args.schema_version == "1.3":
+            manifest.update(location_policy={"mode": "drawing_number_title", "authorization_ref": ""},
+                            source_items=[], source_conflicts=[], evidence_history=[])
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
     for name, headers in [

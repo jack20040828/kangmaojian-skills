@@ -95,10 +95,19 @@ def main() -> int:
         return 1
 
     manifest = json.loads((root / "delivery_manifest.json").read_text(encoding="utf-8"))
+    v13 = manifest.get("schema_version") == "1.3"
+    if v13:
+        from delivery_contract import validate_contract
+        errors.extend(validate_contract(root, manifest))
     doc = Document(docx_path)
+    if v13:
+        from sync_docx_references import reference_errors
+        errors.extend(reference_errors(doc, manifest))
     paragraphs = body_paragraphs(doc)
     texts = [paragraph.text.strip() for paragraph in paragraphs]
     all_body = normalized("\n".join(texts))
+    if v13 and manifest.get("footer_note") and normalized(manifest['footer_note']) not in all_body:
+        errors.append("Approved final opinion-type note is missing")
     visible_text = "\n".join(
         [
             *texts,
@@ -108,7 +117,11 @@ def main() -> int:
     )
 
     for label, pattern in PROCESS_TRACE_PATTERNS.items():
-        if pattern.search(visible_text):
+        check_text = visible_text
+        if v13 and label == "PDF页码" and manifest.get("location_policy", {}).get("mode") == "pdf_page_title":
+            from delivery_contract import PDF_REF
+            check_text = PDF_REF.sub("", check_text)
+        if pattern.search(check_text):
             errors.append(f"Formal DOCX contains internal process trace: {label}")
 
     for field in ["project_name", "report_title", "report_date"]:
@@ -151,6 +164,15 @@ def main() -> int:
         start_position = ordered_start_indexes.index(start)
         end = ordered_start_indexes[start_position + 1] if start_position + 1 < len(ordered_start_indexes) else len(paragraphs)
         block_text = normalized("\n".join(texts[start:end]))
+        if v13:
+            from delivery_contract import CONTINUATION, docx_evidence_errors
+            from compare_reviewer_docx import FIELD_PATTERNS
+            errors.extend(docx_evidence_errors(doc, paragraphs[start:end], item))
+            clean_text = "\n".join(t for t in texts[start:end] if not CONTINUATION.fullmatch(t))
+            for field, pattern in FIELD_PATTERNS.items():
+                match = pattern.search(clean_text)
+                if not match or normalized(match.group(1)).rstrip("。") != normalized(item.get(field)).rstrip("。"):
+                    errors.append(f"Item {number}: unapproved DOCX field change: {field}")
 
         field_positions: list[int] = []
         for label, expected_value in expected_fields(item):

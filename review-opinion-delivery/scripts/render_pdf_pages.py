@@ -55,8 +55,12 @@ def main() -> int:
     if args.qa_csv:
         qa_path = args.qa_csv.resolve()
         qa_path.parent.mkdir(parents=True, exist_ok=True)
+        from page_qa_integrity import EXTRA_CHECKS, enabled, snapshot
+        extra = EXTRA_CHECKS if enabled(qa_path) else []
+        if extra:
+            snapshot(qa_path, args.docx.resolve() if args.docx else None, pdf_path, render_paths)
         with qa_path.open("w", encoding="utf-8", newline="") as handle:
-            writer = csv.DictWriter(handle, fieldnames=QA_HEADERS)
+            writer = csv.DictWriter(handle, fieldnames=QA_HEADERS+extra)
             writer.writeheader()
             for index, render_path in enumerate(render_paths, start=1):
                 writer.writerow(
@@ -73,6 +77,7 @@ def main() -> int:
                         "page_number_check": "待检查",
                         "result": "待检查",
                         "notes": "",
+                        **{field: "待检查" for field in extra},
                     }
                 )
         print(qa_path)

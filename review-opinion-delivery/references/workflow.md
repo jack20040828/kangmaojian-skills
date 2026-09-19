@@ -10,7 +10,7 @@ After the source set is stable, run `scripts/snapshot_source_integrity.py <works
 
 ## Phase 1 意见清单
 
-Create the v1.2 `delivery_manifest.json`. For every reviewer-authored item, record:
+Create the v1.3 `delivery_manifest.json` and follow `delivery-contract-v13.md` for additional source, evidence and reference gates. Read legacy manifests without migration. For every reviewer-authored item, record:
 
 - immutable `item_id` such as `OP-001`, continuous display `item_no`, and exact section;
 - source-note reference and marked-location reference;
@@ -32,7 +32,7 @@ Compare each item with the note and marked location. Preserve the reviewer's con
 
 Preserve reviewer-approved `无` and never copy an older regulation back. An unreviewed placeholder `无` is not deliverable: regulation research or opinion reclassification belongs to a separately authorized `building-review` phase. Run `normalize_opinion_types.py`: known one-result errors must be corrected and logged; unknown or multi-meaning types must be confirmed before delivery. The normalizer must never exchange mandatory and suggested status. The opinion type follows the final approved conclusion, not the drawing name or isolated keywords.
 
-Default to one core problem per opinion. Consolidate synchronized plan, elevation, and detail requirements into the main opinion unless the reviewer explicitly keeps them separate. Use drawing numbers and names in the body; keep source notes, note IDs, PDF pages, mark numbers, crop coordinates, red-box explanations, and evidence-source descriptions only in provenance/log fields.
+Default to one core problem per opinion. Include synchronized plan, elevation, and detail requirements only after reviewer approval. Use drawing numbers and names by default; explicit user authorization permits strict `PDF第N页《图名》` under v1.3 location_policy. Keep all other process information in provenance/log fields.
 
 ## Phase 3 DWG 转 PDF 与证据图
 
@@ -68,7 +68,7 @@ Each item contains:
 4. `【法规条文】` paragraph, including `无` when applicable;
 5. `【意见类型】` paragraph.
 
-Do not add explanatory chapters, process notes, or evidence appendices. Formal body, headers, footers, captions, and visible evidence-card text must not expose `笔记`, `得到大脑`, `note_id`, `证据来源`, PDF page traces, mark numbers, crop coordinates, or red-box instructions.
+Do not add explanatory chapters, process notes, or evidence appendices. Formal body, headers, footers, captions, and visible evidence-card text must not expose `笔记`, `得到大脑`, `note_id`, `证据来源`, unapproved PDF page traces, mark numbers, crop coordinates, or red-box instructions. Only the explicit v1.3 locator exception is permitted.
 
 ## Phase 6 Word 内容回查
 

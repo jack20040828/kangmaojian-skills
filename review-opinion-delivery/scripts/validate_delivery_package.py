@@ -84,7 +84,7 @@ def validate_source_integrity(root: Path, manifest: dict, errors: list[str]) -> 
     source_root = (root / "source").resolve()
     entries = manifest.get("source_integrity")
     if not isinstance(entries, list) or not entries:
-        errors.append("Manifest v1.1/v1.2 requires a non-empty source_integrity array")
+        errors.append("Manifest v1.1/v1.2/v1.3 requires a non-empty source_integrity array")
         return
     if not source_root.is_dir():
         errors.append(f"Source directory not found: {source_root}")
@@ -166,15 +166,15 @@ def main() -> int:
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     schema_version = str(manifest.get("schema_version", "1.0"))
-    if schema_version not in {"1.0", "1.1", "1.2"}:
+    if schema_version not in {"1.0", "1.1", "1.2", "1.3"}:
         errors.append(f"Unsupported schema_version: {schema_version}")
     for field in ["project_name", "report_title", "report_date", "sections", "items"]:
         if not manifest.get(field):
             errors.append(f"Manifest missing {field}")
 
-    if schema_version in {"1.1", "1.2"}:
+    if schema_version in {"1.1", "1.2", "1.3"}:
         validate_source_integrity(root, manifest, errors)
-    if schema_version == "1.2":
+    if schema_version in {"1.2", "1.3"}:
         edit_log_path = root / "edit_log.csv"
         if not edit_log_path.exists():
             errors.append("Manifest v1.2 requires edit_log.csv")
@@ -201,16 +201,16 @@ def main() -> int:
         errors.append(f"Item numbers must be continuous and ordered from 1: {numbers}")
 
     item_ids: list[str] = []
-    if schema_version in {"1.1", "1.2"}:
+    if schema_version in {"1.1", "1.2", "1.3"}:
         item_ids = [str(item.get("item_id", "")).strip() for item in items]
         for item_id in item_ids:
             if not re.fullmatch(r"OP-\d{3,}", item_id):
-                errors.append(f"Invalid v1.1/v1.2 item_id: {item_id!r}")
+                errors.append(f"Invalid v1.1/v1.2/v1.3 item_id: {item_id!r}")
         if len(item_ids) != len(set(item_ids)):
-            errors.append(f"v1.1/v1.2 item_id values must be unique: {item_ids}")
+            errors.append(f"v1.1/v1.2/v1.3 item_id values must be unique: {item_ids}")
 
     log_rows = read_csv(log_path)
-    log_field = "item_id" if schema_version in {"1.1", "1.2"} else "item_no"
+    log_field = "item_id" if schema_version in {"1.1", "1.2", "1.3"} else "item_no"
     log_keys = [row.get(log_field, "").strip() for row in log_rows if present(row.get(log_field))]
     if len(log_keys) != len(set(log_keys)):
         errors.append(f"verification_log.csv has duplicate {log_field} values: {log_keys}")
@@ -219,7 +219,7 @@ def main() -> int:
     expected_log_keys: set[str] = set()
     for index, item in enumerate(items):
         item_no = item.get("item_no")
-        item_id = item_ids[index] if schema_version in {"1.1", "1.2"} and index < len(item_ids) else ""
+        item_id = item_ids[index] if schema_version in {"1.1", "1.2", "1.3"} and index < len(item_ids) else ""
         label = f"Item {item_id or item_no}"
         if item.get("section", "").strip() not in sections:
             errors.append(f"{label}: invalid section: {item.get('section', '')}")
@@ -249,7 +249,7 @@ def main() -> int:
         if "evidence_images" in item and not isinstance(item.get("evidence_images"), list):
             errors.append(f"{label}: evidence_images must be an array")
         evidence = evidence_images(item)
-        if schema_version == "1.2" and present(item.get("image_count")):
+        if schema_version in {"1.2", "1.3"} and present(item.get("image_count")):
             try:
                 if int(item["image_count"]) != len(evidence):
                     errors.append(f"{label}: image_count must equal evidence_images length")
@@ -305,13 +305,13 @@ def main() -> int:
             if crop and len(re.findall(r"-?\d+(?:\.\d+)?", crop)) < 4:
                 errors.append(f"{evidence_label}: crop_box must contain at least four coordinates")
 
-        log_key = item_id if schema_version in {"1.1", "1.2"} else str(item_no)
+        log_key = item_id if schema_version in {"1.1", "1.2", "1.3"} else str(item_no)
         expected_log_keys.add(log_key)
         log = logs.get(log_key)
         if not log:
             errors.append(f"{label}: missing verification_log.csv row")
             continue
-        if schema_version in {"1.1", "1.2"} and log.get("item_no", "").strip() != str(item_no):
+        if schema_version in {"1.1", "1.2", "1.3"} and log.get("item_no", "").strip() != str(item_no):
             errors.append(f"{label}: verification item_no does not match manifest")
         for check in GENERAL_CHECKS:
             if log.get(check, "").strip() != "通过":
@@ -326,6 +326,10 @@ def main() -> int:
     unknown_logs = sorted(set(logs) - expected_log_keys)
     if unknown_logs:
         errors.append(f"verification_log.csv has unknown item keys: {unknown_logs}")
+
+    if schema_version == "1.3":
+        from delivery_contract import validate_contract
+        errors.extend(validate_contract(root, manifest))
 
     if errors:
         for error in errors:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture SHA-256 metadata for every preserved file under a v1.1/v1.2 source directory."""
+"""Capture SHA-256 metadata for every preserved file under a v1.1/v1.2/v1.3 source directory."""
 
 from __future__ import annotations
 
@@ -50,8 +50,8 @@ def main() -> int:
         raise FileNotFoundError(f"Source directory not found: {source_root}")
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if str(manifest.get("schema_version", "")) not in {"1.1", "1.2"}:
-        raise ValueError("Source integrity snapshots require schema_version 1.1 or 1.2")
+    if str(manifest.get("schema_version", "")) not in {"1.1", "1.2", "1.3"}:
+        raise ValueError("Source integrity snapshots require schema_version 1.1, 1.2 or 1.3")
 
     entries: list[dict[str, object]] = []
     for path in sorted(source_root.rglob("*"), key=lambda value: str(value).casefold()):

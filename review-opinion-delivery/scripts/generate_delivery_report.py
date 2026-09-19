@@ -129,7 +129,15 @@ def add_item(doc: Document, root: Path, item: dict) -> None:
         fmt.line_spacing = 1.0
         fmt.keep_with_next = True
         fmt.keep_together = True
-        paragraph.add_run().add_picture(str(image_path), width=picture_width(image_path))
+        width = Inches(screenshot["display_width_inches"]) if screenshot.get("display_width_inches") else picture_width(image_path)
+        shape = paragraph.add_run().add_picture(str(image_path), width=width)
+        crop = screenshot.get("word_crop", [0, 0, 0, 0])
+        if any(crop):
+            rect = OxmlElement("a:srcRect")
+            for key, value in zip(["l", "t", "r", "b"], crop):
+                rect.set(key, str(round(value*100000)))
+            fill = shape._inline.xpath('.//pic:blipFill')[0]
+            fill.insert(1, rect)
 
     regulation = strip_label(item["regulation_text"], "【法规条文】：")
     add_text(doc, f"【法规条文】：{regulation}", after=3, keep_next=True)

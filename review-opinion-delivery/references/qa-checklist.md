@@ -4,7 +4,8 @@
 
 All must pass:
 
-- v1.2 item IDs are unique, stable, and linked to the matching verification rows;
+- v1.2/v1.3 item IDs are unique, stable, and linked to the matching verification rows;
+- v1.3 source dispositions, approved fields, numerical origins, claim/object correspondence, image history and stable references pass `delivery-contract-v13.md` gates;
 - every file under `source/` matches the manifest source-integrity snapshot, with no missing, modified, or untracked source;
 - item count and numbering match the reviewer-approved source;
 - section and order match the approved structure;
@@ -22,7 +23,7 @@ All must pass:
 - every screenshot title/subtitle/footer, red box, dimension, and drawing label agrees with the final approved wording; no stale pre-edit evidence card remains;
 - all non-trivial editorial edits are recorded;
 - unresolved substance questions are marked `需确认`, not silently rewritten.
-- no formal body/header/footer/caption exposes notes, note IDs, 得到大脑, evidence-source labels, PDF page traces, mark numbers, crop coordinates, or red-box instructions;
+- no formal body/header/footer/caption exposes notes, note IDs, 得到大脑, evidence-source labels, unapproved PDF page traces, mark numbers, crop coordinates, or red-box instructions; only the explicitly authorized strict v1.3 locator is exempt;
 
 ## DOCX Structure Gate
 
@@ -53,3 +54,4 @@ Inspect every rendered page:
 
 Record one row per page in `report_qa.csv`. Do not pre-mark uninspected pages as passed.
 Any DOCX or PDF revision invalidates the previous page QA. Render again and initialize a fresh ledger.
+For v1.3, keep `report_qa.csv` at workspace root; verify the complete PDF page set and manifest/DOCX/PDF/PNG hash snapshot, including correspondence, reference numbers, text flow and Word crop checks.

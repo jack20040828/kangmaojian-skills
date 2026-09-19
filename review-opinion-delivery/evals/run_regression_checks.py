@@ -114,7 +114,7 @@ def write_qa(path: Path, docx: Path, pdf: Path, render: Path, value: str) -> Non
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="review-opinion-v11-") as temporary:
         test_root = Path(temporary)
-        created = run("create_delivery_workspace.py", "匿名回归项目", "--root", test_root)
+        created = run("create_delivery_workspace.py", "匿名回归项目", "--root", test_root, "--schema-version", "1.1")
         workspace = Path(created.stdout.strip().splitlines()[-1])
         manifest_path = workspace / "delivery_manifest.json"
         verification_path = workspace / "verification_log.csv"

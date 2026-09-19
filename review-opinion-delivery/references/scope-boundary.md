@@ -25,7 +25,7 @@ If sources conflict, preserve the higher-priority source and record the conflict
 - normalize punctuation, spaces, drawing-number brackets, and obvious transcription errors when the correction has one unambiguous result;
 - replace a known opinion-type alias with its canonical value from `opinion-types.json`, including `设计深度文，必须修改（其它）` → `设计深度，必须修改（其它）`;
 - place the approved item in the correct section;
-- shorten repetitive delivery wording only when the meaning is unchanged;
+- preserve substantive wording; v1.3 shortening beyond deterministic punctuation requires an updated author-confirmed content snapshot;
 - make screenshots cleaner and more readable without changing the marked evidence;
 - adjust Word typography, image size, spacing, page breaks, and page numbers;
 - preserve `无` where the reviewer has approved it or explicitly confirmed that the opinion is an internal drawing contradiction, missing name/index, or design-expression issue without an external technical threshold.

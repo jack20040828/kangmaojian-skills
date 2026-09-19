@@ -159,7 +159,7 @@ def build_semantic_docx(path: Path, items: list[dict], image: Path) -> None:
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="review-opinion-v12-") as temporary:
         root = Path(temporary)
-        created = run("create_delivery_workspace.py", "匿名v1.2项目", "--root", root)
+        created = run("create_delivery_workspace.py", "匿名v1.2项目", "--root", root, "--schema-version", "1.2")
         workspace = Path(created.stdout.strip().splitlines()[-1])
         source_pdf = workspace / "source" / "pdf" / "marked.pdf"
         source_pdf.write_bytes(b"%PDF-1.4\nanonymous fixture\n%%EOF")

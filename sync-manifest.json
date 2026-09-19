@@ -100,6 +100,8 @@
         "evals/routing-cases.json",
         "evals/run_regression_checks.py",
         "evals/run_v12_regression_checks.py",
+        "evals/test_v13_delivery_contract.py",
+        "references/delivery-contract-v13.md",
         "references/delivery-style.md",
         "references/gotchas.md",
         "references/opinion-types.json",
@@ -110,6 +112,10 @@
         "scripts/compare_reviewer_docx.py",
         "scripts/compose_evidence_cards.py",
         "scripts/create_delivery_workspace.py",
+        "scripts/delivery_contract.py",
+        "scripts/evidence_geometry.py",
+        "scripts/page_qa_integrity.py",
+        "scripts/sync_docx_references.py",
         "scripts/export_docx_to_pdf.ps1",
         "scripts/generate_delivery_report.py",
         "scripts/normalize_opinion_types.py",
@@ -159,6 +165,7 @@
     ["building-review/evals/test_cad_automation_guard.py"],
     ["review-opinion-delivery/scripts/validate_eval_assets.py"],
     ["review-opinion-delivery/evals/run_regression_checks.py"],
-    ["review-opinion-delivery/evals/run_v12_regression_checks.py"]
+    ["review-opinion-delivery/evals/run_v12_regression_checks.py"],
+    ["review-opinion-delivery/evals/test_v13_delivery_contract.py"]
   ]
 }

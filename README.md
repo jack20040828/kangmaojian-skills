@@ -101,7 +101,7 @@ python install-skill-from-github.py --repo jack20040828/kangmaojian-skills --pat
 
 [![审查意见整理工作流程图](media/review-opinion-delivery-workflow.png)](media/review-opinion-delivery-workflow.svg)
 
-当前公开版已通过 v1.1 匿名交付回归，以及 v1.2 的纠错、过程痕迹、证据卡、意见类型和语义差异回归。
+新建整理工作区使用 schema v1.3，旧版不自动迁移。新增来源撤销保护、批准文字精确比对、文字与图片对象对应、独立裁切与问题框、稳定续图引用、用户授权的 PDF 页码定位例外，以及绑定当前文档哈希的全页 QA。保持纯整理权限，不加入技术审查矩阵。测试包含既有 v1.1/v1.2 回归及17项 v1.3 匿名正反例。
 
 → [SKILL.md](review-opinion-delivery/SKILL.md) · [高清工作流程图](media/review-opinion-delivery-workflow.svg) · [运行要求](review-opinion-delivery/references/runtime-requirements.md)
 
@@ -111,7 +111,7 @@ python install-skill-from-github.py --repo jack20040828/kangmaojian-skills --pat
 |---|---|
 | 两个 Skill 通用 | Python 3.11+、`python-docx`、可渲染 DOCX 的 Microsoft Word 或 LibreOffice |
 | building-review | `pypdf`；需要 CAD 自动化时使用 Windows、AutoCAD/Core Console，并强制经过安全包装器 |
-| review-opinion-delivery | `Pillow`、`pypdfium2`；Windows 下可使用 Word COM 导出 PDF |
+| review-opinion-delivery | `Pillow`、`pypdfium2`、`pypdf`；Windows 下可使用 Word COM 导出 PDF |
 
 详细依赖和环境变量见各 Skill 的 `runtime-requirements.md`。脚本负责可追溯性、格式和一致性校验，不替代建筑专业人员的技术判断，也不替代法定施工图审查。
 

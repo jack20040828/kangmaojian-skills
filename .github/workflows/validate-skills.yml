@@ -37,3 +37,4 @@ jobs:
         run: |
           python -X utf8 review-opinion-delivery/evals/run_regression_checks.py
           python -X utf8 review-opinion-delivery/evals/run_v12_regression_checks.py
+          python -X utf8 review-opinion-delivery/evals/test_v13_delivery_contract.py
