@@ -16,6 +16,7 @@ from docx.opc.constants import RELATIONSHIP_TYPE as RT
 
 from formal_review_report import (
     FOOTER_NOTE,
+    PAGINATION_CONTROL_TAGS,
     SINGLE_SECTIONS,
     SINGLE_TEMPLATE,
     SITE_SECTIONS,
@@ -102,6 +103,24 @@ def image_package_errors(doc: Document, docx_path: Path) -> list[str]:
     return errors
 
 
+def pagination_control_errors(doc: Document) -> list[str]:
+    found = {tag: [] for tag in PAGINATION_CONTROL_TAGS}
+    for index, paragraph in enumerate(doc.paragraphs, start=1):
+        ppr = paragraph._p.pPr
+        if ppr is None:
+            continue
+        for tag in PAGINATION_CONTROL_TAGS:
+            if ppr.find(qn(f"w:{tag}")) is not None:
+                found[tag].append(index)
+    details = [f"{tag}={len(indices)}" for tag, indices in found.items() if indices]
+    if not details:
+        return []
+    return [
+        "DOCX body contains black-square pagination controls: "
+        + ", ".join(details)
+    ]
+
+
 def validate_docx(root: Path, docx_path: Path) -> list[str]:
     preflight, _warnings = validate_workspace(root)
     if preflight:
@@ -139,6 +158,7 @@ def validate_docx(root: Path, docx_path: Path) -> list[str]:
             errors.append("DOCX title must be bold")
     if text.count(title) != 1:
         errors.append("DOCX title must appear exactly once")
+    errors.extend(pagination_control_errors(doc))
 
     cursor = -1
     grouped = {key: [] for key, _heading in sections}

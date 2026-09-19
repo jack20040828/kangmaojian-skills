@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
-  "catalog_version": "2026-08-18",
-  "rule_count": 94,
+  "catalog_version": "2026-08-24-r2",
+  "rule_count": 156,
   "rules": [
     {
       "rule_id": "ACCESS-2.1.1-CONTINUOUS-ROUTE",
@@ -109,6 +109,129 @@
       "applicability_conditions": [
         {
           "condition_id": "ACCESS-2.2.2-ROUTE-WIDTH-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-2.2.4-GRATING-OPENINGS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility",
+      "review_families": [
+        "总图",
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍通道位置",
+        "井盖或箅子孔洞尺寸",
+        "条状孔洞方向"
+      ],
+      "comparison_method": "确认井盖或箅子是否位于无障碍通道，量取孔洞宽度或直径并核对条状孔洞方向。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第2.2.4条",
+        "requirement": "无障碍通道上的井盖、箅子孔洞宽度或直径不应大于13mm，条状孔洞应垂直于通行方向。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.2.4-GRATING-OPENINGS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-2.2.5-LOW-SPACE-BARRIER",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "height_clearance",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "楼梯大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "可进入低矮空间位置",
+        "净高",
+        "安全阻挡措施"
+      ],
+      "comparison_method": "识别自动扶梯、楼梯下部及其他可进入低矮空间，量取净高并核对安全阻挡。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第2.2.5条",
+        "requirement": "自动扶梯、楼梯下部和其他可进入的室内外低矮空间，应在净高不大于2.00m处采取安全阻挡措施。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.2.5-LOW-SPACE-BARRIER-SCOPE",
           "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
           "profile_field": "",
           "operator": "manual",
@@ -369,6 +492,192 @@
       "independent_review_required": true
     },
     {
+      "rule_id": "ACCESS-2.5.3-DOOR-THRESHOLD",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility_detail",
+      "review_families": [
+        "平面图",
+        "门窗表",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍门位置",
+        "挡块或门槛",
+        "门口高差",
+        "斜坡坡度"
+      ],
+      "comparison_method": "逐樘核对无障碍门口挡块、门槛、高差和斜坡过渡。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第2.5.3条",
+        "requirement": "满足无障碍要求的门不应设挡块和门槛；门口高差不应大于15mm并应以纵坡不大于1:10的斜面过渡。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.5.3-DOOR-THRESHOLD-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-2.5.4-MANUAL-DOOR",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "door_window_safety",
+      "review_families": [
+        "平面图",
+        "门窗表",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "建设性质",
+        "门开启后通行净宽",
+        "门执手和扶手",
+        "启闭力"
+      ],
+      "comparison_method": "区分新扩建与既有建筑改造，逐樘核对通行净宽、操作部件和启闭力。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第2.5.4条",
+        "requirement": "满足无障碍要求的手动门应满足相应通行净宽、易操作门执手及启闭力要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.5.4-MANUAL-DOOR-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-2.5.6-GLASS-DOOR-MARKING",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "door_window_safety",
+      "review_families": [
+        "门窗表",
+        "立面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "玻璃门及相邻玻璃隔断",
+        "防撞提示范围",
+        "提示高度",
+        "视觉区分"
+      ],
+      "comparison_method": "核对全玻璃门及相邻玻璃隔断的安全玻璃、防护和防撞提示表达。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第2.5.6条",
+        "requirement": "全玻璃门应采用安全玻璃或采取防护措施，并设置醒目、横跨玻璃且处于规定高度范围的防撞提示。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.5.6-GLASS-DOOR-MARKING-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
       "rule_id": "ACCESS-2.6.1-ELEVATOR-LOBBY",
       "status": "active",
       "authority_mode": "normative",
@@ -423,6 +732,495 @@
       "applicability_conditions": [
         {
           "condition_id": "ACCESS-2.6.1-ELEVATOR-LOBBY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-2.9.5-PARKING-COUNT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "parking_special_spaces",
+      "review_families": [
+        "总图",
+        "设计说明"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "停车总数",
+        "无障碍机动车位数量",
+        "场地类型"
+      ],
+      "comparison_method": "按场地类型和停车总数计算无障碍机动车位最低数量并与总图逐一核对。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第2.9.5条",
+        "requirement": "无障碍机动车停车位数量应按停车总数和场地类型满足条文规定的最低配置比例。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.9.5-PARKING-COUNT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-2.9.6-DROP-OFF",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "site_accessible_route",
+      "review_families": [
+        "总图",
+        "平面图"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍上客落客区位置",
+        "净尺寸",
+        "与人行通道衔接",
+        "缘石坡道"
+      ],
+      "comparison_method": "核对上客落客区尺寸、与无障碍通道的连续衔接及高差处理。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第2.9.6条",
+        "requirement": "无障碍小汽（客）车上客和落客区尺寸不应小于2.40m×7.00m，并应与无障碍通道衔接。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-2.9.6-DROP-OFF-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-3.1.10-WASHBASIN",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility_detail",
+      "review_families": [
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍洗手盆高度",
+        "水嘴距侧墙",
+        "容膝容脚空间",
+        "镜子和水龙头"
+      ],
+      "comparison_method": "逐项量取洗手盆和镜子高度、水嘴侧距并核对容膝容脚空间和水龙头形式。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第3.1.10条",
+        "requirement": "无障碍洗手盆应满足台面、水嘴、容膝容脚空间、镜子及易操作出水方式要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-3.1.10-WASHBASIN-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-3.1.7-SERVICE-FITTINGS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility_detail",
+      "review_families": [
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍部件位置",
+        "安装牢固措施",
+        "安全抓杆",
+        "低位部件高度"
+      ],
+      "comparison_method": "逐项核对无障碍服务设施部件的设置、安装和使用高度。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第3.1.7条",
+        "requirement": "无障碍服务设施内安装的部件应设置合理、安装牢固，并满足安全抓握和低位使用要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-3.1.7-SERVICE-FITTINGS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-3.1.8-TOILET-FITTINGS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility_detail",
+      "review_families": [
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍坐便器位置",
+        "安全抓杆",
+        "取纸器",
+        "救助呼叫装置"
+      ],
+      "comparison_method": "在卫生间放大图中逐项核对坐便器、抓杆、取纸器及高低位呼叫装置。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第3.1.8条",
+        "requirement": "无障碍坐便器应按条文设置安全抓杆、取纸器和坐姿及跌倒状态均可使用的救助呼叫装置。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-3.1.8-TOILET-FITTINGS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-3.2.1-PUBLIC-TOILET-FACILITIES",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility_detail",
+      "review_families": [
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "男女公共卫生间设施",
+        "无障碍厕位",
+        "无障碍小便器",
+        "无障碍洗手盆",
+        "轮椅回转空间"
+      ],
+      "comparison_method": "逐层核对男女公共卫生间的无障碍设施组合和回转空间。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第3.2.1条",
+        "requirement": "满足无障碍要求的男女公共卫生间应配置相应无障碍厕位、小便器和洗手盆，并留出轮椅回转空间。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-3.2.1-PUBLIC-TOILET-FACILITIES-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-3.2.2-ACCESSIBLE-CUBICLE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility_detail",
+      "review_families": [
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍厕位净尺寸",
+        "门开启后空间",
+        "坐便器和抓杆布置"
+      ],
+      "comparison_method": "按完成面量取无障碍厕位净尺寸并核对门扇、坐便器和抓杆布置。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第3.2.2条",
+        "requirement": "无障碍厕位应方便轮椅到达和进出，尺寸及内部设施应满足条文要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-3.2.2-ACCESSIBLE-CUBICLE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ACCESS-3.2.3-ACCESSIBLE-TOILET",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "005建筑无障碍专项",
+      "coverage_topic": "accessibility_detail",
+      "review_families": [
+        "平面图",
+        "门窗表",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "accessible_requirement",
+            "values": [
+              true,
+              "是",
+              "required",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "无障碍厕所位置和面积",
+        "轮椅回转空间",
+        "内部设施",
+        "门开启形式"
+      ],
+      "comparison_method": "逐项核对位置、面积、回转空间、内部设施及门开启形式。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "005建筑无障碍专项/B无障碍核心规范/GB55019-2021建筑与市政工程无障碍通用规范.pdf",
+        "sha256": "7ea43ab6b62984c359d03650e2e8b945fe116557d35cf04cfaa743353a4baeec",
+        "display_name": "《建筑与市政工程无障碍通用规范》GB 55019-2021",
+        "article": "第3.2.3条",
+        "requirement": "无障碍厕所应满足位置、面积、轮椅回转和内部设施要求，门应采用水平滑动门或向外开启的平开门。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ACCESS-3.2.3-ACCESSIBLE-TOILET-SCOPE",
           "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
           "profile_field": "",
           "operator": "manual",
@@ -568,6 +1366,462 @@
       "independent_review_required": true
     },
     {
+      "rule_id": "CIVIL-4.2.1-RED-LINE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "site_design_parameters",
+      "review_families": [
+        "总图",
+        "剖面图"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "道路红线和用地红线",
+        "地上地下建筑及附属设施轮廓"
+      ],
+      "comparison_method": "将基础、雨篷、台阶、排水沟等地上地下设施与红线叠合核对。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第4.2.1条",
+        "requirement": "除条文允许的设施外，建筑物及其附属设施不得突出道路红线或用地红线。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-4.2.1-RED-LINE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-4.3.3-GARAGE-EXIT-BUFFER",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "pedestrian_vehicle_relationship",
+      "review_families": [
+        "总图",
+        "平面图",
+        "剖面图"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "机动车库出入口坡道起坡点",
+        "连接道路和邻近交叉口位置",
+        "缓冲段范围和尺寸"
+      ],
+      "comparison_method": "在总图、平面图和剖面图中确认车库出入口与连接道路之间设置了可辨识、可量取的有效缓冲段；主条文未规定的推荐尺寸只用于解释，不作为强制阈值。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第4.3.3条",
+        "requirement": "建筑基地内机动车车库出入口与连接道路间应设置缓冲段。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-4.3.3-01",
+          "description": "项目存在与基地内道路连接的机动车库出入口。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在机动车库出入口及连接道路",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "section",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-4.3.5-SITE-ROAD-SAFETY",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "pedestrian_vehicle_relationship",
+      "review_families": [
+        "总图"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "基地道路与城市道路连接位置",
+        "连接处限速设施",
+        "道路至建筑主要出入口的通达关系",
+        "机动车道路转弯位置",
+        "转弯处绿化和建筑物",
+        "有效行车视距"
+      ],
+      "comparison_method": "逐项核对连接处限速设施、道路对主要出入口的通达性，以及道路改变方向时绿化和建筑物是否遮挡有效行车视距。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第4.3.5条",
+        "requirement": "基地内道路与城市道路连接处应设限速设施，道路应能通达建筑物主要出入口；机动车道路改变方向时，路边绿化及建筑物应满足行车有效视距要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-4.3.5-01",
+          "description": "项目设置建筑基地内道路。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在建筑基地内道路",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-4.5.1-EXHAUST-OUTLET-SEPARATION",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "safety_coordination",
+      "review_families": [
+        "总图",
+        "平面图",
+        "立面图",
+        "剖面图"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "地下车库或地下室有污染性排风口位置和朝向",
+        "邻近建筑可开启外窗和取风口位置",
+        "排风口与人员活动场所的水平距离",
+        "排风口底部和人员活动场所地坪标高"
+      ],
+      "comparison_method": "只核对建筑专业可表达的排风口位置、朝向、高度和相邻关系；不得代替暖通系统选型或风量计算。排风口距人员活动场所小于10m时，计算其底部距活动场所地坪的高度并与2.5m比较。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第4.5.1条",
+        "requirement": "地下车库、地下室有污染性的排风口不应朝向邻近建筑的可开启外窗或取风口；当排风口与人员活动场所的距离小于10m时，朝向人员活动场所的排风口底部距人员活动场所地坪的高度不应小于2.5m。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-4.5.1-01",
+          "description": "地下车库或地下室设置有污染性的排风口。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在有污染性的排风口",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "elevation",
+          "section",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-5.2.3-SINGLE-STEP",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "height_elevation",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "出入口或场地高差",
+        "台阶级数",
+        "人行坡道"
+      ],
+      "comparison_method": "逐处核对高差处理，踏步不足2级时确认是否按人行坡道设计。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第5.2.3条",
+        "requirement": "台阶踏步数不应少于2级；不足2级时应按人行坡道设置。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.2.3-SINGLE-STEP-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-5.3.10-STAIR-STEP-CONSISTENCY",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "stair_geometry",
+      "review_families": [
+        "剖面图",
+        "楼梯大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "各梯段踏步高度和宽度",
+        "相邻梯段踏步高差",
+        "踏步防滑"
+      ],
+      "comparison_method": "复核各梯段踏步尺寸，计算相邻梯段高度差并核对防滑措施。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第5.3.10条",
+        "requirement": "每个梯段踏步高度和宽度应一致，相邻梯段踏步高度差不应大于0.01m，踏步面应采取防滑措施。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.3.10-STAIR-STEP-CONSISTENCY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-5.3.11-CHILD-STAIR-WELL-GUARD",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "stair_guard",
+      "review_families": [
+        "平面图",
+        "楼梯大样",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          },
+          {
+            "field": "children_activity",
+            "values": [
+              true,
+              "是",
+              "true"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "少年儿童专用活动场所范围",
+        "公共楼梯井净宽",
+        "防止少年儿童坠落措施"
+      ],
+      "comparison_method": "确认儿童专用活动范围并量取公共楼梯井最不利净宽；净宽大于0.20m时核对可实施的防坠落措施。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第5.3.11条",
+        "requirement": "少年儿童专用活动场所的公共楼梯井净宽大于0.20m时，应采取防止少年儿童坠落的措施。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.3.11-01",
+          "description": "审查对象属于少年儿童专用活动场所的公共楼梯。",
+          "profile_field": "children_activity",
+          "operator": "equals",
+          "expected": true,
+          "outcome_when_false": "not_applicable"
+        },
+        {
+          "condition_id": "CIVIL-5.3.11-02",
+          "description": "公共楼梯井净宽大于0.20m。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "楼梯井净宽大于0.20m",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "dimension",
+        "required_roles": [
+          "plan",
+          "stair_detail",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
       "rule_id": "CIVIL-5.3.2-PUBLIC-STAIR-WIDTH",
       "status": "active",
       "authority_mode": "normative",
@@ -622,6 +1876,129 @@
         "claim_type": "pending",
         "required_roles": [],
         "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-5.3.4-PUBLIC-STAIR-HANDRAILS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "stair_guard",
+      "review_families": [
+        "平面图",
+        "楼梯大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "公共楼梯梯段净宽",
+        "人流股数",
+        "扶手侧数"
+      ],
+      "comparison_method": "量取梯段净宽并按人流股数核对单侧或双侧扶手。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第5.3.4条",
+        "requirement": "公共楼梯至少单侧设置扶手，梯段净宽达3股人流时应两侧设置扶手。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.3.4-PUBLIC-STAIR-HANDRAILS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-5.3.5-STAIR-PLATFORM-WIDTH",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "stair_geometry",
+      "review_families": [
+        "平面图",
+        "楼梯大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "公共楼梯形式和梯段净宽",
+        "梯段转向处休息平台净宽",
+        "扶手转向端是否有中间实体墙及平台净宽",
+        "直跑楼梯中间平台净宽"
+      ],
+      "comparison_method": "先识别楼梯形式和实体墙条件，再分别将转向平台、实体墙处扶手转向端平台及直跑楼梯中间平台净宽与对应限值比较。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第5.3.5条",
+        "requirement": "梯段改变方向时，楼梯休息平台最小宽度不应小于梯段净宽且不应小于1.20m；中间有实体墙时，扶手转向端处平台净宽不应小于1.30m；直跑楼梯中间平台宽度不应小于0.90m。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.3.5-01",
+          "description": "审查对象为公共楼梯休息平台。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在公共楼梯休息平台",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "dimension",
+        "required_roles": [
+          "plan",
+          "stair_detail",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
       },
       "independent_review_required": true
     },
@@ -799,6 +2176,190 @@
       "independent_review_required": true
     },
     {
+      "rule_id": "CIVIL-5.6.2-PUBLIC-TOILET-LAYOUT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "wet_room_hygiene",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "建筑功能及公共厕所位置和数量",
+        "公共厕所直接下层房间功能",
+        "卫生洁具布置和使用空间",
+        "管道集中布置及更换维修条件"
+      ],
+      "comparison_method": "逐项核对公共厕所的位置和数量、上下层房间功能、洁具及使用空间和管道维修条件；条文说明中的建议服务半径不得作为强制数值阈值。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第5.6.2条",
+        "requirement": "公共厕所应根据建筑功能合理布局，位置和数量满足使用要求；不得布置在有严格卫生、安全要求房间的直接上层；卫生洁具及使用空间应合理布置，管道应相对集中并便于更换维修。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.6.2-01",
+          "description": "项目设置公共厕所或公共卫生间。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在公共厕所或公共卫生间",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "section",
+          "detail"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-5.6.4-TOILET-CUBICLE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "wet_room_hygiene",
+      "review_families": [
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "便器类型",
+        "隔间门开启方向",
+        "隔间完成面净宽和净深"
+      ],
+      "comparison_method": "按便器和门开启方式量取隔间完成面净尺寸并与表5.6.4比较。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第5.6.4条",
+        "requirement": "公共厕所隔间平面净尺寸应根据使用特点确定，且不应小于表5.6.4规定值。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.6.4-TOILET-CUBICLE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-5.6.5-TOILET-AISLE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "wet_room_hygiene",
+      "review_families": [
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "隔间排布",
+        "门开启方向",
+        "通道净宽",
+        "对面小便器位置"
+      ],
+      "comparison_method": "按隔间排布和开门方式量取最不利通道净宽。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第5.6.5条",
+        "requirement": "公共厕所隔间外开门时相关通道净宽不应小于1.30m，内开门时通道净宽不应小于1.10m。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-5.6.5-TOILET-AISLE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
       "rule_id": "CIVIL-6.2.4-WINDOW-SILL-DRAINAGE",
       "status": "active",
       "authority_mode": "normative",
@@ -848,6 +2409,72 @@
         "sensitive_to_ambiguity": false
       },
       "independent_review_required": false
+    },
+    {
+      "rule_id": "CIVIL-6.5.4-WINDOW-SAFETY",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "door_window_safety",
+      "review_families": [
+        "平面图",
+        "立面图",
+        "门窗表",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "窗扇开启形式及启闭、维修和清洗条件",
+        "开向公共走道的窗扇位置和底面高度",
+        "外开窗扇防脱落措施"
+      ],
+      "comparison_method": "逐窗核对开启使用安全；对开向公共走道的窗扇量取其底面至走道地面的高度并与2.00m比较；外开窗扇核对明确、可实施的防脱落措施。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第6.5.4条",
+        "requirement": "窗扇开启形式应保障使用安全并便于启闭、维修和清洗；开向公共走道的窗扇不得影响通行，其底面距走道地面不应小于2.00m；外开窗扇应采取防脱落措施。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-6.5.4-01",
+          "description": "项目设置需要审查开启安全、走道影响或防脱落措施的窗。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在适用窗扇",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "elevation",
+          "schedule",
+          "dimension"
+        ],
+        "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
     },
     {
       "rule_id": "CIVIL-6.5.6-LOW-WINDOW-GUARD",
@@ -1028,6 +2655,68 @@
         "claim_type": "pending",
         "required_roles": [],
         "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "CIVIL-6.8.5-DOOR-DEFORMATION-JOINT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "004民用建筑专项",
+      "coverage_topic": "detail_implementability",
+      "review_families": [
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "变形缝位置和范围",
+        "门洞、门扇和门框位置",
+        "门与变形缝的跨越关系"
+      ],
+      "comparison_method": "在平面图和变形缝节点中叠合核对门洞、门框、门扇与变形缝，确认门未跨越变形缝设置。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "004民用建筑专项/B民用建筑核心规范/GB55031-2022民用建筑通用规范.pdf",
+        "sha256": "53e5f7ccfb5641aa3c9dd94ccf7d34174a65e3c030874021ccc22df92cbd0e54",
+        "display_name": "《民用建筑通用规范》GB 55031-2022",
+        "article": "第6.8.5条",
+        "requirement": "门不应跨越变形缝设置。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "CIVIL-6.8.5-01",
+          "description": "建筑设置变形缝且附近布置门。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "存在变形缝附近的门",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": true,
+        "claim_type": "cross_sheet",
+        "required_roles": [
+          "plan",
+          "detail"
+        ],
+        "sensitive_to_ambiguity": true
       },
       "independent_review_required": true
     },
@@ -3207,6 +4896,643 @@
       "independent_review_required": false
     },
     {
+      "rule_id": "DORM-2.0.17-GUARD-HEIGHT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "012宿舍、旅馆建筑专项",
+      "coverage_topic": "roof_fall_protection",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "宿舍",
+              "旅馆",
+              "酒店",
+              "客房"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "宿舍旅馆临空部位",
+        "可踏面",
+        "栏杆有效高度"
+      ],
+      "comparison_method": "识别可踏面并从其顶面量取栏杆有效防护高度。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "012宿舍、旅馆建筑专项/B宿舍旅馆核心规范/GB55025-2022宿舍、旅馆建筑项目规范.pdf",
+        "sha256": "90f96837b10df0f1bcc6dff15cff936d7dc920e600ed59a80f6f4315e3d2262f",
+        "display_name": "《宿舍、旅馆建筑项目规范》GB 55025-2022",
+        "article": "第2.0.17条",
+        "requirement": "宿舍、旅馆临空部位防护设施应按可踏面计算有效高度并满足条文安全要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "DORM-2.0.17-GUARD-HEIGHT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "DORM-2.0.18-REFUSE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "012宿舍、旅馆建筑专项",
+      "coverage_topic": "dormitory_refuse",
+      "review_families": [
+        "总图",
+        "平面图",
+        "设计说明"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "宿舍",
+              "旅馆",
+              "酒店",
+              "客房"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "宿舍旅馆规模",
+        "垃圾收集间或设施位置",
+        "卫生与运输条件"
+      ],
+      "comparison_method": "核对建筑内及场地垃圾收集设施的位置、服务范围和卫生运输条件。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "012宿舍、旅馆建筑专项/B宿舍旅馆核心规范/GB55025-2022宿舍、旅馆建筑项目规范.pdf",
+        "sha256": "90f96837b10df0f1bcc6dff15cff936d7dc920e600ed59a80f6f4315e3d2262f",
+        "display_name": "《宿舍、旅馆建筑项目规范》GB 55025-2022",
+        "article": "第2.0.18条",
+        "requirement": "宿舍、旅馆项目应按条文设置垃圾收集间或垃圾收集设施。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "DORM-2.0.18-REFUSE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "DORM-2.0.6-ACCESSIBLE-FACILITIES",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "012宿舍、旅馆建筑专项",
+      "coverage_topic": "accessibility",
+      "review_families": [
+        "总图",
+        "平面图",
+        "楼梯大样"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "宿舍",
+              "旅馆",
+              "酒店",
+              "客房"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "主要及无障碍出入口",
+        "无障碍电梯",
+        "视觉障碍者楼梯",
+        "上客落客区"
+      ],
+      "comparison_method": "核对宿舍旅馆出入口、电梯、楼梯和上客落客区的成套无障碍配置。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "012宿舍、旅馆建筑专项/B宿舍旅馆核心规范/GB55025-2022宿舍、旅馆建筑项目规范.pdf",
+        "sha256": "90f96837b10df0f1bcc6dff15cff936d7dc920e600ed59a80f6f4315e3d2262f",
+        "display_name": "《宿舍、旅馆建筑项目规范》GB 55025-2022",
+        "article": "第2.0.6条",
+        "requirement": "宿舍、旅馆项目应按条文设置无障碍出入口、无障碍电梯、方便视觉障碍者使用的楼梯和无障碍上客落客区。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "DORM-2.0.6-ACCESSIBLE-FACILITIES-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "DORM-2.0.8-ACOUSTIC-SEPARATION",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "012宿舍、旅馆建筑专项",
+      "coverage_topic": "dormitory_acoustics",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "设计说明"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "宿舍",
+              "旅馆",
+              "酒店",
+              "客房"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "居室客房与电梯井设备房等相邻关系",
+        "隔声减振降噪措施"
+      ],
+      "comparison_method": "逐间核对居室客房与噪声振动源的贴邻关系及构造措施。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "012宿舍、旅馆建筑专项/B宿舍旅馆核心规范/GB55025-2022宿舍、旅馆建筑项目规范.pdf",
+        "sha256": "90f96837b10df0f1bcc6dff15cff936d7dc920e600ed59a80f6f4315e3d2262f",
+        "display_name": "《宿舍、旅馆建筑项目规范》GB 55025-2022",
+        "article": "第2.0.8条",
+        "requirement": "居室或客房贴邻电梯井、设备机房、公共楼梯间及公共卫生洗衣房等时，应采取有效隔声、减振和降噪措施。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "DORM-2.0.8-ACOUSTIC-SEPARATION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "DORM-3.1.4-ACCESSIBLE-ROOMS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "012宿舍、旅馆建筑专项",
+      "coverage_topic": "accessible_room",
+      "review_families": [
+        "平面图",
+        "设计说明"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "宿舍",
+              "旅馆",
+              "酒店",
+              "客房"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "男女宿舍居室数量",
+        "无障碍居室数量和位置",
+        "无障碍通行流线"
+      ],
+      "comparison_method": "分别统计男女宿舍居室和无障碍居室，并核对至无障碍出入口的连续流线。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "012宿舍、旅馆建筑专项/B宿舍旅馆核心规范/GB55025-2022宿舍、旅馆建筑项目规范.pdf",
+        "sha256": "90f96837b10df0f1bcc6dff15cff936d7dc920e600ed59a80f6f4315e3d2262f",
+        "display_name": "《宿舍、旅馆建筑项目规范》GB 55025-2022",
+        "article": "第3.1.4条",
+        "requirement": "男女宿舍应分别按规模设置无障碍居室，并以无障碍通行流线连接无障碍出入口。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "DORM-3.1.4-ACCESSIBLE-ROOMS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "DORM-3.3.1-ELEVATOR",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "012宿舍、旅馆建筑专项",
+      "coverage_topic": "accessible_elevator",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "设计说明"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "宿舍",
+              "旅馆",
+              "酒店",
+              "客房"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "居室最高入口层与室外地面高差",
+        "电梯设置"
+      ],
+      "comparison_method": "计算居室最高入口层楼面与室外设计地面高差并核对电梯设置。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "012宿舍、旅馆建筑专项/B宿舍旅馆核心规范/GB55025-2022宿舍、旅馆建筑项目规范.pdf",
+        "sha256": "90f96837b10df0f1bcc6dff15cff936d7dc920e600ed59a80f6f4315e3d2262f",
+        "display_name": "《宿舍、旅馆建筑项目规范》GB 55025-2022",
+        "article": "第3.3.1条",
+        "requirement": "宿舍居室最高入口层楼面距室外设计地面的高差大于9m时应设置电梯。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "DORM-3.3.1-ELEVATOR-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "DORM-4.3.5-LOBBY-ACCESSIBLE-TOILET",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "012宿舍、旅馆建筑专项",
+      "coverage_topic": "accessibility_detail",
+      "review_families": [
+        "平面图",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "宿舍",
+              "旅馆",
+              "酒店",
+              "客房"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "旅馆规模和无障碍客房",
+        "大堂门厅位置",
+        "邻近无障碍卫生间或公共卫生间"
+      ],
+      "comparison_method": "根据旅馆规模和无障碍客房设置，核对大堂附近无障碍卫生设施。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "012宿舍、旅馆建筑专项/B宿舍旅馆核心规范/GB55025-2022宿舍、旅馆建筑项目规范.pdf",
+        "sha256": "90f96837b10df0f1bcc6dff15cff936d7dc920e600ed59a80f6f4315e3d2262f",
+        "display_name": "《宿舍、旅馆建筑项目规范》GB 55025-2022",
+        "article": "第4.3.5条",
+        "requirement": "设置无障碍客房的旅馆大堂附近应按项目规模设置无障碍卫生间或满足无障碍要求的公共卫生间。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "DORM-4.3.5-LOBBY-ACCESSIBLE-TOILET-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ELEC-2.0.3-EQUIPMENT-ROOM-COORDINATION",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "016设备配套专项",
+      "coverage_topic": "vertical_relationship",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "电气智能化设备用房位置",
+        "上下层和贴邻有水房间",
+        "门槛或地面高差",
+        "无关管线和变形缝"
+      ],
+      "comparison_method": "只核对建筑专业可表达的房间位置、竖向关系、门槛地坪和穿越条件，不判断设备系统计算。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "016设备配套专项/A设备配套核心规范/GB55024-2022建筑电气与智能化通用规范.pdf",
+        "sha256": "963b859c8ec0b480a9d9cc2b3255264e7d7702aec59e76d5b91f73d9c57cf83f",
+        "display_name": "《建筑电气与智能化通用规范》GB 55024-2022",
+        "article": "第2.0.3条",
+        "requirement": "电气和智能化设备用房不得处于经常积水场所的不利竖向关系，并应满足防水、门槛地坪、无关管线及变形缝限制。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ELEC-2.0.3-EQUIPMENT-ROOM-COORDINATION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ELEC-3.2.4-GENERATOR-ROOM-EXITS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "016设备配套专项",
+      "coverage_topic": "fire_egress",
+      "review_families": [
+        "平面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "柴油发电机房和控制室长度",
+        "出入口数量和位置"
+      ],
+      "comparison_method": "只核对建筑图中的房间长度和出入口数量，不判断电气设备容量。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "016设备配套专项/A设备配套核心规范/GB55024-2022建筑电气与智能化通用规范.pdf",
+        "sha256": "963b859c8ec0b480a9d9cc2b3255264e7d7702aec59e76d5b91f73d9c57cf83f",
+        "display_name": "《建筑电气与智能化通用规范》GB 55024-2022",
+        "article": "第3.2.4条",
+        "requirement": "柴油发电机房或控制室长度大于7m时，应至少设置2个出入口。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ELEC-3.2.4-GENERATOR-ROOM-EXITS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ENERGY-1.0.2-CURRENT-BASIS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "007建筑节能专项",
+      "coverage_topic": "code_basis_consistency",
+      "review_families": [
+        "设计说明",
+        "节能专篇"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "建设性质",
+        "建筑类型",
+        "节能设计依据版本",
+        "节能计算书依据"
+      ],
+      "comparison_method": "核对建设性质和适用范围，确认节能说明与计算采用现行通用规范。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "007建筑节能专项/B建筑节能核心规范/GB55015-2021建筑节能与可再生能源利用通用规范.pdf",
+        "sha256": "37e6355d7adb71d1ff3d5047374f25f36d584c7671ff950204a04d96f813ea43",
+        "display_name": "《建筑节能与可再生能源利用通用规范》GB 55015-2021",
+        "article": "第1.0.2条",
+        "requirement": "新建、扩建、改建建筑及既有建筑节能改造的建筑节能与可再生能源利用应执行本规范。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ENERGY-1.0.2-CURRENT-BASIS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ENERGY-3.1.18-RESIDENTIAL-WINDOW-FLOOR-RATIO",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "007建筑节能专项",
+      "coverage_topic": "height_clearance",
+      "review_families": [
+        "平面图",
+        "门窗表",
+        "节能专篇"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "居住建筑主要使用房间",
+        "外窗面积",
+        "房间地面面积",
+        "窗地面积比"
+      ],
+      "comparison_method": "逐房间计算卧室、起居室等主要使用房间窗地面积比。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "007建筑节能专项/B建筑节能核心规范/GB55015-2021建筑节能与可再生能源利用通用规范.pdf",
+        "sha256": "37e6355d7adb71d1ff3d5047374f25f36d584c7671ff950204a04d96f813ea43",
+        "display_name": "《建筑节能与可再生能源利用通用规范》GB 55015-2021",
+        "article": "第3.1.18条",
+        "requirement": "居住建筑主要使用房间的窗地面积比不应低于条文规定值。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ENERGY-3.1.18-RESIDENTIAL-WINDOW-FLOOR-RATIO-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
       "rule_id": "ENERGY-5.2.1-SOLAR-SYSTEM",
       "status": "active",
       "authority_mode": "normative",
@@ -3266,6 +5592,177 @@
           "roof_plan"
         ],
         "sensitive_to_ambiguity": true
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ENV-5.1.2-INDOOR-AIR-LIMITS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "008建筑环境专项",
+      "coverage_topic": "material_performance",
+      "review_families": [
+        "设计说明",
+        "材料做法表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "民用建筑类别",
+        "室内空气污染物控制指标",
+        "材料环保性能要求"
+      ],
+      "comparison_method": "按I类或II类民用建筑核对设计说明和材料控制指标是否采用相应限量。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "008建筑环境专项/B建筑环境核心规范/GB55016-2021建筑环境通用规范.pdf",
+        "sha256": "dc01efd74df00585b4698146446c22a7db8563d12491ec41e4c8cfaf752459cd",
+        "display_name": "《建筑环境通用规范》GB 55016-2021",
+        "article": "第5.1.2条",
+        "requirement": "民用建筑工程室内空气污染物浓度限量应符合表5.1.2的规定。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ENV-5.1.2-INDOOR-AIR-LIMITS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "ENV-5.2.1-SOIL-RADON",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "008建筑环境专项",
+      "coverage_topic": "project_applicability",
+      "review_families": [
+        "设计说明",
+        "总图"
+      ],
+      "report_types": [
+        "site",
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "industrial_building",
+            "values": [
+              false,
+              "否",
+              "false"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "项目所在区域土壤氡资料",
+        "工程勘察阶段测定",
+        "防氡设计条件"
+      ],
+      "comparison_method": "核对设计依据中的区域土壤氡资料或现场测定结论，并判断是否需要防氡措施。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "008建筑环境专项/B建筑环境核心规范/GB55016-2021建筑环境通用规范.pdf",
+        "sha256": "dc01efd74df00585b4698146446c22a7db8563d12491ec41e4c8cfaf752459cd",
+        "display_name": "《建筑环境通用规范》GB 55016-2021",
+        "article": "第5.2.1条",
+        "requirement": "建筑工程设计前应掌握项目区域土壤氡水平，并按规范确定现场测定及防氡工程措施。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "ENV-5.2.1-SOIL-RADON-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FINISH-4.0.8-WINDOWLESS-ROOM",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "010改造装修专项",
+      "coverage_topic": "material_performance",
+      "review_families": [
+        "材料做法表",
+        "设计说明",
+        "平面图"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "无窗房间识别",
+        "装修部位",
+        "材料燃烧性能等级",
+        "基准表要求"
+      ],
+      "comparison_method": "识别无窗房间，逐部位将装修材料燃烧性能等级与相应基准表提高一级后比较。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB50222-2017 《建筑内部装修设计防火规范》 .pdf",
+        "sha256": "fca92e9cd64a5b7c3494c11fb02149880c08043c4844f3948612907230372fdb",
+        "display_name": "《建筑内部装修设计防火规范》GB 50222-2017",
+        "article": "第4.0.8条",
+        "requirement": "无窗房间内部装修材料除A级外，其燃烧性能等级应在相应表格规定基础上提高一级。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FINISH-4.0.8-WINDOWLESS-ROOM-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
       },
       "independent_review_required": true
     },
@@ -3342,6 +5839,677 @@
       "independent_review_required": true
     },
     {
+      "rule_id": "FIRE-4.1.3-SPECIAL-ROOM-SEPARATION",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "function_layout",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "特殊房间使用功能",
+        "防火隔墙和楼板耐火极限",
+        "防火门窗等级"
+      ],
+      "comparison_method": "识别厨房、医疗特殊房间、儿童或老年人场所及消防设备用房，逐一核对围护和门窗。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第4.1.3条",
+        "requirement": "条文所列特殊场所应采用防火门、防火窗、耐火极限不低于2.00h的防火隔墙和不低于1.00h的楼板与其他区域分隔。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-4.1.3-SPECIAL-ROOM-SEPARATION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-4.1.8-CONTROL-ROOM",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "function_layout",
+      "review_families": [
+        "平面图",
+        "门窗表",
+        "设计说明"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "消防控制室位置",
+        "防火分隔",
+        "疏散门去向",
+        "防水淹防潮措施",
+        "无关管线"
+      ],
+      "comparison_method": "核对消防控制室楼层、直通路径、围护、门窗和防水淹等建筑措施。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第4.1.8条",
+        "requirement": "消防控制室应满足位置、直通疏散、防火分隔、无关管线和防水淹、防潮等要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-4.1.8-CONTROL-ROOM-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-4.2.3-INTERMEDIATE-WAREHOUSE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "function_layout",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "厂房内中间仓库危险性类别",
+        "防火墙",
+        "楼板耐火极限",
+        "门窗等级"
+      ],
+      "comparison_method": "确认中间仓库类别并核对与厂房其他部位的墙、板和开口分隔。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第4.2.3条",
+        "requirement": "厂房内甲、乙、丙类中间仓库应采用防火墙和耐火极限不低于1.50h的不燃性楼板与其他部位分隔。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-4.2.3-INTERMEDIATE-WAREHOUSE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-4.3.2-MIXED-RESIDENTIAL-SEPARATION",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "function_layout",
+      "review_families": [
+        "平面图",
+        "剖面图"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "住宅与非住宅功能边界",
+        "隔墙和楼板耐火极限",
+        "边界开口"
+      ],
+      "comparison_method": "沿住宅与非住宅边界逐层核对墙、板连续性及开口。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第4.3.2条",
+        "requirement": "住宅部分与非住宅部分之间应按条文采用无开口防火隔墙和不燃性楼板完全分隔。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-4.3.2-MIXED-RESIDENTIAL-SEPARATION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-4.3.4-CHILD-ACTIVITY-LOCATION",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "function_layout",
+      "review_families": [
+        "平面图",
+        "设计说明"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "儿童活动场所服务年龄",
+        "所在楼层",
+        "耐火等级",
+        "独立疏散条件"
+      ],
+      "comparison_method": "确认儿童活动场所定性、建筑耐火等级和楼层后比较允许布置位置。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第4.3.4条",
+        "requirement": "儿童活动场所应按建筑耐火等级布置在条文允许的楼层，并满足相应疏散要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-4.3.4-CHILD-ACTIVITY-LOCATION-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-4.3.7-ENTERTAINMENT-LAYOUT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "function_layout",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "歌舞娱乐放映游艺场所定性",
+        "楼层和埋深",
+        "房间面积",
+        "房间之间及与其他部位分隔"
+      ],
+      "comparison_method": "确认场所定性后，逐房间核对楼层、面积和防火分隔。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第4.3.7条",
+        "requirement": "歌舞娱乐放映游艺场所应满足楼层和埋深限制、房间面积限制及房间之间和与其他部位的防火分隔要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-4.3.7-ENTERTAINMENT-LAYOUT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-6.1.3-FIRE-WALL-RATING",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "material_performance",
+      "review_families": [
+        "设计说明",
+        "平面图",
+        "墙身大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "建筑及仓储危险性类别",
+        "防火墙位置",
+        "防火墙耐火极限"
+      ],
+      "comparison_method": "根据厂房或仓库危险性类别，逐道核对防火墙耐火极限。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第6.1.3条",
+        "requirement": "防火墙耐火极限不应低于3.00h；甲、乙类厂房和甲、乙、丙类仓库内不应低于4.00h。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-6.1.3-FIRE-WALL-RATING-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-6.3.1-ELEVATOR-SHAFT-DOOR",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "vertical_relationship",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "电梯井独立性",
+        "井内管线",
+        "电梯层门耐火完整性"
+      ],
+      "comparison_method": "跨层核对电梯井边界、井内管线和层门耐火完整性标注。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第6.3.1条",
+        "requirement": "电梯井应独立设置，井内不得设置无关管线，电梯层门耐火完整性不应低于2.00h。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-6.3.1-ELEVATOR-SHAFT-DOOR-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-6.4.1-AUTO-CLOSING-SMOKE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "door_window_identity",
+      "review_families": [
+        "平面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "防火门窗自动关闭功能",
+        "关闭后烟密闭性能",
+        "宿舍或旅馆居室门"
+      ],
+      "comparison_method": "核对门窗表、门图例和使用功能，确认自动关闭与烟密闭性能。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第6.4.1条",
+        "requirement": "防火门窗应具有自动关闭和关闭后烟密闭性能；宿舍居室、旅馆客房等疏散门还应满足条文专门要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-6.4.1-AUTO-CLOSING-SMOKE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-6.4.2-CLASS-A-DOORS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "door_window_identity",
+      "review_families": [
+        "平面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "门所在分隔部位",
+        "仓库类型和层数",
+        "与汽车库或避难部位关系",
+        "防火门等级"
+      ],
+      "comparison_method": "逐樘识别门所处分隔和连通关系，再核对是否应为甲级防火门。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第6.4.2条",
+        "requirement": "防火墙、防火分区疏散走道、规定防火隔墙、汽车库连通部位、避难部位及规定仓库疏散门应采用甲级防火门。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-6.4.2-CLASS-A-DOORS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-6.4.3-CLASS-B-A-DOORS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "door_window_identity",
+      "review_families": [
+        "平面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "建筑高度",
+        "门所在部位和房间功能",
+        "防火门等级"
+      ],
+      "comparison_method": "逐樘识别楼梯间、前室、娱乐场所、室外楼梯及2.00h隔墙上的门，并结合建筑高度核对等级。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第6.4.3条",
+        "requirement": "条文所列部位的门耐火性能不应低于乙级；建筑高度大于100m时相应部位应采用甲级防火门。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-6.4.3-CLASS-B-A-DOORS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-6.4.9-FIRE-GLASS-PERFORMANCE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "material_performance",
+      "review_families": [
+        "平面图",
+        "门窗表",
+        "墙身大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "防火分隔部位性质",
+        "要求耐火性能",
+        "防火玻璃墙性能证明"
+      ],
+      "comparison_method": "先确定所处分隔的法定类型和耐火要求，再核对防火玻璃墙完整性、隔热性及构造证明。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第6.4.9条",
+        "requirement": "用于防火分隔的防火玻璃墙，其耐火性能不应低于所在防火分隔部位的耐火性能要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-6.4.9-FIRE-GLASS-PERFORMANCE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-6.5.1-RENOVATION-FIRE-INTEGRITY",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "cross_drawing_consistency",
+      "review_families": [
+        "设计说明",
+        "平面图"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "原消防设施和疏散系统",
+        "改造前后平面",
+        "防火防烟分隔",
+        "消防标识和操作空间"
+      ],
+      "comparison_method": "对照原设计和改造图，核对消防设施、疏散、防火和防烟系统是否被削弱或遮挡。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第6.5.1条",
+        "requirement": "建筑内部装修不得擅自减少、改动、拆除或遮挡消防设施、疏散设施及标识，不得擅自改变防火防烟分隔或影响其使用。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-6.5.1-RENOVATION-FIRE-INTEGRITY-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
       "rule_id": "FIRE-7.1.1-EGRESS-BASIS",
       "status": "active",
       "authority_mode": "normative",
@@ -3379,6 +6547,57 @@
       "applicability_conditions": [
         {
           "condition_id": "FIRE-7.1.1-EGRESS-BASIS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-7.1.10-STAIR-CONTINUITY",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "fire_egress",
+      "review_families": [
+        "平面图",
+        "剖面图",
+        "楼梯大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "楼梯各层平面位置",
+        "地上地下分隔",
+        "首层直通室外路径"
+      ],
+      "comparison_method": "跨层追踪疏散楼梯连续性、地上地下分隔及首层至室外路径。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第7.1.10条",
+        "requirement": "除条文允许情形外，疏散楼梯间各层位置应保持连续，首层应直通室外，并按规定处理地上地下楼梯。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.10-STAIR-CONTINUITY-SCOPE",
           "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
           "profile_field": "",
           "operator": "manual",
@@ -3683,6 +6902,214 @@
       "applicability_conditions": [
         {
           "condition_id": "FIRE-7.1.7-DOOR-WIDTH-IMPACT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-7.1.8-STAIR-ENCLOSURE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "fire_egress",
+      "review_families": [
+        "平面图",
+        "立面图",
+        "门窗表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "楼梯间内部用途和障碍",
+        "墙上开口",
+        "相邻外墙开口距离",
+        "防烟条件"
+      ],
+      "comparison_method": "逐层核对楼梯间内部、墙上开口、防烟条件及与相邻外墙开口关系。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第7.1.8条",
+        "requirement": "室内疏散楼梯间不得设置影响疏散的房间、设施和开口，并应满足防烟、前室面积及相邻外墙开口防火要求。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.1.8-STAIR-ENCLOSURE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-7.4.1-PUBLIC-EXIT-COUNT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "fire_egress",
+      "review_families": [
+        "平面图",
+        "设计说明"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "公共建筑耐火等级",
+        "层数和楼层",
+        "建筑面积",
+        "人数",
+        "安全出口数量"
+      ],
+      "comparison_method": "按公共建筑层数、面积、人数和特殊功能判断是否允许仅设一个安全出口。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第7.4.1条",
+        "requirement": "公共建筑每个防火分区或每层安全出口不应少于2个；仅在条文限定条件下可设1个。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.4.1-PUBLIC-EXIT-COUNT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRE-7.4.2-ROOM-DOOR-COUNT",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "003建筑工程消防专项",
+      "coverage_topic": "fire_egress",
+      "review_families": [
+        "平面图",
+        "设计说明"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "房间使用功能",
+        "位置",
+        "建筑面积",
+        "人数",
+        "疏散距离",
+        "门净宽和数量"
+      ],
+      "comparison_method": "逐房间按功能、位置、面积、人数、距离和门宽判断是否允许仅设一樘疏散门。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "003建筑工程消防专项/B建筑消防核心规范/GB 55037-2022 建筑防火通用规范--带条文说明.pdf",
+        "sha256": "f492e3c996a7dfb833e0daa6633d0b151292de3396b13ec4cd99c010b0bb0138",
+        "display_name": "《建筑防火通用规范》GB 55037-2022",
+        "article": "第7.4.2条",
+        "requirement": "公共建筑房间疏散门不应少于2个；仅在条文列明的功能、位置、面积、人数、距离和净宽条件下可设1个。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRE-7.4.2-ROOM-DOOR-COUNT-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "FIRESYS-8.0.2-GAS-PROTECTION-DOOR",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "016设备配套专项",
+      "coverage_topic": "door_window_identity",
+      "review_families": [
+        "平面图",
+        "门窗表",
+        "设计说明"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "全淹没气体灭火防护区范围",
+        "防护区门开启方向",
+        "自行关闭功能"
+      ],
+      "comparison_method": "只核对建筑图中防护区门的方向和自行关闭功能，不判断灭火系统选型和计算。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "016设备配套专项/A设备配套核心规范/GB55036-2022消防设施通用规范.pdf",
+        "sha256": "c6ff8cc52b88b0f77ee945443450ecc15520424cff67f40d963c78919ee118e6",
+        "display_name": "《消防设施通用规范》GB 55036-2022",
+        "article": "第8.0.2条第3款",
+        "requirement": "全淹没气体灭火系统防护区的门应向疏散方向开启，并应具有自行关闭功能。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "FIRESYS-8.0.2-GAS-PROTECTION-DOOR-SCOPE",
           "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
           "profile_field": "",
           "operator": "manual",
@@ -4063,6 +7490,63 @@
       "independent_review_required": true
     },
     {
+      "rule_id": "RES-4.2.2-STAIR-STEP-MARKINGS",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "013住宅建筑专项",
+      "coverage_topic": "stair_geometry",
+      "review_families": [
+        "楼梯大样",
+        "材料做法表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "all": [
+          {
+            "field": "building_use",
+            "contains": [
+              "住宅"
+            ]
+          }
+        ]
+      },
+      "required_facts": [
+        "公共楼梯梯段",
+        "首步和末步标志",
+        "标志材质或颜色"
+      ],
+      "comparison_method": "逐梯段核对首步、末步与平台之间是否有清晰可实施的明显标志。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "013住宅建筑专项/B住宅项目核心规范/GB55038-2025住宅项目规范.pdf",
+        "sha256": "4121700001df8b564a22a4b1ea8ecb0892da2d5d09727c8aa2a964d04bb5116e",
+        "display_name": "《住宅项目规范》GB 55038-2025",
+        "article": "第4.2.2条第2款",
+        "requirement": "住宅公共楼梯每个梯段的首步和末步踏步均应设置明显标志。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "RES-4.2.2-STAIR-STEP-MARKINGS-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
       "rule_id": "RES-4.2.8-PUBLIC-GUARD",
       "status": "active",
       "authority_mode": "normative",
@@ -4179,6 +7663,110 @@
           "plan",
           "material_schedule"
         ],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "WATER-2.0.6-WATERPROOF-GRADE",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "006建筑防水专项",
+      "coverage_topic": "waterproofing_detail",
+      "review_families": [
+        "设计说明",
+        "材料做法表"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "工程类别",
+        "防水使用环境类别",
+        "防水等级",
+        "屋面和外墙防水做法"
+      ],
+      "comparison_method": "依据工程类别和使用环境确定防水等级，再核对屋面、外墙设防。",
+      "calculation_required": true,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "006建筑防水专项/B建筑防水核心规范/GB55030-2022建筑与市政工程防水通用规范.pdf",
+        "sha256": "abeafb4f90a5d9107701567b0274c66ae92f02f3d4d481e891af8dcf0b28421c",
+        "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
+        "article": "第2.0.6条",
+        "requirement": "工程防水等级应根据工程类别和防水使用环境类别确定，并采用与等级相匹配的防水做法。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-2.0.6-WATERPROOF-GRADE-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
+        "sensitive_to_ambiguity": false
+      },
+      "independent_review_required": true
+    },
+    {
+      "rule_id": "WATER-4.1.1-SPECIAL-DESIGN",
+      "status": "active",
+      "authority_mode": "normative",
+      "specialty": "006建筑防水专项",
+      "coverage_topic": "waterproofing_detail",
+      "review_families": [
+        "设计说明",
+        "材料做法表",
+        "其他大样"
+      ],
+      "report_types": [
+        "single"
+      ],
+      "trigger": {
+        "always": true
+      },
+      "required_facts": [
+        "防水设计工作年限",
+        "防水等级和做法",
+        "细部节点",
+        "材料性能",
+        "排水截水和维护设施"
+      ],
+      "comparison_method": "核对专项防水设计的工作年限、等级、做法、细部、材料和排水维护内容。",
+      "calculation_required": false,
+      "risk_level": "high",
+      "basis": {
+        "source_role": "B_核心规范",
+        "relative_path": "006建筑防水专项/B建筑防水核心规范/GB55030-2022建筑与市政工程防水通用规范.pdf",
+        "sha256": "abeafb4f90a5d9107701567b0274c66ae92f02f3d4d481e891af8dcf0b28421c",
+        "display_name": "《建筑与市政工程防水通用规范》GB 55030-2022",
+        "article": "第4.1.1条",
+        "requirement": "工程防水应进行专项防水设计，并完整表达防水等级、做法、细部构造、材料性能及排水维护措施。"
+      },
+      "applicability_conditions": [
+        {
+          "condition_id": "WATER-4.1.1-SPECIAL-DESIGN-SCOPE",
+          "description": "本规则适用对象、项目范围和专项前提已由图纸事实确认。",
+          "profile_field": "",
+          "operator": "manual",
+          "expected": "适用",
+          "outcome_when_false": "not_applicable"
+        }
+      ],
+      "graphic_evidence_requirements": {
+        "required": false,
+        "claim_type": "pending",
+        "required_roles": [],
         "sensitive_to_ambiguity": false
       },
       "independent_review_required": true

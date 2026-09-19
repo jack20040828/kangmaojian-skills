@@ -18,6 +18,14 @@ from docx.shared import Inches, Pt
 
 from validate_review_package import image_size, resolve_paths, rows, validate_workspace
 
+PAGINATION_CONTROL_TAGS = (
+    "keepLines",
+    "keepNext",
+    "pageBreakBefore",
+    "suppressLineNumbers",
+    "widowControl",
+)
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 SINGLE_TEMPLATE = SKILL_DIR / "范本_建筑单体施工图审查意见.docx"
@@ -62,17 +70,18 @@ def configure_paragraph(
     before: float = 0,
     after: float = 4,
     line_spacing: float = 1.15,
-    keep_next: bool = False,
-    keep_together: bool = True,
 ) -> None:
     paragraph.alignment = alignment
     fmt = paragraph.paragraph_format
     fmt.space_before = Pt(before)
     fmt.space_after = Pt(after)
     fmt.line_spacing = line_spacing
-    fmt.keep_with_next = keep_next
-    fmt.keep_together = keep_together
-    fmt.widow_control = True
+    ppr = paragraph._p.pPr
+    if ppr is not None:
+        for tag in PAGINATION_CONTROL_TAGS:
+            element = ppr.find(qn(f"w:{tag}"))
+            if element is not None:
+                ppr.remove(element)
 
 
 def set_numbering(paragraph, num_id: int = 7) -> None:
@@ -111,7 +120,6 @@ def add_plain_paragraph(
     alignment=WD_ALIGN_PARAGRAPH.LEFT,
     before: float = 0,
     after: float = 4,
-    keep_next: bool = False,
 ):
     paragraph = doc.add_paragraph()
     configure_paragraph(
@@ -119,7 +127,6 @@ def add_plain_paragraph(
         alignment=alignment,
         before=before,
         after=after,
-        keep_next=keep_next,
     )
     run = paragraph.add_run(text)
     set_font(run, font, size, bold)
@@ -128,7 +135,7 @@ def add_plain_paragraph(
 
 def add_drawing_reference(doc: Document, number: int, text: str) -> None:
     paragraph = doc.add_paragraph()
-    configure_paragraph(paragraph, after=3, keep_next=True)
+    configure_paragraph(paragraph, after=3)
     prefix = paragraph.add_run(f"{number}、涉及图纸：")
     set_font(prefix, "宋体", 12, False)
     cursor = 0
@@ -158,10 +165,9 @@ def add_labeled_paragraph(
     *,
     body_bold: bool = False,
     after: float = 4,
-    keep_next: bool = False,
 ) -> None:
     paragraph = doc.add_paragraph()
-    configure_paragraph(paragraph, after=after, keep_next=keep_next)
+    configure_paragraph(paragraph, after=after)
     label_run = paragraph.add_run(label)
     set_font(label_run, "宋体", 12, True)
     body_run = paragraph.add_run(text)
@@ -178,7 +184,7 @@ def fit_picture_width(path: Path, max_width: float = 6.05, max_height: float = 4
     return Inches(min(max_width, max_height * width / height))
 
 
-def add_evidence(doc: Document, path: Path, *, keep_next: bool) -> None:
+def add_evidence(doc: Document, path: Path) -> None:
     paragraph = doc.add_paragraph()
     configure_paragraph(
         paragraph,
@@ -186,7 +192,6 @@ def add_evidence(doc: Document, path: Path, *, keep_next: bool) -> None:
         before=1,
         after=5,
         line_spacing=1.0,
-        keep_next=keep_next,
     )
     paragraph.add_run().add_picture(str(path), width=fit_picture_width(path))
 
@@ -197,7 +202,6 @@ def add_page_number(paragraph) -> None:
         alignment=WD_ALIGN_PARAGRAPH.CENTER,
         after=0,
         line_spacing=1.0,
-        keep_together=False,
     )
     run = paragraph.add_run()
     set_font(run, "宋体", 9, False)
@@ -238,7 +242,7 @@ def add_section_heading(doc: Document, text: str, *, numbered: bool, empty: bool
     paragraph = doc.add_paragraph()
     if numbered:
         set_numbering(paragraph)
-    configure_paragraph(paragraph, before=6, after=6, keep_next=not empty)
+    configure_paragraph(paragraph, before=6, after=6)
     run = paragraph.add_run(text + ("无意见" if empty else ""))
     set_font(run, "黑体", 12, True)
 
@@ -331,7 +335,6 @@ def build_report(args: argparse.Namespace) -> Path:
         alignment=WD_ALIGN_PARAGRAPH.CENTER,
         before=2,
         after=10,
-        keep_next=True,
     )
     add_plain_paragraph(
         doc,
@@ -339,7 +342,6 @@ def build_report(args: argparse.Namespace) -> Path:
         size=12,
         alignment=WD_ALIGN_PARAGRAPH.CENTER,
         after=14,
-        keep_next=True,
     )
 
     number = 1
@@ -356,14 +358,13 @@ def build_report(args: argparse.Namespace) -> Path:
                 after=5,
             )
             screenshots = resolve_paths(root, issue.get("screenshot_path", ""))
-            for index, screenshot in enumerate(screenshots):
-                add_evidence(doc, screenshot, keep_next=index == len(screenshots) - 1)
+            for screenshot in screenshots:
+                add_evidence(doc, screenshot)
             add_labeled_paragraph(
                 doc,
                 "【法规条文】：",
                 regulation_text(issue, schema_version),
                 after=3,
-                keep_next=True,
             )
             add_labeled_paragraph(
                 doc,

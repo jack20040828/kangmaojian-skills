@@ -238,7 +238,8 @@ def main() -> int:
         print(f"PASS: {payload['rule_count']} executable review rules are current")
         return 0
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(rendered, encoding="utf-8")
+    with args.output.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(rendered)
     print(f"PASS: wrote {payload['rule_count']} executable review rules to {args.output}")
     return 0
 

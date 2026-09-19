@@ -14,12 +14,15 @@ import tempfile
 from pathlib import Path
 
 from PIL import Image, ImageDraw
+from docx import Document
+from docx.oxml.ns import qn
 
 SKILL_DIR = Path(__file__).resolve().parent.parent
 SCRIPTS = SKILL_DIR / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from create_review_workspace import PROFILE_FACT_KEYS  # noqa: E402
+from formal_review_report import PAGINATION_CONTROL_TAGS  # noqa: E402
 from validate_review_package import V16_GATE_FIELDS  # noqa: E402
 
 
@@ -69,6 +72,43 @@ def make_evidence(path: Path, label: str, box: tuple[int, int, int, int]) -> Non
     draw.text((70, 25), label, fill="black")
     path.parent.mkdir(parents=True, exist_ok=True)
     image.save(path)
+
+
+def pagination_control_counts(path: Path) -> dict[str, int]:
+    doc = Document(path)
+    counts = {tag: 0 for tag in PAGINATION_CONTROL_TAGS}
+    for paragraph in doc.paragraphs:
+        ppr = paragraph._p.pPr
+        if ppr is None:
+            continue
+        for tag in PAGINATION_CONTROL_TAGS:
+            if ppr.find(qn(f"w:{tag}")) is not None:
+                counts[tag] += 1
+    return counts
+
+
+def assert_no_pagination_controls(path: Path) -> None:
+    present = {
+        tag: count
+        for tag, count in pagination_control_counts(path).items()
+        if count
+    }
+    if present:
+        raise AssertionError(f"DOCX contains black-square pagination controls: {present}")
+
+
+def negative_docx_pagination_gate(workspace: Path, source_docx: Path, root: Path) -> None:
+    bad_dir = root / "bad-pagination-docx"
+    bad_dir.mkdir(parents=True, exist_ok=True)
+    bad_docx = bad_dir / source_docx.name
+    doc = Document(source_docx)
+    doc.paragraphs[0].paragraph_format.keep_together = True
+    doc.save(bad_docx)
+    run(
+        [sys.executable, str(SCRIPTS / "validate_docx_content.py"), str(workspace), str(bad_docx)],
+        1,
+        "black-square pagination controls",
+    )
 
 
 def make_rule_assets(root: Path) -> tuple[Path, Path, Path]:
@@ -431,6 +471,9 @@ def main() -> int:
         _standard, catalog, index = make_rule_assets(root)
         single_workspace, single_docx = build_workspace(root / "single", "single", catalog, index)
         site_workspace, site_docx = build_workspace(root / "site", "site", catalog, index)
+        assert_no_pagination_controls(single_docx)
+        assert_no_pagination_controls(site_docx)
+        negative_docx_pagination_gate(single_workspace, single_docx, root)
         negative_gates(single_workspace)
 
         if artifact_root_value:

@@ -25,6 +25,18 @@ Record one strategy for every candidate issue:
 
 Prefer one precise evidence image for a single-location issue. Do not add extra screenshots for decoration or general context; use `multiple` only when the issue cannot be proved by one crop.
 
+## Context Range Standard
+
+For a screenshot with one or more red boxes, use the smallest rectangle enclosing all red boxes as the red-box envelope.
+
+- When feasible, the screenshot crop's width and height should each be 2–3 times the red-box envelope's width and height. The crop must also show useful locating references such as an axis, table header, room name, dimension line, drawing title/number, or note heading.
+- If both crop-to-envelope ratios are already within or above this range and the location is understandable, keep the crop unchanged. Do not zoom out merely to make the image larger.
+- If either ratio is below 2, or the crop is too local to find on the drawing, expand the entire crop only on the deficient axis or axes to about 2.5 times the envelope. Preserve the red box's source-drawing coordinates and size; never enlarge or move the red box to simulate more context.
+- If a page boundary prevents a 2-times ratio, expand to the available boundary and include the strongest available locating reference. Record the limitation in the evidence ledger.
+- For evidence images without a red box, the numeric ratio does not apply; choose the crop from the semantic location and surrounding references.
+- Confirm readability after the image is placed in Word. Crop range and Word display size are separate decisions.
+
+
 ## Positioning Steps
 
 1. Start from the written candidate issue.
